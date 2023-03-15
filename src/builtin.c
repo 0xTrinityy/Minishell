@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 20:44:17 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/03/14 10:27:00 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/03/15 18:10:36 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,23 @@
 void    echo(int argc, char **argv)
 {
     int     i;
+    int     flag;
 
-    i = 0;
+    i = 1;
+    flag = 0;
+    if (!ft_strncmp(argv[1], "-n", 2))
+    {
+        flag = 1;
+        i++;
+    }
     while (i < argc)
     {
         printf("%s", argv[i]);
         i++;
     }
-    write(1, "/n", 1);
+    if (flag == 1)
+        printf("%%");
+    printf("\n");
 }
 
 //****************************** PWD CMD ********************************
@@ -42,10 +51,16 @@ void    pwd(char **envp)
     printf("%s\n", path);
 }
 
+//****************************** CD CMD ********************************
+
+
+
+
+
 //****************************** MAIN ********************************
 int     main(int argc, char **argv, char **envp)
 {
-    //echo(argc, argv);
-    pwd(envp);
+    echo(argc, argv);
+    //pwd(envp);
     return (0);
 }
