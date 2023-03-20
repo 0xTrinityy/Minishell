@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 20:51:03 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/03/20 15:55:55 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/03/20 16:36:26 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,26 @@
 // D'ailleurs dans le parsing il faut qu on pense a implenter une variable qui nous permet de savoir si ont doit rediriger dans la
 // sortie standart ou dans des FD.
 
+// fait une fonctions type "struct init" qui malloc argv et envp et qui leur donne leur arguments
 
+//THOMAS TO DO :
+    //- Dans le built in CD, ne pas oublier de faire une fonction qui reload le pwd a chaque utilisation et qui donc change l'envp.
+            //du coup il faut free puis re-malloc envp avec le nouveau OLDPWD.
+
+            
 typedef struct s_args
 {
     int     argc;
     char    **argv;
     char    **envp;
+    
 } t_args;
 
 
 // *************************Built-in************************
 
 int    ft_echo(t_args *data);
-int     n_option(t_args *data);
+int    n_option(t_args *data);
 
 //**********************************************************
 
