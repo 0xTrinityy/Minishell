@@ -6,7 +6,7 @@
 #    By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/14 10:06:19 by tbelleng          #+#    #+#              #
-#    Updated: 2023/03/14 10:18:38 by tbelleng         ###   ########.fr        #
+#    Updated: 2023/03/20 15:44:37 by tbelleng         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,14 @@ SRC_DIR = ./src
 
 BIN_DIR = ./bin/
 
-SRC =	$(SRC_DIR)/builtin.c     \
+SRC =	$(SRC_DIR)/builtin/builtin_exec.c     \
+		$(SRC_DIR)/builtin/cd.c     	\
+		$(SRC_DIR)/builtin/echo.c		\
+		$(SRC_DIR)/builtin/env.c		\
+		$(SRC_DIR)/builtin/exit.c		\
+		$(SRC_DIR)/builtin/export.c		\
+		$(SRC_DIR)/builtin/pwd.c		\
+		$(SRC_DIR)/builtin/unset.c		\
 
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(BIN_DIR)%.o)
 
