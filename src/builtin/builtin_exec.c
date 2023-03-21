@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 14:48:27 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/03/20 15:42:01 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/03/21 14:34:54 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int     main(int argc, char **argv, char **envp)
     data.argc = argc;
     data.argv = argv;
     data.envp = envp;
-    ft_echo(&data);
-    //pwd(envp);
+    //ft_echo(&data);
+    ft_pwd(envp);
     return (0);
 }

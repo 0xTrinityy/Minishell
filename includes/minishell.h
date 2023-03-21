@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 20:51:03 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/03/20 16:36:26 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/03/21 14:35:40 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ typedef struct s_args
 int    ft_echo(t_args *data);
 int    n_option(t_args *data);
 
+char	*find_path(char **envp);
+void    ft_pwd(char **envp);
 //**********************************************************
 
 #endif
