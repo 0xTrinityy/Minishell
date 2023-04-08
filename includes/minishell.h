@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 20:51:03 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/03/21 14:35:40 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/08 14:25:00 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,14 @@
 # include <unistd.h>
 # include "../libft/libft.h"
 
-
+# define ERR_INFILE "Infile error\n"
+# define ERR_OUTFILE "Outfile error\n"
+# define ERR_INPUT "Invalid number of arguments.\n"
+# define ERR_PIPE "Pipe error \n"
+# define ERR_CMD "Command not found\n"
+# define ERR_HEREDOC "Here_doc error\n"
+# define ERR_UNLINK "Unlink error\n"
+# define NO_PATH "Path not found\n"
 // mon gars Lucien dans cette structure je vais mettre les arguments generaux dont on a besoin
 // pour les balader dans le programme sans soucis. hesite pas a faire des strucutres si ta besoin de truc pour rendre les
 // choses plus claires.
@@ -49,11 +56,19 @@ typedef struct s_args
 
 // *************************Built-in************************
 
+
 int    ft_echo(t_args *data);
 int    n_option(t_args *data);
 
 char	*find_path(char **envp);
 void    ft_pwd(char **envp);
+
+void    ft_env(t_args *data);
+
+void	ft_export(t_args *data, char *str);
+
+// gestion d'erreur Built-in
+int	msg(char *err);
 //**********************************************************
 
 #endif

@@ -6,11 +6,11 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 14:49:20 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/03/20 16:15:08 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/05 17:05:17 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../includes/minishell.h"
 
 size_t	ft_strlen(const char *s)
 {

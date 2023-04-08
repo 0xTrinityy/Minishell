@@ -6,11 +6,11 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 14:51:12 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/03/21 14:49:05 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/05 17:05:59 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../includes/minishell.h"
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
