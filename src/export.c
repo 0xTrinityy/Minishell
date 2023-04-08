@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 14:51:10 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/08 15:45:16 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/08 17:00:24 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,31 +24,56 @@ void    free_envp(char **new_env, int i)
 
 //faire fonction qui cherche si la varaible existe deja, de plus, la variable ne peut etre utiliser que si caractere alphanum ou underscore
 
-size_t      var_lenght(char *str)
+char      *var_trimmed(char *str)
 {
     size_t  len;
+    int     i;
+    char    *tab;
+    
     
     len = 0;
     while (str[len] != '=')
         len++;
-    return (len);
+    len++;
+    tab = malloc(sizeof(char *) * (len + 1));
+    i = 0;
+    while (i < len)
+    {
+        tab[i] = str[i];
+        i++;
+    }
+    tab[i] = '\0';
+    return (tab);
 }
+
+size_t  to_equal(char *str)
+{
+    size_t  i;
+    
+    i = 0;
+    while (str[i] != '=')
+        i++;
+    i++;
+    return (i);
+}
+
+
 int     new_or_replace(t_args *data, char *str)
 {
     int     i;
-    int     k;
+    char    *var;
     size_t  var_len;
     
     i = 0;
-    var_len = var_lenght(str);
+    var_len = to_equal(str);
+    var = var_trimmed(str);
     while (data->envp[i])
     {
-        k = 0;
-        while (data->envp[i][k] && data->envp[i][k])
-        {
-            
-        }
+        if (ft_strnstr(data->envp[i], var, var_len) != NULL)
+            return (1);
+        i++;
     }
+    return (0);
 }
 
 void	ft_export(t_args *data, char *str)
@@ -57,6 +82,8 @@ void	ft_export(t_args *data, char *str)
     char    **new_env;
     
     i = 0;
+    if (new_or_replace(data, str))
+        //faire une fonction pour corriger la valeur de la variable deja existante (genre dup avec la nouvelle valeur)
     while (data->envp[i])
         i++;
     new_env = malloc(sizeof(char *) * (i + 2));
