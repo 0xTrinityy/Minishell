@@ -6,7 +6,7 @@
 #    By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/14 10:06:19 by tbelleng          #+#    #+#              #
-#    Updated: 2023/04/05 17:07:37 by tbelleng         ###   ########.fr        #
+#    Updated: 2023/04/09 15:21:32 by luciefer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRC =	$(SRC_DIR)/builtin_exec.c     \
 		$(SRC_DIR)/export.c		\
 		$(SRC_DIR)/pwd.c		\
 		$(SRC_DIR)/unset.c		\
+		$(SRC_DIR)/main.c		\
 
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(BIN_DIR)%.o)
 
