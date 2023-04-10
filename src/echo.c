@@ -6,11 +6,13 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 14:49:20 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/05 17:05:17 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/08 17:31:13 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+//ok refaire echo en gerant le cas d'erreur "echo -n -n " ou encore "echo -n bonjour -n"
 
 size_t	ft_strlen(const char *s)
 {
