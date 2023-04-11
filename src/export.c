@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 14:51:10 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/10 20:20:23 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/11 16:25:17 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@ void	free_envp(char **new_env, int i)
 	}
 	free(new_env);
 }
-
-//faire fonction qui cherche si la varaible existe deja, de plus,
-	//la variable ne peut etre utiliser que si caractere alphanum ou underscore
 
 char	*var_trimmed(char *str)
 {
@@ -111,32 +108,57 @@ void new_value(t_args *data, char *str)
 	    {
 	        j = ft_strlen(str);
 	        data->envp[i] = realloc_value(data->envp[i], str, j);
-	        /*while (data->envp[i] != 0)
-	            i++;
-	        j = ft_strlen(str);
-	        data->envp[i] = malloc(sizeof(char) * (j + 1));
-	        j = 0;
-	        while (str[j] != '\0')
-	        {
-	            data->envp[i][j] = str[j];
-	            j++;
-	        }*/
-        }
+	        break ;
+		}
 	    i++;
 	}
+}
+
+void	msg_error(char *err, char *str)
+{
+	perror(err);
+	printf("bash: export: %s : ", str);
+	exit(1);
+}
+
+int     valid_variable(char *str)
+{
+	int     i;
+	
+	i = 0;
+	while(str[i] != '=' && str[0] != '=')
+	{
+		if (str[i] == '_')
+			i++;
+		else if (ft_isalnum(str[i]))
+			i++;
+		else
+			return (0);
+	}
+	return (1);
 }
 
 char	**ft_export(t_args *data, char *str)
 {
 	int		i;
+	int     flag;
 	char	**new_env;
 	
 	i = 0;
+	flag = 0;
+	if (!valid_variable(str))
+	{	
+		printf("bash: export: %s : not a valid identifier", str);
+		exit(1);
+		//msg_error(INVALID_ID, str);
+	}
 	if (new_or_replace(data, str) == 1)
 	{
-	    printf("DEBUG\n");
+		flag = 1;
 		new_value(data, str);
-    }
+	}
+    while (data->envp[i])
+        i++;
 	new_env = malloc(sizeof(char *) * (i + 2));
 	if (!new_env)
 		return (NULL);
@@ -148,6 +170,8 @@ char	**ft_export(t_args *data, char *str)
 			free_envp(new_env, i);
 		i++;
 	}
+	if (flag == 1)
+		return (new_env);
 	new_env[i] = ft_strdup(str);
 	i++;
 	new_env[i] = 0;

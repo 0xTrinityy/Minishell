@@ -6,28 +6,11 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 14:51:12 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/05 17:05:59 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/11 16:31:31 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
-{
-	unsigned int	i;
-
-	i = 0;
-	if (n == 0)
-		return (0);
-	while ((unsigned char)s1[i] != '\0'
-		&& (unsigned char)s2[i] != '\0' && i + 1 < n)
-	{
-		if (((unsigned char)s1[i]) != ((unsigned char)s2[i]))
-			return (((unsigned char)s1[i]) - (unsigned char)s2[i]);
-		i++;
-	}
-	return (((unsigned char)s1[i]) - (unsigned char)s2[i]);
-}
 
 char	*find_path(char **envp)
 {

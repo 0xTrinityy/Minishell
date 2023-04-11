@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 20:51:03 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/10 19:44:46 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/11 16:23:56 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define ERR_HEREDOC "Here_doc error\n"
 # define ERR_UNLINK "Unlink error\n"
 # define NO_PATH "Path not found\n"
+# define INVALID_ID "not a valid identifier\n"
 // mon gars Lucien dans cette structure je vais mettre les arguments generaux dont on a besoin
 // pour les balader dans le programme sans soucis. hesite pas a faire des strucutres si ta besoin de truc pour rendre les
 // choses plus claires.
@@ -68,7 +69,7 @@ void    ft_env(t_args *data);
 char    **ft_export(t_args *data, char *str);
 
 // gestion d'erreur Built-in
-int	msg(char *err);
+void	msg_error(char *err, char *str);
 //**********************************************************
 
 #endif
