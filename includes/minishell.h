@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 20:51:03 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/12 10:23:34 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/12 15:28:26 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,9 @@ char    **ft_unset(t_args *data, char *str);
 
 size_t	to_equal(char *str);
 char	*var_trimmed(char *str);
+
+int    ft_cd(t_args *data, char *str);
+
 
 // gestion d'erreur Built-in
 void	msg_error(char *err, char *str);

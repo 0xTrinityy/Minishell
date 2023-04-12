@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 14:48:27 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/12 11:17:56 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/12 15:40:23 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int     main(int argc, char **argv, char **envp)
     data.envp = envp;
     //ft_echo(&data);
     //ft_pwd(envp);
-    
+    /*
     data.envp = ft_export(&data, "Lucien=first-pick");
     data.envp = ft_export(&data, "ab=25");
     data.envp = ft_export(&data, "Lucien=second-pick");
@@ -32,7 +32,8 @@ int     main(int argc, char **argv, char **envp)
     data.envp = ft_export(&data, "ab=-50");
     data.envp = ft_unset(&data , "Lucien");
     data.envp = ft_unset(&data , "TERM_PROGRAM");
-    
+    */
+    ft_cd(&data, "src");
     //data.envp = ft_export(&data, "a_*b=-50");
     //data.envp = ft_export(&data, "ab=-50");
     i = 0;

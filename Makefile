@@ -6,7 +6,7 @@
 #    By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/14 10:06:19 by tbelleng          #+#    #+#              #
-#    Updated: 2023/04/05 17:07:37 by tbelleng         ###   ########.fr        #
+#    Updated: 2023/04/12 14:31:09 by tbelleng         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,11 +39,11 @@ CFLAGS = -Wall -Werror -Wextra -I$(INCLUDES) -g3
 all :	$(BIN_DIR) $(NAME)
 
 $(OBJ) :	 $(BIN_DIR)%.o: $(SRC_DIR)/%.c
-		@ $(CC) -I$(INCLUDES) -c $< -o $@
+		@ $(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME) :	$(BIN_DIR) $(OBJ)
 			@ $(MAKE) -s -C $(LIB_PATH)
-			@ $(CC) $(CFLAGS) $(OBJ) $(LIB) -o $(NAME)
+			@ $(CC) $(CFLAGS) $(OBJ) $(LIB) -o $(NAME) -lreadline
 			@ echo "\e[33m\e[1m\tMake\e[0m [🗿] : \e[1mDone ! ✅"
 
 $(BIN_DIR) :
