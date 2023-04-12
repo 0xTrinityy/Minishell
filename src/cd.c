@@ -6,9 +6,16 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 14:51:03 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/05 17:05:13 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/12 11:55:40 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+void    ft_cd(char *str)
+{
+	
+
+
+
+}

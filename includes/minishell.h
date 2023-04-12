@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 20:51:03 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/11 16:23:56 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/12 10:23:34 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,11 @@ void    ft_pwd(char **envp);
 void    ft_env(t_args *data);
 
 char    **ft_export(t_args *data, char *str);
+
+char    **ft_unset(t_args *data, char *str);
+
+size_t	to_equal(char *str);
+char	*var_trimmed(char *str);
 
 // gestion d'erreur Built-in
 void	msg_error(char *err, char *str);
