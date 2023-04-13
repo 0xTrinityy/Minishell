@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 14:51:10 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/11 16:25:17 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/13 14:29:41 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	free_envp(char **new_env, int i)
 
 char	*var_trimmed(char *str)
 {
-	size_t	len;
+	int	len;
 	int		i;
 	char	*tab;
 
@@ -158,7 +158,9 @@ char	**ft_export(t_args *data, char *str)
 		new_value(data, str);
 	}
     while (data->envp[i])
+    {
         i++;
+	}
 	new_env = malloc(sizeof(char *) * (i + 2));
 	if (!new_env)
 		return (NULL);

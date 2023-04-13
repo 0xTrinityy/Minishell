@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 14:51:15 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/12 11:17:42 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/13 14:30:17 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ char    **ft_unset(t_args *data, char *str)
 {
 	int     i;
 	int     k;
-	char    *var;
 	char    **new;
 	size_t  var_len;
 	
