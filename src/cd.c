@@ -6,15 +6,11 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 14:51:03 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/13 14:33:35 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/13 14:39:02 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-
-//TO DO 
-	//il faut refresh le OLD PWD
 
 char    *realloc_oldpwd(char *old, char *before, int oldsize)
 {
@@ -35,8 +31,6 @@ char    *realloc_oldpwd(char *old, char *before, int oldsize)
         new[i] = oldpwd[i];
         i++;
     }
-    printf("i equal %d\n", i);
-    printf("%s\n\n\n\n", before);
     while (before[len] != '\0')
     {
         new[i] = before[len];

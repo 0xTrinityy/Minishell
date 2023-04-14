@@ -6,20 +6,20 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 20:51:03 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/12 15:28:26 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/13 14:59:45 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "../libft/libft.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <stdio.h>
 # include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include "../libft/libft.h"
 
 # define ERR_INFILE "Infile error\n"
 # define ERR_OUTFILE "Outfile error\n"
@@ -42,42 +42,42 @@
 // fait une fonctions type "struct init" qui malloc argv et envp et qui leur donne leur arguments
 
 //THOMAS TO DO :
-    //- Dans le built in CD, ne pas oublier de faire une fonction qui reload le pwd a chaque utilisation et qui donc change l'envp.
-            //du coup il faut free puis re-malloc envp avec le nouveau OLDPWD.
+//- Dans le built in CD,
+//ne pas oublier de faire une fonction qui reload le pwd a chaque utilisation et qui donc change l'envp.
+//du coup il faut free puis re-malloc envp avec le nouveau OLDPWD.
 
-            
 typedef struct s_args
 {
-    int     argc;
-    char    **argv;
-    char    **envp;
-    
-} t_args;
+	int		argc;
+	char	**argv;
+	char	**envp;
 
+}			t_args;
 
 // *************************Built-in************************
 
+int			ft_echo(t_args *data);
+int			n_option(t_args *data);
 
-int    ft_echo(t_args *data);
-int    n_option(t_args *data);
+char		*find_path(char **envp);
+void		ft_pwd(char **envp);
 
-char	*find_path(char **envp);
-void    ft_pwd(char **envp);
+void		ft_env(t_args *data);
 
-void    ft_env(t_args *data);
+char		**ft_export(t_args *data, char *str);
 
-char    **ft_export(t_args *data, char *str);
+char		**ft_unset(t_args *data, char *str);
 
-char    **ft_unset(t_args *data, char *str);
+void		ft_exit(unsigned long long int nb);
 
-size_t	to_equal(char *str);
-char	*var_trimmed(char *str);
+size_t		to_equal(char *str);
+char		*var_trimmed(char *str);
 
-int    ft_cd(t_args *data, char *str);
+int			ft_cd(t_args *data, char *str);
 
+//gestion d'erreur Built-in
+void		msg_error(char *err, char *str);
 
-// gestion d'erreur Built-in
-void	msg_error(char *err, char *str);
 //**********************************************************
 
 #endif

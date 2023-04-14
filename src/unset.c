@@ -6,43 +6,11 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 14:51:15 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/13 14:30:17 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/13 14:57:07 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-/*char	*var_trimmed_unset(char *str)
-{
-	size_t	len;
-	int		i;
-	char	*tab;
-
-	len = 0;
-	while (str[len] != '=')
-		len++;
-	len++;
-	tab = malloc(sizeof(char *) * (len + 1));
-	i = 0;
-	while (i < len)
-	{
-		tab[i] = str[i];
-		i++;
-	}
-	tab[i] = '\0';
-	return (tab);
-}
-
-size_t	to_equal(char *str)
-{
-	size_t	i;
-
-	i = 0;
-	while (str[i] != '=')
-		i++;
-	i++;
-	return (i);
-}*/
 
 char    **ft_unset(t_args *data, char *str)
 {
@@ -60,7 +28,6 @@ char    **ft_unset(t_args *data, char *str)
 	if (!new)
 		return (NULL);
 	i = 0;
-	//var = var_trimmed(str);
 	var_len = ft_strlen(str);
 	printf("la var est %s et vaut %zu\n\n\n\n", str, var_len);
 	while(data->envp[i])

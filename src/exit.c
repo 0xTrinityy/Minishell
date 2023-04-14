@@ -6,10 +6,13 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 14:51:08 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/11 16:32:24 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/13 14:59:11 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-//void    ft_exit()
+void	ft_exit(unsigned long long int nb)
+{
+	exit(nb);
+}
