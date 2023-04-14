@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 20:51:03 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/09 16:24:06 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/04/14 13:51:04 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,41 @@
     //- Dans le built in CD, ne pas oublier de faire une fonction qui reload le pwd a chaque utilisation et qui donc change l'envp.
             //du coup il faut free puis re-malloc envp avec le nouveau OLDPWD.
 
-            
-/*typedef struct s_args
+enum	e_token
 {
-    int     argc;
-    char    **argv;
-    char    **envp;
-    
-} t_args;*/
+	ALPHA_NUM,
+	IFS,
+	S_QUOTE,
+	D_QUOTE,
+	DOLLAR,
+	PIPE_C,
+	REDIRECT,
+	FINISH
+};
+
+enum	e_parc
+{
+	CMD,
+	PIPE,
+	ARG,
+	EXPAND,
+	R_INPUT,
+	R_OUTPUT,
+	R_DINPUT,
+	R_DOUTPUT,
+	REDIRECT_TMP,
+	TXT,
+	TXT_S,
+	TXT_D
+};
+
+struct	s_list
+{
+	t_list		*prev;
+	char		*str;
+	enum e_parc	token;
+	t_list		*next;
+}	t_list;
 
 
 // *************************Built-in************************
