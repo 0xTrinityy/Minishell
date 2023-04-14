@@ -6,9 +6,10 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 20:51:03 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/13 14:59:45 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/14 14:06:50 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -20,6 +21,10 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <stdlib.h>
+# include "../libft/libft.h"
 
 # define ERR_INFILE "Infile error\n"
 # define ERR_OUTFILE "Outfile error\n"
@@ -63,6 +68,11 @@ char		*find_path(char **envp);
 void		ft_pwd(char **envp);
 
 void		ft_env(t_args *data);
+int    ft_echo(char **str);
+int    n_option(char *str);
+
+/*char	*find_path(char **envp);
+void    ft_pwd(char **envp);
 
 char		**ft_export(t_args *data, char *str);
 
@@ -78,6 +88,11 @@ int			ft_cd(t_args *data, char *str);
 //gestion d'erreur Built-in
 void		msg_error(char *err, char *str);
 
+// gestion d'erreur Built-in
+int	msg(char *err);*/
+
 //**********************************************************
+
+void	exec_cmd(char *str);
 
 #endif

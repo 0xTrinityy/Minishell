@@ -6,14 +6,15 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 14:48:27 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/13 14:57:21 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/14 14:04:51 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../includes/minishell.h"
 
 //main pour tester les built-in
-int     main(int argc, char **argv, char **envp)
+/*int     main(int argc, char **argv, char **envp)
 {
     t_args      data;
     int     i;
@@ -44,4 +45,25 @@ int     main(int argc, char **argv, char **envp)
     }
     
     return (0);
+}*/
+
+void	select_cmd(char **cmd)
+{
+//	char	str[6];
+
+	/*while (cmd[i] || cmd[i] != ' ')
+	{
+		str[i] = cmd[i];
+		i++;
+	}*/
+	if (ft_strncmp(cmd[0], "echo", 4) == 0)
+		ft_echo(cmd);
+}
+
+void	exec_cmd(char *str)
+{
+	char	**cmd;
+
+	cmd = ft_split(str, ' ');
+	select_cmd(cmd);
 }
