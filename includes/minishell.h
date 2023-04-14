@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 20:51:03 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/14 14:06:50 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/14 14:08:01 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ char		*find_path(char **envp);
 void		ft_pwd(char **envp);
 
 void		ft_env(t_args *data);
-int    ft_echo(char **str);
+int    ft_ecXho(char **str);
 int    n_option(char *str);
 
 /*char	*find_path(char **envp);
