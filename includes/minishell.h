@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 20:51:03 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/14 14:17:18 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/15 14:52:28 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@
 // D'ailleurs dans le parsing il faut qu on pense a implenter une variable qui nous permet de savoir si ont doit rediriger dans la
 // sortie standart ou dans des FD.
 
-// fait une fonctions type "struct init" qui malloc argv et envp et qui leur donne leur arguments
+// fait une fonctions type "struct init" quiminishell malloc argv et envp et qui leur donne leur arguments
 
 //THOMAS TO DO :
     //- Dans le built in CD, ne pas oublier de faire une fonction qui reload le pwd a chaque utilisation et qui donc change l'envp.
@@ -82,14 +82,31 @@ enum	e_parc
 	TXT_D
 };
 
-struct	s_list
+typedef struct	s_list
 {
-	t_list		*prev;
+	struct s_list		*prev;
 	char		*str;
 	enum e_parc	token;
-	t_list		*next;
+	struct s_list		*next;
 }	t_list;
 
+typedef struct s_pipex
+{
+	pid_t	*pid;
+	int		pidx;
+	int		pid_numb;
+	int		pipe_nb;
+	int		cmd_nb;
+	int		doc;
+	int		*pipe;
+	int		infile;
+	int		outfile;
+	char	*paths;
+	char	**cmd_paths;
+	char	**cmd_args;
+	char	*cmd;
+
+}			t_pipe;
 
 // *************************Built-in************************
 
