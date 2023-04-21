@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 20:51:03 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/14 14:13:20 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/17 17:46:12 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,9 @@ typedef struct s_args
 	int		argc;
 	char	**argv;
 	char	**envp;
+}   t_args;
+
+
 enum	e_token
 {
 	ALPHA_NUM,
@@ -83,15 +86,34 @@ enum	e_parc
 	TXT_D
 };
 
-struct	s_list
+typedef struct	s_pars
 {
-	t_list		*prev;
-	char		*str;
-	enum e_parc	token;
-	t_list		*next;
-}	t_list;
+	struct s_pars	*prev;
+	char		      *str;
+	enum e_parc	    token;
+	struct s_pars		*next;
+}	t_pars;
 
-}			t_args;
+typedef struct s_pipex
+{
+	pid_t	*pid;
+	int		pidx;
+	int		pid_numb;
+	int		pipe_nb;
+	int		cmd_nb;
+	int		doc;
+	int		*pipe;
+	int		infile;
+	char    *in_str;
+	char    *out_str;
+	int		outfile;
+	char	*paths;
+	char    *limit;
+	char	**cmd_paths;
+	char	**cmd_args;
+	char	*cmd;
+
+}			t_pipe;
 
 // *************************Built-in************************
 
@@ -124,6 +146,20 @@ void		msg_error(char *err, char *str);
 
 // gestion d'erreur Built-in
 int	msg(char *err);*/
+
+// *************************Pipe/Exec************************
+
+void     redirect_infile(t_pars *data, t_pipe *file);
+void     redirect_outfile(t_pars *data, t_pipe *file);
+void    redirect_hdoc(t_pars *data, t_pipe *file);
+
+void	read_doc(t_pipe *file);
+void	is_heredoc(t_pipe *file);
+
+
+
+
+
 
 //**********************************************************
 

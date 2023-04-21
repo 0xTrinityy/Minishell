@@ -6,74 +6,129 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 15:42:08 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/14 13:40:50 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/21 10:39:28 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 
-void    trimmed_cmd()
+void     redirect_infile(t_pars *data, t_pipe *file)
 {
-
-
-
+	t_pars *tmp;
+	char    *in;
+	int     size;
+	
+	size = 0;
+	tmp = data;
+	while (data->next != NULL)
+	{
+		if (data->token == R_INPUT)
+		{
+			data = data->next;
+			size = ft_strlen(data->str);
+			file->in_str = malloc(sizeof(char) * (size * 1));
+			size = 0;
+			while (data->str[size] != '\0')
+			{
+				file->in_str[size] = data->str[size];
+				size++;
+			}
+			file->in_str[size] = '\0';
+		}
+	}
+	data = tmp;
+	return ;
 }
 
-void    trimmed_args()
+void     redirect_outfile(t_pars *data, t_pipe *file)
 {
-
-
-
+	t_pars *tmp;
+	char    *in;
+	int     size;
+	
+	size = 0;
+	tmp = data;
+	while (data->next != NULL)
+	{
+		if (data->token == R_OUTPUT)
+		{
+			data = data->next;
+			size = ft_strlen(data->str);
+			file->out_str = malloc(sizeof(char) * (size * 1));
+			size = 0;
+			while (data->str[size] != '\0')
+			{
+				file->out_str[size] = data->str[size];
+				size++;
+			}
+			file->out_str[size] = '\0';
+		}
+	}
+	data = tmp;
+	return ;
 }
 
-int     pipe()
+void    redirect_hdoc(t_pars *data, t_pipe *file)
 {
-
-
+		t_pars *tmp;
+	char    *in;
+	int     size;
+	
+	size = 0;
+	tmp = data;
+	file->doc = 0;
+	while (data->next != NULL)
+	{
+		if (data->token == R_DINPUT)
+		{
+			file->doc += 1;
+			file->limit = ft_strdup(data->next->str);
+		}
+	}
+	data = tmp;
+	return ;
 }
 
-void	end_main(t_pipe data, int argc, char **envp, char **argv)
+void	end_main(t_pipe file, char **envp)
 {
 	int	i;
 
 	i = 0;
-	while (data.pidx < data.cmd_nb)
+	while (file.pidx < file.cmd_nb)
 	{
-		multiple_cmd(data, argv, envp);
-		data.pidx++;
+		multiple_cmd(file, envp);
+		file.pidx++;
 	}
-	close_pipes(&data);
-	while (i < data.cmd_nb)
+	close_pipes(&file);
+	while (i < file.cmd_nb)
 	{
-		waitpid(data.pid[i], NULL, 0);
+		waitpid(file.pid[i], NULL, 0);
 		i++;
 	}
-	parent_free(&data, argc);
+	parent_free(&file);
 }
 
-int	main(int argc, char **argv, char **envp)
+int	execution(t_pars *data, char **envp)
 {
-	t_pipe	data;
+	t_pipe	file;
 
-	if (argc - 1 < 4)
-		msg_error(ERR_INPUT, &data);
-	is_heredoc(argv, &data);
-	if (data.infile < 0)
+	is_heredoc(&file);
+	if (file.infile < 0)
 		infile_error(ERR_INFILE, &data);
-	data.outfile = out_file(argc, argv, &data);
-	if (data.outfile < 0)
+	file.outfile = out_file(&data);
+	if (file.outfile < 0)
 		msg_error(ERR_OUTFILE, &data);
-	data.pipe_nb = 2 * ((argc - 3 - data.doc) - 1);
-	data.pipe = malloc(sizeof(int *) * data.pipe_nb);
-	if (pipe(data.pipe) < 0)
+	file.pipe_nb = 2 * 0; //nombre de pipe dans la str
+	file.pipe = malloc(sizeof(int *) * file.pipe_nb);
+	if (pipe(file.pipe) < 0)
 		msg_error(ERR_PIPE, &data);
-	data.paths = find_path(envp);
-	data.cmd_paths = ft_split(data.paths, ':');
-	new_pipe(&data, argc);
-	data.pid = malloc(sizeof(pid_t) * (data.cmd_nb));
-	if (!data.pid)
-		pid_err(&data, argc);
-	end_main(data, argc, envp, argv);
+	file.paths = find_path(envp);
+	file.cmd_paths = ft_split(file.paths, ':');
+	new_pipe(&data);
+	file.pid = malloc(sizeof(pid_t) * (file.cmd_nb));
+	if (!file.pid)
+		pid_err(&file);
+	end_main(file, envp);
 	return (0);
 }

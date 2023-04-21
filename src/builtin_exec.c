@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 14:48:27 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/04/14 14:04:51 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/04/17 13:23:54 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
     data.envp = ft_export(&data, "ab=-50");
     data.envp = ft_unset(&data , "Lucien");
     data.envp = ft_unset(&data , "TERM_PROGRAM");
-    */
+    
     ft_cd(&data, "src");
     //data.envp = ft_export(&data, "a_*b=-50");
     //data.envp = ft_export(&data, "ab=-50");
