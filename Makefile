@@ -5,10 +5,11 @@
 #                                                     +:+ +:+         +:+      #
 #    By: luciefer <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/04/15 11:35:37 by luciefer          #+#    #+#              #
-#    Updated: 2023/05/05 11:37:32 by luciefer         ###   ########.fr        #
+#    Created: 2023/03/14 10:06:19 by tbelleng          #+#    #+#              #
+#    Updated: 2023/04/14 14:15:00 by tbelleng         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
 
 NAME = minishell
 
@@ -16,7 +17,8 @@ SRC_DIR = ./src
 
 BIN_DIR = ./bin/
 
-SRC =	$(SRC_DIR)/main.c			\
+SRC = $(SRC_DIR)/free_all.c	\
+    $(SRC_DIR)/main.c			\
 		$(SRC_DIR)/parsing.c		\
 		$(SRC_DIR)/pars.c			\
 		$(SRC_DIR)/token.c			\
@@ -30,6 +32,7 @@ SRC =	$(SRC_DIR)/main.c			\
 		$(SRC_DIR)/free.c			\
 		$(SRC_DIR)/exec.c			\
 
+
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(BIN_DIR)%.o)
 
 
@@ -39,7 +42,7 @@ LIB = -Llibft -lft
 
 INCLUDES = ./includes
 
-CFLAGS = -Wall -Werror -Wextra -I$(INCLUDES) -g3
+CFLAGS = -Wall -Werror -Wextra -I$(INCLUDES) -g3i -lreadline
 
 all :	$(BIN_DIR) $(NAME)
 
