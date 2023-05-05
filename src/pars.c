@@ -6,7 +6,7 @@
 /*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 14:02:39 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/01 14:06:36 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/05 08:53:00 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,38 +51,29 @@ static int	ft_iter(char *str, enum e_token *ID)
 	return (i);
 }
 
-static t_pars	*get_word(t_pars **pars, char *str, enum e_token *ID)
+static t_pars	*get_word(t_pars **pars, char *str
+		, enum e_token *ID, t_pars *new)
 {
 	int		i;
 	int		j;
-	t_pars	*new;
 
 	i = 0;
 	j = ft_iter(str, ID);
 	new = (t_pars *)malloc(sizeof(t_pars));
+	if (!new)
+		exit(malloc_sec(*pars, new));
 	new->str = malloc(sizeof(char) * j + 1);
 	if (!new->str)
-		ft_free_all();
-	while (i < j)
-	{
-		new->str[i] = str[i];
-		i++;
-	}
-	new->str[i] = 0;
+		exit(malloc_sec(*pars, new));
+	ft_strlcpy(new->str, str, j);
 	new->ID = (enum e_token *) malloc(sizeof(enum e_token)
 			* (ft_strlen(new->str) + 1));
 	if (!new->ID)
-	{
-		free(new->ID);
-		ft_free_all();
-	}
+		exit(malloc_sec(*pars, new));
 	put_id(new->str, new->ID);
 	new->token = N_SORTED;
 	new->next = NULL;
-	if (!*pars)
-		new->prev = NULL;
-	else
-		new->prev = *pars;
+	new->prev = *pars;
 	return (new);
 }
 
@@ -100,15 +91,17 @@ int	create_pars(t_pars **pars, char *str, enum e_token *ID)
 	t_pars	*tmp;
 
 	i = 0;
+	if (!str[0])
+		return (2);
 	while (str[i])
 	{
 		while (ID[i] == IFS && str[i])
 			i++;
 		if (!str[i])
-			return (1);
+			return (2);
 		if (ID[i] != FINISH)
 		{
-			tmp = get_word(pars, str + i, ID + i);
+			tmp = get_word(pars, str + i, ID + i, tmp);
 			if (pars)
 				tmp->prev = *pars;
 			_lstadd_back(tmp, pars);

@@ -6,7 +6,7 @@
 /*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:57:38 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/01 17:06:11 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/03 20:13:11 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static int	check_token(t_pars *pars)
 int	ft_parcing(t_pars **pars, char *str, char **env)
 {
 	enum e_token	*id;
+	int				i;
 
 	(void) env;
 	*pars = 0;
@@ -50,8 +51,11 @@ int	ft_parcing(t_pars **pars, char *str, char **env)
 	if (!str)
 		return (0);
 	put_id(str, id);
-	if (!create_pars(pars, str, id))
+	i = create_pars(pars, str, id);
+	if (i == 0)
 		return (0);
+	else if (i == 2)
+		return (1);
 	free(id);
 	put_token(pars);
 	if (!check_token(*pars))

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+         #
+#    By: luciefer <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/03/14 10:06:19 by tbelleng          #+#    #+#              #
-#    Updated: 2023/04/12 14:31:09 by tbelleng         ###   ########.fr        #
+#    Created: 2023/04/15 11:35:37 by luciefer          #+#    #+#              #
+#    Updated: 2023/05/05 10:20:34 by luciefer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,14 +16,18 @@ SRC_DIR = ./src
 
 BIN_DIR = ./bin/
 
-SRC =	$(SRC_DIR)/builtin_exec.c     \
-		$(SRC_DIR)/cd.c     	\
-		$(SRC_DIR)/echo.c		\
-		$(SRC_DIR)/env.c		\
-		$(SRC_DIR)/exit.c		\
-		$(SRC_DIR)/export.c		\
-		$(SRC_DIR)/pwd.c		\
-		$(SRC_DIR)/unset.c		\
+SRC =	$(SRC_DIR)/main.c			\
+		$(SRC_DIR)/parsing.c		\
+		$(SRC_DIR)/pars.c			\
+		$(SRC_DIR)/token.c			\
+		$(SRC_DIR)/token2.c			\
+		$(SRC_DIR)/syntax.c			\
+		$(SRC_DIR)/syntax_utils.c	\
+		$(SRC_DIR)/syntax_utils2.c	\
+		$(SRC_DIR)/syntax_utils3.c	\
+		$(SRC_DIR)/parsing_utils.c	\
+		$(SRC_DIR)/signal.c			\
+		$(SRC_DIR)/free.c			\
 
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(BIN_DIR)%.o)
 

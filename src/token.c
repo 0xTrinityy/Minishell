@@ -6,7 +6,7 @@
 /*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 13:18:01 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/01 17:45:09 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/05 09:57:53 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,28 +28,25 @@ static enum e_pars	check_redirect(enum e_pars token, char *str)
 	int	i;
 
 	i = 0;
-	if (token == N_SORTED)
+	if (token != N_SORTED)
+		return (token);
+	if (ft_strlen(str) == 1)
 	{
-		if (ft_strlen(str) == 1)
-		{
-			if (str[0] == '>')
-				token = R_OUTPUT;
-			else if (str[0] == '<')
-				token = R_INPUT;
-		}
-		else
-		{
-			while (str[i] == '>' && str[i])
-			{
-				i++;
-				token = R_DOUTPUT;
-			}
-			while (str[i] == '<' && str[i])
-			{
-				i++;
-				token = R_DINPUT;
-			}
-		}
+		if (str[0] == '>')
+			token = R_OUTPUT;
+		else if (str[0] == '<')
+			token = R_INPUT;
+		return (token);
+	}
+	while (str[i] == '>' && str[i])
+	{
+		i++;
+		token = R_DOUTPUT;
+	}
+	while (str[i] == '<' && str[i])
+	{
+		i++;
+		token = R_DINPUT;
 	}
 	return (token);
 }
@@ -107,7 +104,8 @@ void	put_token(t_pars **pars)
 	(*pars) = tmp;
 	while ((*pars) != NULL)
 	{
-		if ((*pars)->next != 0 && is_redirect((*pars)->token) && (*pars)->next->token == CMD)
+		if ((*pars)->next != 0 && is_redirect((*pars)->token)
+			&& (*pars)->next->token == CMD)
 			(*pars)->next->token = ARG;
 		*pars = (*pars)->next;
 	}

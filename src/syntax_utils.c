@@ -6,7 +6,7 @@
 /*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 09:45:27 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/03 18:53:21 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/05 09:48:56 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,50 +40,50 @@ void	del_quote(t_pars *pars)
 	return ;
 }
 
-static char	*replace_expand(char *str, char **env, char *exp)
+static char	*ft_exist(char *tmp, char *str, char *env, char *exp)
 {
-	int		i;
-	int		j;
-	int		size;
-	char	*tmp;
+	int	size;
+	int	i;
 
 	i = 0;
+	size = (ft_strlen(str) - ft_strlen(exp))
+		+ (ft_strlen(env) - ft_strlen(exp) - 1);
+	tmp = malloc(sizeof(char) * size);
+	if (!tmp)
+		exit (0);
+	while (str[i] != '$')
+	{
+		tmp[i] = str[i];
+		i++;
+	}
+	tmp[i] = 0;
+	ft_strlcat(tmp, ft_strchr(env, '='),
+		ft_strlen(env) + ft_strlen(str));
+	i += ((int)ft_strlen(exp) + 1);
+	ft_strlcat(tmp, str + i, ft_strlen(str) + ft_strlen(env));
+	return (tmp);
+}
+
+static char	*replace_expand(char *str, char **env, char *exp)
+{
+	int		j;
+	char	*tmp;
+
 	j = 0;
-	while (env[i])
+	tmp = 0;
+	while (env[j])
 	{
-		if (ft_strnstr(env[i], exp, ft_strlen(exp)) != NULL
-				&& env[i][ft_strlen(exp)] == '=')
-		{
-			size = (ft_strlen(str) - ft_strlen(exp))
-				+ (ft_strlen(env[i]) - ft_strlen(exp) - 1);
-			tmp = malloc(sizeof(char) * size);
-			if (!tmp)
-				exit (0);
-			while (str[j] != '$')
-			{
-				tmp[j] = str[j];
-				j++;
-			}
-			tmp[j] = 0;
-			ft_strlcat(tmp, ft_strchr(env[i], '='),
-					ft_strlen(env[i]) + ft_strlen(str));
-			j += ((int)ft_strlen(exp) + 1);
-			ft_strlcat(tmp, str + j, ft_strlen(str) + ft_strlen(env[i]));
-			return (tmp);
-		}
+		if (ft_strnstr(env[j], exp, ft_strlen(exp)) != NULL
+			&& env[j][ft_strlen(exp)] == '=')
+			return (ft_exist(tmp, str, env[j], exp));
 		else
-			i++;
+			j++;
 	}
-	size = ft_strlen(str) - ft_strlen(exp) - 1;
-	if (size == 0)
+	j = 0;
+	if ((ft_strlen(str) - ft_strlen(exp) - 1) == 0)
 		return ("");
-	tmp = malloc(sizeof(char) * (size) + 1);
-	while (str[j] != '$')
-	{
-		tmp[j] = str[j];
-		j++;
-	}
-	tmp[j] = 0;
+	tmp = malloc(sizeof(char) * (ft_strlen(str) - ft_strlen(exp) - 1) + 1);
+	ft_strcpy_dollar(tmp, str);
 	j += (int)ft_strlen(exp) + 1;
 	if (str[j])
 		ft_strlcat(str + j, tmp, ft_strlen(str + j));
@@ -107,19 +107,15 @@ int	check_dote(t_pars *pars, int i)
 	ft_strlcat(tmp, ft_itoa(g_global), ft_strlen(pars->str) + 3);
 	if (pars->str[i])
 		ft_strlcat(tmp, pars->str + i, ft_strlen(pars->str));
-	free(pars->ID);
 	pars->str = tmp;
-	pars->ID = (enum e_token *) malloc(sizeof(enum e_token) * (ft_strlen(pars->str) + 1));
-	put_id(pars->str, pars->ID);
-	return (0);
+	pars = new_id(pars);
+	return (-1);
 }
 
-void	replace_dollar(t_pars *pars, char **env)
+void	replace_dollar(t_pars *pars, char **env, char *tmp)
 {
 	int		i;
-	int		j;
 	int		u;
-	char	*tmp;
 
 	i = 0;
 	if (pars->token == TXT_D)
@@ -132,32 +128,15 @@ void	replace_dollar(t_pars *pars, char **env)
 		else if (pars->ID[i] == DOLLAR)
 		{
 			i++;
-			j = i;
-			while ((pars->str[j] >= '0' && pars->str[j] <= '9')
-					|| (pars->str[j] >= 'a' && pars->str[j] <= 'z')
-					|| (pars->str[j] >= 'A' && pars->str[j] <= 'Z') || pars->str[j] == '_')
-				j++;
-			tmp = malloc(sizeof(char) * (j - i) + 1);
-			while (i < j)
-				tmp[u++] = pars->str[i++];
-			tmp[u] = 0;
+			tmp = is_expand(pars, tmp, i);
 			pars->str = replace_expand(pars->str, env, tmp);
-			if (pars->str[0])
-			{
-				free(pars->ID);
-				pars->ID = (enum e_token *) malloc(sizeof(enum e_token) * (ft_strlen(pars->str) + 1));
-				put_id(pars->str, pars->ID);
-			}
-			else
-				break;
-			i = 0;
+			if (!pars->str[0])
+				break ;
+			pars = new_id(pars);
+			i = -1;
 		}
-		else
-			i++;
+		i++;
 	}
 	pars->token = ARG;
 	return ;
 }
-
-
-
