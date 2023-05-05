@@ -6,7 +6,7 @@
 /*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 13:18:01 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/05 09:57:53 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/05 11:39:38 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static enum e_pars	check_redirect(enum e_pars token, char *str)
 	return (token);
 }
 
-static int	cmd_comp(char *cmd)
+int	cmd_comp(char *cmd)
 {
 	if (strcmp(cmd, "unset") == 0)
 		return (1);
@@ -60,7 +60,7 @@ static int	cmd_comp(char *cmd)
 	else if (strcmp(cmd, "cd") == 0)
 		return (1);
 	else if (strcmp(cmd, "exit") == 0)
-		return (1);
+		return (2);
 	else if (strcmp(cmd, "export") == 0)
 		return (1);
 	else if (strcmp(cmd, "echo") == 0)

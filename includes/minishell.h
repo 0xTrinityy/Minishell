@@ -6,7 +6,7 @@
 /*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/05 10:53:55 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/05 11:41:08 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct	s_pars
 // token.c
 
 void			put_token(t_pars **pars);
+int				cmd_comp(char *cmd);
 
 // token2.c
 
@@ -114,5 +115,9 @@ void			ft_free(t_pars *pars);
 // free.c
 int	malloc_sec(t_pars *pars, t_pars *new);
 int	malloc_sec2(t_pars *pars, char *tmp);
+
+// exec.c
+void	ft_exec(t_pars *pars, char *str);
+void	ft_exit(t_pars *pars, char *str);
 
 #endif

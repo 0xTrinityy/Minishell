@@ -6,7 +6,7 @@
 #    By: luciefer <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/15 11:35:37 by luciefer          #+#    #+#              #
-#    Updated: 2023/05/05 10:20:34 by luciefer         ###   ########.fr        #
+#    Updated: 2023/05/05 11:37:32 by luciefer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ SRC =	$(SRC_DIR)/main.c			\
 		$(SRC_DIR)/parsing_utils.c	\
 		$(SRC_DIR)/signal.c			\
 		$(SRC_DIR)/free.c			\
+		$(SRC_DIR)/exec.c			\
 
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(BIN_DIR)%.o)
 

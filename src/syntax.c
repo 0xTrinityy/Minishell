@@ -6,7 +6,7 @@
 /*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 08:58:14 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/05 10:55:45 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/05 12:04:26 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	check_nb_cmd(t_pars **pars)
 	}
 	*pars = tmp;
 	if (i == 0)
-		return(check_binary(*pars));
+		return (check_binary(*pars));
 	if (i != j + 1)
 		return (0);
 	return (1);
