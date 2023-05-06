@@ -6,7 +6,7 @@
 /*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 13:18:01 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/05 11:39:38 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/05 16:44:11 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,31 +51,34 @@ static enum e_pars	check_redirect(enum e_pars token, char *str)
 	return (token);
 }
 
-int	cmd_comp(char *cmd)
+static int    is_a_cmd(char *str, char **envp)
 {
-	if (strcmp(cmd, "unset") == 0)
+	char	**tab;
+	char	*path;
+	char	*cmd;
+
+	tab = 0;
+	path = 0;
+	cmd = 0;
+	path = find_path(envp);
+	tab = ft_split(path, ':');
+	cmd = get_cmd(tab, str);
+	free(tab);
+	printf("cmd = %s\n", cmd);
+	if (cmd != NULL)
+	{
+		free(cmd);
 		return (1);
-	else if (strcmp(cmd, "pwd") == 0)
-		return (1);
-	else if (strcmp(cmd, "cd") == 0)
-		return (1);
-	else if (strcmp(cmd, "exit") == 0)
-		return (2);
-	else if (strcmp(cmd, "export") == 0)
-		return (1);
-	else if (strcmp(cmd, "echo") == 0)
-		return (1);
-	else if (strcmp(cmd, "env") == 0)
-		return (1);
-	else
-		return (0);
+	}
+	free(cmd);
+	return (0);
 }
 
-static enum e_pars	check_cmd(enum e_pars token, char *str, enum e_token *ID)
+static enum e_pars	check_cmd(enum e_pars token, char *str, enum e_token *ID, char **env)
 {
 	if (token == N_SORTED)
 	{
-		if (cmd_comp(str))
+		if (is_a_cmd(str, env))
 			token = CMD;
 		else
 		{
@@ -87,7 +90,7 @@ static enum e_pars	check_cmd(enum e_pars token, char *str, enum e_token *ID)
 	return (token);
 }
 
-void	put_token(t_pars **pars)
+void	put_token(t_pars **pars, char **env)
 {
 	int		i;
 	t_pars	*tmp;
@@ -98,7 +101,7 @@ void	put_token(t_pars **pars)
 	{
 		(*pars)->token = check_pipe((*pars)->token, (*pars)->str, (*pars)->ID);
 		(*pars)->token = check_redirect((*pars)->token, (*pars)->str);
-		(*pars)->token = check_cmd((*pars)->token, (*pars)->str, (*pars)->ID);
+		(*pars)->token = check_cmd((*pars)->token, (*pars)->str, (*pars)->ID, env);
 		(*pars) = (*pars)->next;
 	}
 	(*pars) = tmp;

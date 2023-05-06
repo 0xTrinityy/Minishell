@@ -6,7 +6,7 @@
 /*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 11:18:26 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/05 15:43:24 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/05 17:33:53 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 extern int	g_global;
 
-void	ft_exec(t_pars *pars, char *str)
+void	ft_exec(t_pars *pars, char *str, char **env)
 {
-	if (cmd_comp(pars->str) == 2)
+	if (is_a_cmd(pars->str, env) == 2)
 		ft_exit(pars, str);
 }
 

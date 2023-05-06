@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 11:47:50 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/03 19:31:01 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/06 09:21:33 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,4 @@ void    infile_read(t_pipe *file, t_pars **pars)
 	if (file->infile < 0)
 		infile_error(ERR_INFILE, file);
 	free(tmp);
-	free(tmp1);
 }

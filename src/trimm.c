@@ -6,13 +6,13 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:18:24 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/05 14:50:29 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/05 16:40:31 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static char	*find_path(char **envp)
+char	*find_path(char **envp)
 {
 	int	i;
 	int	no_path;
@@ -41,7 +41,7 @@ static char	*find_path(char **envp)
 	return (*envp + 5);
 }
 
-static char	*get_cmd(char **paths, char *cmd)
+/*char	*get_cmd(char **paths, char *cmd)
 {
 	char	*tmp;
 	char	*command;
@@ -57,7 +57,7 @@ static char	*get_cmd(char **paths, char *cmd)
 		paths++;
 	}
 	return (NULL);
-}
+}*/
 
 static void    dup_cmdd(t_pars **pars, t_pipe *file)
 {

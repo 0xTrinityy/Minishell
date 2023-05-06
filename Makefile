@@ -6,7 +6,7 @@
 #    By: luciefer <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/14 10:06:19 by tbelleng          #+#    #+#              #
-#    Updated: 2023/04/14 14:15:00 by tbelleng         ###   ########.fr        #
+#    Updated: 2023/05/05 16:36:33 by luciefer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,7 @@ SRC_DIR = ./src
 
 BIN_DIR = ./bin/
 
-SRC = $(SRC_DIR)/free_all.c	\
-    $(SRC_DIR)/main.c			\
+SRC = $(SRC_DIR)/main.c			\
 		$(SRC_DIR)/parsing.c		\
 		$(SRC_DIR)/pars.c			\
 		$(SRC_DIR)/token.c			\
@@ -30,7 +29,17 @@ SRC = $(SRC_DIR)/free_all.c	\
 		$(SRC_DIR)/parsing_utils.c	\
 		$(SRC_DIR)/signal.c			\
 		$(SRC_DIR)/free.c			\
-		$(SRC_DIR)/exec.c			\
+		$(SRC_DIR)/cmd_exec.c		\
+		$(SRC_DIR)/gnl.c			\
+		$(SRC_DIR)/is_cmd.c			\
+		$(SRC_DIR)/multi_cmd.c		\
+		$(SRC_DIR)/error.c			\
+		$(SRC_DIR)/for_free.c		\
+		$(SRC_DIR)/gnl_utils.c		\
+		$(SRC_DIR)/one_cmd.c		\
+		$(SRC_DIR)/in_file.c		\
+		$(SRC_DIR)/out_file.c		\
+		$(SRC_DIR)/trimm.c			\
 
 
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(BIN_DIR)%.o)
@@ -42,7 +51,7 @@ LIB = -Llibft -lft
 
 INCLUDES = ./includes
 
-CFLAGS = -Wall -Werror -Wextra -I$(INCLUDES) -g3i -lreadline
+CFLAGS = -Wall -Werror -Wextra -I$(INCLUDES) -g3
 
 all :	$(BIN_DIR) $(NAME)
 

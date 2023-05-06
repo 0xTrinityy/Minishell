@@ -6,7 +6,7 @@
 /*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/05 11:19:25 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/05 16:35:55 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,10 +112,7 @@ typedef struct s_pipex
 
 // token.c
 
-void		put_token(t_pars **pars);
-enum e_pars	check_pipe(enum e_pars token, char *str, enum e_token *ID);
-enum e_pars	check_redirect(enum e_pars token, char *str);
-enum e_pars	check_cmd(enum e_pars token, char *str, enum e_token *ID);
+void		put_token(t_pars **pars, char **env);
 
 // token2.c
 
@@ -123,11 +120,8 @@ enum e_pars	check_quoted(char *str, enum e_token *ID);
 
 // pars.c
 
-void	create_pars(t_pars **pars, char *str, enum e_token *ID);
-t_pars	*get_word(t_pars **pars, char *str, enum e_token *ID);
 t_pars	*ft_lstlast_(t_pars *lst);
 void	_lst_back(t_pars *tmp, t_pars **pars);
-int		ft_iter(char *str, enum e_token *ID);
 
 // parcing.c
 
@@ -178,8 +172,10 @@ char		*getting_line(char *rest);
 int			check(char *str);
 char		*trimmed_buff(char *rest);
 int			ft_strlen_classic(char *str);
-void			put_token(t_pars **pars);
 int				cmd_comp(char *cmd);
+
+char	*get_cmd(char **paths, char *cmd);
+char	*find_path(char **envp);
 
 // token2.c
 
@@ -228,7 +224,7 @@ int	malloc_sec(t_pars *pars, t_pars *new);
 int	malloc_sec2(t_pars *pars, char *tmp);
 
 // exec.c
-void	ft_exec(t_pars *pars, char *str);
+/*void	ft_exec(t_pars *pars, char *str);
 void	ft_exit(t_pars *pars, char *str);
-
+*/
 #endif

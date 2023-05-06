@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 13:48:02 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/03 11:08:23 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/06 10:06:03 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,9 @@ void	parent_free(t_pipe *file)
 		i++;
 	}
 	free(file->cmd_paths);
-	free(file->pipe);
+	free(file->cmd_to_exec);
+	free(file->cmd);
+	//free(file->pipe);
 	close(6);
 	close(5);
 	close(4);

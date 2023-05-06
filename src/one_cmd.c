@@ -6,13 +6,13 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/05 14:55:35 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/05 16:38:49 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static char	*get_cmd(char **paths, char *cmd)
+/*char	*get_cmd(char **paths, char *cmd)
 {
 	char	*tmp;
 	char	*command;
@@ -28,7 +28,7 @@ static char	*get_cmd(char **paths, char *cmd)
 		paths++;
 	}
 	return (NULL);
-}
+}*/
 
 char    **tema_larg(t_pars **pars, t_pipe *file)
 {

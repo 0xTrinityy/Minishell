@@ -6,7 +6,7 @@
 /*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 14:02:39 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/05 08:53:00 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/05 17:21:21 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static t_pars	*get_word(t_pars **pars, char *str
 	int		j;
 
 	i = 0;
-	j = ft_iter(str, ID);
+	j = ft_iter(str, ID) + 1;
 	new = (t_pars *)malloc(sizeof(t_pars));
 	if (!new)
 		exit(malloc_sec(*pars, new));

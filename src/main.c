@@ -6,7 +6,7 @@
 /*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:49:01 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/05 11:42:09 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/05 16:36:55 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	main(int ac, char **av, char **envp)
 		add_history(str);
 		if (!ft_parcing(&pars, str, envp))
 			ft_putstr_fd("error\n", 1);
-		ft_exec(pars, str);
+		trimm_exec(&pars, envp);
 		free(str);
 		ft_free(pars);
 		str = readline("> ");
