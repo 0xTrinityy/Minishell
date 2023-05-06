@@ -6,7 +6,7 @@
 /*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 13:18:01 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/05 16:44:11 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/06 10:29:06 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static int    is_a_cmd(char *str, char **envp)
 	path = find_path(envp);
 	tab = ft_split(path, ':');
 	cmd = get_cmd(tab, str);
-	free(tab);
+	ft_free_tab(tab);
 	printf("cmd = %s\n", cmd);
 	if (cmd != NULL)
 	{

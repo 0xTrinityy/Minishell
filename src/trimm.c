@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:18:24 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/05 16:40:31 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/06 11:02:12 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ char	*find_path(char **envp)
 	if (!envp[0])
 	{
 		msg(NO_PATH);
-		exit(1);
 	}
 	i = 0;
 	while (envp[i] != NULL)
@@ -34,7 +33,6 @@ char	*find_path(char **envp)
 	if (no_path == 0)
 	{
 		msg(NO_PATH);
-		exit(1);
 	}
 	while (ft_strncmp("PATH", *envp, 4))
 		envp++;
@@ -125,7 +123,6 @@ int    trimm_exec(t_pars **pars, char **envp)
 	if (file.cmd_nb <= 0)
 	{
 		msg_error(ERR_CMD, &file);
-		exit (1);
 	}
 	return (0);
 }

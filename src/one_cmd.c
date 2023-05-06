@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/05 16:38:49 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/06 11:02:45 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ static void	first_child(t_pipe *file, t_pars **pars, char **envp)
 	if (count == 0 && file->cmd == NULL)
 	{
 		msg_error(ERR_CMD, file);
-		exit (1);
 	}
 	//printf("cmd arg 2 = %s\n", file->cmd_args[0]);
 	//printf("cmd arg 2 = %s\n", file->cmd_args[1]);

@@ -6,7 +6,7 @@
 /*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 11:30:22 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/05 08:45:45 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/06 10:30:21 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,17 @@ int	malloc_sec2(t_pars *pars, char *tmp)
 	ft_free(pars);
 	free(tmp);
 	return (0);
+}
+
+void	ft_free_tab(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i] != NULL)
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
 }

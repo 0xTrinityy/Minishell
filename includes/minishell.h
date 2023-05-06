@@ -6,7 +6,7 @@
 /*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/05 16:35:55 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/06 11:32:32 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,7 @@ void			ft_free(t_pars *pars);
 // free.c
 int	malloc_sec(t_pars *pars, t_pars *new);
 int	malloc_sec2(t_pars *pars, char *tmp);
-
+void	ft_free_tab(char **tab);
 // exec.c
 /*void	ft_exec(t_pars *pars, char *str);
 void	ft_exit(t_pars *pars, char *str);

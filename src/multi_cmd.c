@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/05 16:38:59 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/06 13:23:38 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,5 +192,6 @@ void    mult_cmd(t_pipe *file, t_pars **pars, char **envp)
 		i++;
 	}
 	parent_free(file);
+	free(file->pid);
 	return ;
 }
