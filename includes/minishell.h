@@ -192,14 +192,14 @@ void	put_id(char *str, enum e_token *ID);
 
 // syntax.c
 
-int				check_syntax(t_pars **pars, char **env);
+int				check_syntax(t_pars *pars, char **env);
 
 // syntax_utils.c
 void			del_quote(t_pars *pars);
 void			replace_dollar(t_pars *pars, char **env, char *tmp);
 
 // syntax_utils2.c
-int				check_syntax_redirect(t_pars *pars);
+int				check_syntax_redirect(t_pars *pars, char **env);
 int	is_redirect(enum e_pars pars);
 void	ft_strcpy_dollar(char *tmp, char *str);
 t_pars	*new_id(t_pars *pars);

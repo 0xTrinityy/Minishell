@@ -6,7 +6,7 @@
 /*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:57:38 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/05 17:18:59 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/06 16:38:24 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,8 @@ int	ft_parcing(t_pars **pars, char *str, char **env)
 	else if (i == 2)
 		return (1);
 	free(id);
-	printf("str: %s\n", (*pars)->str);
 	put_token(pars, env);
 	if (!check_token(*pars))
 		return (0);
-	return (check_syntax(pars, env));
+	return (check_syntax(*pars, env));
 }

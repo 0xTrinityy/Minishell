@@ -6,13 +6,13 @@
 /*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 08:58:14 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/05 12:04:26 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/06 16:35:12 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int	check_nb_cmd(t_pars **pars)
+static int	check_nb_cmd(t_pars *pars)
 {
 	int		i;
 	int		j;
@@ -20,41 +20,41 @@ static int	check_nb_cmd(t_pars **pars)
 
 	j = 0;
 	i = 0;
-	tmp = (*pars);
-	while ((*pars) != NULL)
+	tmp = pars;
+	while (pars != NULL)
 	{
-		if ((*pars)->token == CMD)
+		if (pars->token == CMD)
 			i++;
-		if ((*pars)->token == PIPE)
+		if (pars->token == PIPE)
 			j++;
-		*pars = (*pars)->next;
+		pars = pars->next;
 	}
-	*pars = tmp;
+	pars = tmp;
 	if (i == 0)
-		return (check_binary(*pars));
+		return (check_binary(pars));
 	if (i != j + 1)
 		return (0);
 	return (1);
 }
 
-static int	replace_expand(t_pars **pars, char **env)
+static int	replace_expand(t_pars *pars, char **env)
 {
 	t_pars	*tmp;
 	char	*str;
 
 	(void) env;
 	str = 0;
-	tmp = *pars;
-	while ((*pars) != NULL)
+	tmp = pars;
+	while (pars != NULL)
 	{
-		if ((*pars)->token == TXT_S)
-			del_quote(*pars);
-		else if ((*pars)->token == EXPAND || (*pars)->token == TXT
-			|| (*pars)->token == TXT_D)
-			replace_dollar(*pars, env, str);
-		*pars = (*pars)->next;
+		if (pars->token == TXT_S)
+			del_quote(pars);
+		else if (pars->token == EXPAND || pars->token == TXT
+			|| pars->token == TXT_D)
+			replace_dollar(pars, env, str);
+		pars = pars->next;
 	}
-	*pars = tmp;
+	pars = tmp;
 	return (1);
 }
 
@@ -65,7 +65,7 @@ static int	check_redirect(t_pars *pars)
 
 	i = 0;
 	tmp = pars;
-	while (pars != 0)
+	while (pars != 0 && pars->token != PIPE)
 	{
 		if (is_redirect(pars->token))
 		{
@@ -85,7 +85,7 @@ static int	check_arg(t_pars *pars, char **env)
 
 	tmp = pars;
 	if (check_redirect(pars))
-		return (check_syntax_redirect(pars));
+		return (check_syntax_redirect(pars, env));
 	if (pars->token != CMD)
 		return (0);
 	pars = pars->next;
@@ -93,7 +93,7 @@ static int	check_arg(t_pars *pars, char **env)
 	{
 		if (pars->token == PIPE && pars->next != NULL)
 		{
-			check_syntax(&pars->next, env);
+			check_syntax(pars->next, env);
 			break ;
 		}
 		if (pars->token != ARG)
@@ -107,14 +107,14 @@ static int	check_arg(t_pars *pars, char **env)
 	return (1);
 }
 
-int	check_syntax(t_pars **pars, char **env)
+int	check_syntax(t_pars *pars, char **env)
 {
 	int	i;
 
 	(void) env;
 	i = check_nb_cmd(pars);
 	i = i + replace_expand(pars, env);
-	i = i + check_arg(*pars, env);
+	i = i + check_arg(pars, env);
 	if (i != 3)
 		return (0);
 	return (i);
