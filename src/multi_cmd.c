@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/08 17:37:56 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/08 18:05:16 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,30 @@
 	}
 	return (NULL);
 }*/
+
+static void	read_doc(t_pipe *file)
+{
+	int		fd;
+	int     size;
+	char	*buffer;
+
+	fd = open(".here_doc", O_WRONLY | O_TRUNC | O_CREAT, 0000644);
+	if (fd < 0)
+		msg_error(ERR_HEREDOC, file);
+	size = ft_strlen(file->limit);
+	while (1)
+	{
+		write(1, "heredoc> ", 9);
+		buffer = get_next_line(0);
+		if (!ft_strncmp(buffer, file->limit, size))
+			break ;
+		write(fd, buffer, ft_strlen(buffer));
+		free(buffer);
+	}
+	free(buffer);
+	close(fd);
+	file->infile = open(".here_doc", O_RDONLY);
+}
 
 static int    pipe_count(t_pars **pars)
 {
@@ -69,24 +93,6 @@ static void	neww(int infile, int outfile)
 	dup2(outfile, 1);
 }
 
-
-
-/*static int many_pipe(t_pars **pars)
-{
-	t_pars  *tmp;
-	int     count;
-	
-	tmp = *pars;
-	count = 0;
-	while ((*pars) != NULL)
-	{
-		if ((*pars)->token == PIPE)
-			count++;
-	}
-	*pars = tmp;
-	return (count);
-}*/
-
 static char **tema_larg2(t_pipe *file, t_pars **pars)
 {
 	t_pars  *tmp;
@@ -125,7 +131,7 @@ static char **tema_larg2(t_pipe *file, t_pars **pars)
 	return (arg);
 }
 
-int    redirect_out(t_pipe *file, t_pars **pars)
+static int    redirect_in(t_pipe *file, t_pars **pars)
 {
 	int     count;
 	t_pars  *tmp;
@@ -146,7 +152,66 @@ int    redirect_out(t_pipe *file, t_pars **pars)
 	{
 		while ((*pars)->token != PIPE)
 		{
-			if ((*pars)->token == R_OUTPUT)
+			if ((*pars)->token == R_INPUT || (*pars)->token == R_DINPUT)
+				count++;
+			(*pars) = (*pars)->next;
+		}
+		*pars = tmp;
+	}
+	//printf("LE COUNT = %d\n", count);
+	if (count != 0)
+	{
+		while ((*pars) != NULL && (*pars)->token != PIPE)
+		{
+			if ((*pars)->token == R_INPUT)
+			{
+				file->infile = open((*pars)->next->str, O_RDONLY);
+				if (file->infile < 0)
+					msg_error(ERR_INFILE, file);
+			}
+			if ((*pars)->token == R_DINPUT)
+			{
+				read_doc(file);
+				if (file->infile < 0)
+					msg_error(ERR_INFILE, file);
+				file->doc = 1;
+			}
+		(*pars) = (*pars)->next;
+		}
+	}
+	else
+	{
+		if (file->pidx == 0)
+			file->infile = 0;
+		else
+			file->infile = file->pipe[2 * file->pidx - 2];
+	}
+	*pars = tmp;
+	return (file->outfile);
+}
+
+static int    redirect_out(t_pipe *file, t_pars **pars)
+{
+	int     count;
+	t_pars  *tmp;
+	
+	count = 0;
+	tmp = *pars;
+	
+	if (file->pidx != 0)
+	{
+		while (count != file->pidx && (*pars) != NULL)
+		{
+			if ((*pars)->token == PIPE)
+				count++;
+			(*pars) = (*pars)->next;
+		}
+	}
+	else if (file->pidx == 0)
+	{
+		while ((*pars)->token != PIPE)
+		{
+			if ((*pars)->token == R_OUTPUT || (*pars)->token == R_DOUTPUT)
 				count++;
 			(*pars) = (*pars)->next;
 		}
@@ -189,20 +254,22 @@ int    redirect_out(t_pipe *file, t_pars **pars)
 static void	multiple_cmd(t_pipe *file, char **envp, t_pars **pars)
 {
 	int     i;
+	int     in;
 	int     out;
 	
 	i = 0;
 	file->pid[file->pidx] = fork();
 	if (!file->pid[file->pidx])
 	{
+		in = redirect_in(file, pars);
 		out = redirect_out(file, pars);
 		//printf("la valeur de l'out vaut %d\n", out);
 		if (file->pidx == 0)
-			neww(file->infile, out);
+			neww(in, out);
 		else if (file->pidx == file->cmd_nb - 1)
-			neww(file->pipe[2 * file->pidx - 2], out);
+			neww(in, out);
 		else
-			neww(file->pipe[2 * file->pidx - 2], out);
+			neww(in, out);
 		close_pipes(file);
 		//file->cmd_args = ft_split(file->cmd_to_exec[file->pidx], ' ');
 		file->cmd_args = tema_larg2(file, pars);
