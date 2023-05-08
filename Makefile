@@ -3,12 +3,13 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+         #
+#    By: luciefer <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/14 10:06:19 by tbelleng          #+#    #+#              #
-#    Updated: 2023/04/12 14:31:09 by tbelleng         ###   ########.fr        #
+#    Updated: 2023/05/05 16:36:33 by luciefer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
 
 NAME = minishell
 
@@ -16,14 +17,30 @@ SRC_DIR = ./src
 
 BIN_DIR = ./bin/
 
-SRC =	$(SRC_DIR)/builtin_exec.c     \
-		$(SRC_DIR)/cd.c     	\
-		$(SRC_DIR)/echo.c		\
-		$(SRC_DIR)/env.c		\
-		$(SRC_DIR)/exit.c		\
-		$(SRC_DIR)/export.c		\
-		$(SRC_DIR)/pwd.c		\
-		$(SRC_DIR)/unset.c		\
+SRC = $(SRC_DIR)/main.c			\
+		$(SRC_DIR)/parsing.c		\
+		$(SRC_DIR)/pars.c			\
+		$(SRC_DIR)/token.c			\
+		$(SRC_DIR)/token2.c			\
+		$(SRC_DIR)/syntax.c			\
+		$(SRC_DIR)/syntax_utils.c	\
+		$(SRC_DIR)/syntax_utils2.c	\
+		$(SRC_DIR)/syntax_utils3.c	\
+		$(SRC_DIR)/parsing_utils.c	\
+		$(SRC_DIR)/signal.c			\
+		$(SRC_DIR)/free.c			\
+		$(SRC_DIR)/cmd_exec.c		\
+		$(SRC_DIR)/gnl.c			\
+		$(SRC_DIR)/is_cmd.c			\
+		$(SRC_DIR)/multi_cmd.c		\
+		$(SRC_DIR)/error.c			\
+		$(SRC_DIR)/for_free.c		\
+		$(SRC_DIR)/gnl_utils.c		\
+		$(SRC_DIR)/one_cmd.c		\
+		$(SRC_DIR)/in_file.c		\
+		$(SRC_DIR)/out_file.c		\
+		$(SRC_DIR)/trimm.c			\
+
 
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(BIN_DIR)%.o)
 
