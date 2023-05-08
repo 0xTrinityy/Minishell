@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:49:01 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/06 17:03:23 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/08 14:33:24 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,6 @@ int	main(int ac, char **av, char **envp)
         else if (i == 1)
 			trimm_exec(&pars, envp);
         printf("%s\n", strerror(g_global));
-        printf("i = %d\n", i);
-        printf("? = %d\n", g_global);
 		free(str);
 		ft_free(pars);
 		str = readline("> ");

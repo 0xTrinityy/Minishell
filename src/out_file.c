@@ -6,13 +6,13 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 14:08:49 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/02 14:06:14 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/06 15:29:55 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int     redirect_nb(t_pars **pars)
+static int     redirect_nb(t_pars **pars, t_pipe *file)
 {
 	t_pars  *tmp;
 	int count;
@@ -26,6 +26,7 @@ static int     redirect_nb(t_pars **pars)
 		*pars = (*pars)->next;
 	}
 	*pars = tmp;
+	file->out_nb = count;
 	return (count);
 }
 
@@ -40,7 +41,8 @@ void	out_read_v2(t_pipe *file, t_pars **pars)
 	tmp2 = *pars;
 	tmp3 = NULL;
 	flag = 0;
-	count = redirect_nb(pars);
+	count = redirect_nb(pars, file);
+	file->out_fd = malloc(sizeof(int) * count);
 	while ((*pars) != NULL && count > 0)
 	{
 		if ((*pars)->token == R_OUTPUT)
@@ -49,6 +51,7 @@ void	out_read_v2(t_pipe *file, t_pars **pars)
 			file->outfile = open(tmp3, O_TRUNC | O_CREAT | O_RDWR, 0000644);
 			if (file->outfile < 0)
 				msg_error(ERR_OUTFILE, file);
+			file->out_fd[flag] = file->outfile;
 			count--;
 			flag++;
 		}
@@ -58,6 +61,7 @@ void	out_read_v2(t_pipe *file, t_pars **pars)
 			file->outfile = open(tmp3, O_TRUNC | O_CREAT | O_RDWR, 0000644);
 			if (file->outfile < 0)
 				msg_error(ERR_OUTFILE, file);
+			file->out_fd[flag] = file->outfile;
 			count--;
 			flag++;
 		}

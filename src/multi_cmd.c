@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/06 13:23:38 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/08 17:37:56 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,12 +107,12 @@ static char **tema_larg2(t_pipe *file, t_pars **pars)
 	count++;
 	while ((*pars) != NULL && ((*pars)->token != PIPE && (*pars)->token != R_OUTPUT && (*pars)->token != R_DOUTPUT))
 	{
-		if ((*pars)->token == CMD)
+		if ((*pars)->token != CMD && (*pars)->token != PIPE)
 		{
-			if((*pars)->token != CMD && (*pars)->token != R_INPUT)
+			if((*pars)->token != CMD && (*pars)->token != R_INPUT && (*pars)->token != PIPE)
 			{
 				arg[count] = (*pars)->str;
-			//printf("L'arg vaut = %s\n", arg[count]);
+				//printf("L'arg vaut = %s\n", arg[count]);
 				count++;
 			}
 			(*pars) = (*pars)->next;
@@ -125,25 +125,89 @@ static char **tema_larg2(t_pipe *file, t_pars **pars)
 	return (arg);
 }
 
+int    redirect_out(t_pipe *file, t_pars **pars)
+{
+	int     count;
+	t_pars  *tmp;
+	
+	count = 0;
+	tmp = *pars;
+	
+	if (file->pidx != 0)
+	{
+		while (count != file->pidx && (*pars) != NULL)
+		{
+			if ((*pars)->token == PIPE)
+				count++;
+			(*pars) = (*pars)->next;
+		}
+	}
+	else if (file->pidx == 0)
+	{
+		while ((*pars)->token != PIPE)
+		{
+			if ((*pars)->token == R_OUTPUT)
+				count++;
+			(*pars) = (*pars)->next;
+		}
+		*pars = tmp;
+	}
+	//printf("LE COUNT = %d\n", count);
+	if (count != 0)
+	{
+		while ((*pars) != NULL && (*pars)->token != PIPE)
+		{
+			if ((*pars)->token == R_OUTPUT)
+			{
+				file->outfile = open((*pars)->next->str, O_TRUNC | O_CREAT | O_RDWR, 0000644);
+				if (file->outfile < 0)
+					msg_error(ERR_OUTFILE, file);
+			}
+			if ((*pars)->token == R_DOUTPUT)
+			{
+				file->outfile = open((*pars)->next->str, O_APPEND | O_CREAT | O_RDWR, 0000644);
+				if (file->outfile < 0)
+					msg_error(ERR_OUTFILE, file);
+			}
+		(*pars) = (*pars)->next;
+		}
+	}
+	else
+	{
+		if (file->pidx == 0)
+			file->outfile = file->pipe[1];
+		else if (file->pidx == file->cmd_nb - 1)
+			file->outfile = 1;
+		else
+			file->outfile = file->pipe[2 * file->pidx + 1];
+	}
+	*pars = tmp;
+	return (file->outfile);
+}
+
+
 static void	multiple_cmd(t_pipe *file, char **envp, t_pars **pars)
 {
 	int     i;
+	int     out;
 	
 	i = 0;
 	file->pid[file->pidx] = fork();
 	if (!file->pid[file->pidx])
 	{
+		out = redirect_out(file, pars);
+		//printf("la valeur de l'out vaut %d\n", out);
 		if (file->pidx == 0)
-			neww(file->infile, file->pipe[1]);
+			neww(file->infile, out);
 		else if (file->pidx == file->cmd_nb - 1)
-			neww(file->pipe[2 * file->pidx - 2], file->outfile);
+			neww(file->pipe[2 * file->pidx - 2], out);
 		else
-			neww(file->pipe[2 * file->pidx - 2], file->pipe[2 * file->pidx + 1]);
+			neww(file->pipe[2 * file->pidx - 2], out);
 		close_pipes(file);
 		//file->cmd_args = ft_split(file->cmd_to_exec[file->pidx], ' ');
 		file->cmd_args = tema_larg2(file, pars);
 		file->cmd = get_cmd(file->cmd_paths, file->cmd_args[0]);
-		//printf("CDM to b executed is %s\n", file->cmd);
+		//printf("ARG to b executed is %s\n", file->cmd_args[1]);
 		if (!file->cmd)
 		{
 			child_free1(file);
@@ -165,21 +229,24 @@ void    mult_cmd(t_pipe *file, t_pars **pars, char **envp)
 	(void)envp;
 	
 	i = 0;
-	redirect_hdoc(pars, file);
-	is_heredoc(file, pars);
+	//redirect_hdoc(pars, file);
+	//is_heredoc(file, pars);
+	file->infile = 0;
 	file->outfile = 1;
-	out_read_v2(file, pars);
-	//file->pipe_count = many_pipe(pars);
+	file->pidx = 0;
+	file->doc = 0;
+	file->out_nb = 0;
+	//out_read_v2(file, pars);
 	file->pipe_nb = pipe_count(pars);
 	file->pipe = malloc(sizeof(int *) * file->pipe_nb);
 	if (pipe(file->pipe) < 0)
 		msg_error(ERR_PIPE, file);
 	new_pipe(file);
-	//printf("DEBUGGGGG\n");
+	//printf("INFILE = %d\n", file->infile);
 	file->pid = malloc(sizeof(pid_t) * (file->cmd_nb));
 	if (!file->pid)
 		pid_err(file);
-	//printf("PIDX = %d et CMD_MB = %d\n", file.pidx, file.cmd_nb);
+	//printf("PIDX = %d et CMD_MB = %d\n", file->pidx, file->cmd_nb);
 	while (file->pidx < file->cmd_nb)
 	{
 		multiple_cmd(file, envp, pars);
@@ -192,6 +259,12 @@ void    mult_cmd(t_pipe *file, t_pars **pars, char **envp)
 		i++;
 	}
 	parent_free(file);
+	/*while (file->out_nb > 0)
+	{
+		close(file->out_fd[file->out_nb - 1]);
+		file->out_nb--;
+	}*/
+	//free(file->out_fd);
 	free(file->pid);
 	return ;
 }
