@@ -64,7 +64,6 @@ static int    is_a_cmd(char *str, char **envp)
 	tab = ft_split(path, ':');
 	cmd = get_cmd(tab, str);
 	ft_free_tab(tab);
-	printf("cmd = %s\n", cmd);
 	if (cmd != NULL)
 	{
 		free(cmd);

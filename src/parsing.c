@@ -12,6 +12,8 @@
 
 #include "../includes/minishell.h"
 
+extern int  g_global;
+
 void	ft_free_all(void)
 {
 	exit (0);
@@ -27,12 +29,27 @@ static int	check_token(t_pars *pars)
 		if (is_redirect(pars->token))
 		{
 			if (ft_strlen(pars->str) > 2)
+            {
+                g_global = 2;
 				return (0);
+            }
 		}
 		pars = pars->next;
 	}
 	pars = tmp;
 	return (1);
+}
+
+static int  check_ifs(char *str, enum e_token *ID) 
+{
+    int i;
+
+    i = 0;
+    while (ID[i] == IFS && str[i])
+        i++;
+    if (ID[i] != FINISH)
+        return (0);
+    return (1);
 }
 
 int	ft_parcing(t_pars **pars, char *str, char **env)
@@ -51,11 +68,11 @@ int	ft_parcing(t_pars **pars, char *str, char **env)
 	if (!str)
 		return (0);
 	put_id(str, id);
-	i = create_pars(pars, str, id);
+    if (check_ifs(str, id))
+        return (2);
+    i = create_pars(pars, str, id);
 	if (i == 0)
 		return (0);
-	else if (i == 2)
-		return (1);
 	free(id);
 	put_token(pars, env);
 	if (!check_token(*pars))

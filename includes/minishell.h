@@ -102,7 +102,7 @@ typedef struct s_pipex
 	char	**cmd_paths;
 	char	**cmd_args;
 	char	*cmd;
-
+    char    **env;
 }			t_pipe;
 
 

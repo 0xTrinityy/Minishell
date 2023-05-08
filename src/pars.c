@@ -91,14 +91,10 @@ int	create_pars(t_pars **pars, char *str, enum e_token *ID)
 	t_pars	*tmp;
 
 	i = 0;
-	if (!str[0])
-		return (2);
 	while (str[i])
 	{
 		while (ID[i] == IFS && str[i])
 			i++;
-		if (!str[i])
-			return (2);
 		if (ID[i] != FINISH)
 		{
 			tmp = get_word(pars, str + i, ID + i, tmp);

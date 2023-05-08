@@ -12,6 +12,8 @@
 
 #include "../includes/minishell.h"
 
+extern int  g_global;
+
 int	check_next(t_pars *pars)
 {
 	if (pars->next != NULL)
@@ -33,5 +35,6 @@ int	check_binary(t_pars *pars)
 		pars->token = CMD;
 		return (1);
 	}
+    g_global = 127;
 	return (0);
 }

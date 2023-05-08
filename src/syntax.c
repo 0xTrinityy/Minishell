@@ -117,5 +117,6 @@ int	check_syntax(t_pars *pars, char **env)
 	i = i + check_arg(pars, env);
 	if (i != 3)
 		return (0);
-	return (i);
+    else
+	return (1);
 }

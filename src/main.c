@@ -26,24 +26,42 @@ void	ft_free(t_pars *pars)
 	return ;
 }
 
+// static char **cpy_env(char **envp)
+// {
+//     int i;
+//     int j;
+//
+//     i = 0;
+//     while(envp[i])
+//         i++;
+//     
+// }
+
 int	main(int ac, char **av, char **envp)
 {
 	char	*str;
 	t_pars	*pars;
+    int     i;
+    // struct t_pipe   data;
 
 	(void) ac;
 	(void) av;
 	pars = NULL;
+    // data.env = cpy_env(envp);
 	signal (SIGINT, &siginthandler);
 	signal (SIGQUIT, SIG_IGN);
 	str = readline("> ");
 	while (str)
 	{
 		add_history(str);
-		if (!ft_parcing(&pars, str, envp))
+        i = ft_parcing(&pars, str, envp);
+		if (i == 0)
 			ft_putstr_fd("error\n", 1);
-		else
+        else if (i == 1)
 			trimm_exec(&pars, envp);
+        printf("%s\n", strerror(g_global));
+        printf("i = %d\n", i);
+        printf("? = %d\n", g_global);
 		free(str);
 		ft_free(pars);
 		str = readline("> ");
