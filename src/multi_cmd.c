@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/06 17:33:12 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/08 13:38:59 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ void    mult_cmd(t_pipe *file, t_pars **pars, char **envp)
 	if (pipe(file->pipe) < 0)
 		msg_error(ERR_PIPE, file);
 	new_pipe(file);
-	//printf("DEBUGGGGG\n");
+	printf("INFILE = %d\n", file->infile);
 	file->pid = malloc(sizeof(pid_t) * (file->cmd_nb));
 	if (!file->pid)
 		pid_err(file);
