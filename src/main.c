@@ -58,6 +58,7 @@ static char **cpy_env(char **envp, t_pipe *data)
     return (data->env);
 }
 
+
 int	main(int ac, char **av, char **envp)
 {
 	char	*str;
@@ -75,7 +76,7 @@ int	main(int ac, char **av, char **envp)
 	while (str)
 	{
 		add_history(str);
-        i = ft_parcing(&pars, str, data.env);
+        i = ft_parcing(&pars, str, envp);
 		if (i == 0)
 			ft_putstr_fd("error\n", 1);
         else if (i == 1)

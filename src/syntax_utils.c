@@ -122,7 +122,7 @@ void	replace_dollar(t_pars *pars, char **env, char *tmp)
 		del_quote(pars);
 	while (pars->str[i])
 	{
-		u = 0;
+        u = 0;
 		if (pars->ID[i] == DOLLAR && pars->str[i + 1] == '?')
 			i = check_dote(pars, i);
 		else if (pars->ID[i] == DOLLAR)
