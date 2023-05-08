@@ -12,30 +12,30 @@
 
 #include "../includes/minishell.h"
 
-static int	check_nb_cmd(t_pars *pars)
-{
-	int		i;
-	int		j;
-	t_pars	*tmp;
-
-	j = 0;
-	i = 0;
-	tmp = pars;
-	while (pars != NULL)
-	{
-		if (pars->token == CMD)
-			i++;
-		if (pars->token == PIPE)
-			j++;
-		pars = pars->next;
-	}
-	pars = tmp;
-	if (i == 0)
-		return (check_binary(pars));
-	if (i != j + 1)
-		return (0);
-	return (1);
-}
+// static int	check_nb_cmd(t_pars *pars)
+// {
+// 	int		i;
+// 	int		j;
+// 	t_pars	*tmp;
+//
+// 	j = 0;
+// 	i = 0;
+// 	tmp = pars;
+// 	while (pars != NULL)
+// 	{
+// 		if (pars->token == CMD)
+// 			i++;
+// 		if (pars->token == PIPE)
+// 			j++;
+// 		pars = pars->next;
+// 	}
+// 	pars = tmp;
+// 	if (i == 0)
+// 		return (check_binary(pars));
+// 	if (i != j + 1)
+// 		return (0);
+// 	return (1);
+// }
 
 static int	replace_expand(t_pars *pars, char **env)
 {
@@ -107,12 +107,28 @@ static int	check_arg(t_pars *pars, char **env)
 	return (1);
 }
 
+static int  replace_arg(t_pars *pars)
+{
+    t_pars  *tmp;
+
+    tmp = pars;
+    pars = pars->next;
+    while (pars != NULL && (pars->token == ARG || pars->token == CMD))
+    {
+        pars->token = ARG;
+        pars = pars->next;
+    }
+    pars = tmp;
+    return (1);
+}
+
 int	check_syntax(t_pars *pars, char **env)
 {
 	int	i;
 
 	(void) env;
-	i = check_nb_cmd(pars);
+	// i = check_nb_cmd(pars);
+    i = replace_arg(pars);
 	i = i + replace_expand(pars, env);
 	i = i + check_arg(pars, env);
     is_builtin(pars);
