@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/08 18:05:16 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/08 18:44:44 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,7 @@ static int    redirect_in(t_pipe *file, t_pars **pars)
 			file->infile = file->pipe[2 * file->pidx - 2];
 	}
 	*pars = tmp;
-	return (file->outfile);
+	return (file->infile);
 }
 
 static int    redirect_out(t_pipe *file, t_pars **pars)
