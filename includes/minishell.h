@@ -58,6 +58,7 @@ enum	e_pars
 {
 	N_SORTED,
 	CMD,
+    BUILTIN,
 	PIPE,
 	ARG,
 	EXPAND,
@@ -211,6 +212,7 @@ t_pars	*ft_lstlast_(t_pars *lst);
 // syntax_utils3.c
 int	check_next(t_pars *pars);
 int	check_binary(t_pars *pars);
+void    is_builtin(t_pars *pars);
 /***************************************************/
 
 // signal.c

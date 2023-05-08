@@ -115,6 +115,7 @@ int	check_syntax(t_pars *pars, char **env)
 	i = check_nb_cmd(pars);
 	i = i + replace_expand(pars, env);
 	i = i + check_arg(pars, env);
+    is_builtin(pars);
 	if (i != 3)
 		return (0);
     else
