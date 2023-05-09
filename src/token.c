@@ -73,11 +73,33 @@ static int    is_a_cmd(char *str, char **envp)
 	return (0);
 }
 
+static int	is_a_builtin(char *cmd)
+{
+	if (strcmp(cmd, "unset") == 0)
+		return (1);
+	else if (strcmp(cmd, "pwd") == 0)
+		return (1);
+	else if (strcmp(cmd, "cd") == 0)
+		return (1);
+	else if (strcmp(cmd, "exit") == 0)
+		return (2);
+	else if (strcmp(cmd, "export") == 0)
+		return (1);
+	else if (strcmp(cmd, "echo") == 0)
+		return (1);
+	else if (strcmp(cmd, "env") == 0)
+		return (1);
+	else
+		return (0);
+}
+
 static enum e_pars	check_cmd(enum e_pars token, char *str, enum e_token *ID, char **env)
 {
 	if (token == N_SORTED)
 	{
-		if (is_a_cmd(str, env))
+        if (is_a_builtin(str))
+            token = CMD;
+        else if (is_a_cmd(str, env))
 			token = CMD;
 		else
 		{

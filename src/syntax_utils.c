@@ -46,6 +46,7 @@ static char	*ft_exist(char *tmp, char *str, char *env, char *exp)
 	int	i;
 
 	i = 0;
+    write(1, "ok\n", 3);
 	size = (ft_strlen(str) - ft_strlen(exp))
 		+ (ft_strlen(env) - ft_strlen(exp) - 1);
 	tmp = malloc(sizeof(char) * size);
@@ -57,7 +58,7 @@ static char	*ft_exist(char *tmp, char *str, char *env, char *exp)
 		i++;
 	}
 	tmp[i] = 0;
-	ft_strlcat(tmp, ft_strchr(env, '='),
+	ft_strlcat(tmp, ft_strchr(env, '=') + 1,
 		ft_strlen(env) + ft_strlen(str));
 	i += ((int)ft_strlen(exp) + 1);
 	ft_strlcat(tmp, str + i, ft_strlen(str) + ft_strlen(env));

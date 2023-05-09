@@ -48,7 +48,7 @@ static char **cpy_env(char **envp, t_pipe *data)
             return (0);
         i++;
     }
-    data->env[i] = 0;
+    data->env[i - 1] = 0;
     i = 0;
     while(envp[i])
     {
@@ -77,11 +77,14 @@ int	main(int ac, char **av, char **envp)
 	{
 		add_history(str);
         i = ft_parcing(&pars, str, envp);
+        printf("token = %u\n", pars->token);
 		if (i == 0)
 			ft_putstr_fd("error\n", 1);
         else if (i == 1)
 			trimm_exec(&pars, data.env);
         printf("%s\n", strerror(g_global));
+        printf("i = %d\n", i);
+        printf("? = %d\n", g_global);
 		free(str);
 		ft_free(pars);
 		str = readline("> ");
