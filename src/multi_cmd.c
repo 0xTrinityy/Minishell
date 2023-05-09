@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/08 18:44:44 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/09 14:31:16 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ static void	read_doc(t_pipe *file)
 	}
 	free(buffer);
 	close(fd);
-	file->infile = open(".here_doc", O_RDONLY);
 }
 
 static int    pipe_count(t_pars **pars)
@@ -111,6 +110,8 @@ static char **tema_larg2(t_pipe *file, t_pars **pars)
 	count = 0;
 	arg[count] = file->cmd_to_exec[file->pidx];
 	count++;
+	while ((*pars)->token != CMD)
+			(*pars) = (*pars)->next;
 	while ((*pars) != NULL && ((*pars)->token != PIPE && (*pars)->token != R_OUTPUT && (*pars)->token != R_DOUTPUT))
 	{
 		if ((*pars)->token != CMD && (*pars)->token != PIPE)
@@ -134,32 +135,15 @@ static char **tema_larg2(t_pipe *file, t_pars **pars)
 static int    redirect_in(t_pipe *file, t_pars **pars)
 {
 	int     count;
+	int     nb_rd;
 	t_pars  *tmp;
 	
 	count = 0;
+	nb_rd = 0;
 	tmp = *pars;
-	
-	if (file->pidx != 0)
-	{
-		while (count != file->pidx && (*pars) != NULL)
-		{
-			if ((*pars)->token == PIPE)
-				count++;
-			(*pars) = (*pars)->next;
-		}
-	}
-	else if (file->pidx == 0)
-	{
-		while ((*pars)->token != PIPE)
-		{
-			if ((*pars)->token == R_INPUT || (*pars)->token == R_DINPUT)
-				count++;
-			(*pars) = (*pars)->next;
-		}
-		*pars = tmp;
-	}
-	//printf("LE COUNT = %d\n", count);
-	if (count != 0)
+	file->infile = 0;
+	//printf("entering infile\n");
+	if (file->pidx == 0)
 	{
 		while ((*pars) != NULL && (*pars)->token != PIPE)
 		{
@@ -168,26 +152,49 @@ static int    redirect_in(t_pipe *file, t_pars **pars)
 				file->infile = open((*pars)->next->str, O_RDONLY);
 				if (file->infile < 0)
 					msg_error(ERR_INFILE, file);
+				nb_rd++;
 			}
-			if ((*pars)->token == R_DINPUT)
+			else if ((*pars)->token == R_DINPUT)
 			{
 				read_doc(file);
-				if (file->infile < 0)
-					msg_error(ERR_INFILE, file);
-				file->doc = 1;
+				nb_rd++;
 			}
-		(*pars) = (*pars)->next;
+			(*pars) = (*pars)->next;
 		}
+		if (nb_rd == 0)
+			file->infile = 0;
+		*pars = tmp;
+		return (file->infile);
 	}
 	else
 	{
-		if (file->pidx == 0)
-			file->infile = 0;
-		else
-			file->infile = file->pipe[2 * file->pidx - 2];
+		while (count != file->pidx && (*pars) != NULL)
+		{
+			if ((*pars)->token == PIPE)
+				count++;
+			(*pars) = (*pars)->next;
+		}
+		while ((*pars) != NULL && (*pars)->token != PIPE)
+		{
+			if ((*pars)->token == R_INPUT)
+			{
+				file->infile = open((*pars)->next->str, O_RDONLY);
+				if (file->infile < 0)
+					msg_error(ERR_INFILE, file);
+				nb_rd++;
+			}
+			else if ((*pars)->token == R_DINPUT)
+			{
+				read_doc(file);
+				nb_rd++;
+			}
+			(*pars) = (*pars)->next;
+		}
+		if (nb_rd == 0)
+				file->infile = file->pipe[2 * file->pidx - 2];
+		*pars = tmp;
+		return (file->infile);
 	}
-	*pars = tmp;
-	return (file->infile);
 }
 
 static int    redirect_out(t_pipe *file, t_pars **pars)
@@ -262,6 +269,7 @@ static void	multiple_cmd(t_pipe *file, char **envp, t_pars **pars)
 	if (!file->pid[file->pidx])
 	{
 		in = redirect_in(file, pars);
+		//printf("IN = %d\n", in);
 		out = redirect_out(file, pars);
 		//printf("la valeur de l'out vaut %d\n", out);
 		if (file->pidx == 0)
@@ -274,7 +282,8 @@ static void	multiple_cmd(t_pipe *file, char **envp, t_pars **pars)
 		//file->cmd_args = ft_split(file->cmd_to_exec[file->pidx], ' ');
 		file->cmd_args = tema_larg2(file, pars);
 		file->cmd = get_cmd(file->cmd_paths, file->cmd_args[0]);
-		//printf("ARG to b executed is %s\n", file->cmd_args[1]);
+		printf("ARG to b executed is %s\n", file->cmd_args[0]);
+		printf("ARG to b executed is %s\n", file->cmd_args[1]);
 		if (!file->cmd)
 		{
 			child_free1(file);

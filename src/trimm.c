@@ -6,11 +6,14 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:18:24 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/06 11:02:12 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/09 14:50:51 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+
+//si on a un / ne pas verifier que c est une cmd et execute direct avec le path.
 
 char	*find_path(char **envp)
 {

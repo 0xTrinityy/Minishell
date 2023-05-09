@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/06 11:02:45 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/09 11:07:34 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,8 @@ static void	first_child(t_pipe *file, t_pars **pars, char **envp)
 
 void    one_cmd(t_pipe *file, t_pars **pars, char **envp)
 {	
-	redirect_hdoc(pars, file);
+	//redirect_hdoc(pars, file);
+	file->doc = 0;
 	is_heredoc(file, pars);
 	file->outfile = 1;
 	out_read_v2(file, pars);
