@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 13:48:02 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/06 13:23:41 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/09 21:04:42 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,46 +27,31 @@ void	msg_error(char *err, t_pipe *file)
 
 void	close_pipes(t_pipe *file)
 {
-	int	i;
-
-	i = 0;
-	while (i < (file->pipe_nb))
-	{
-		close(file->pipe[i]);
-		i++;
-	}
-	free(file->pipe);
+	close_here_doc_pipe(file->node, 1, 0);
+	close(file->fd[0]);
+	close(file->fd[1]);
+	if (file->prev_pipes != -1)
+		close(file->prev_pipes);
 }
 
 void	parent_free(t_pipe *file)
 {
 	int	i;
 
-	i = 0;
-	if (file->infile != -1 && file->infile != 0)
+	i = -1;
+	if (file->infile > 0)
 		close(file->infile);
 	if (file->outfile != 1)
 		close(file->outfile);
-	if (file->doc == 1 && unlink(".here_doc") == -1)
-		msg_error(ERR_UNLINK, file);
-	while (file->cmd_paths[i])
-	{
+	while (file->cmd_paths[++i])
 		free(file->cmd_paths[i]);
-		i++;
-	}
 	free(file->cmd_paths);
-	i = 0;
-	while(file->cmd_to_exec[i])
-	{
+	i = -1;
+	while(file->cmd_to_exec[++i])
 		free(file->cmd_to_exec[i]);
-		i++;
-	}
 	free(file->cmd_to_exec);
 	free(file->cmd);
-	//free(file->pipe);
-	close(6);
-	close(5);
-	close(4);
+	free(file->pid);
 }
 
 void	pid_err(t_pipe *file)

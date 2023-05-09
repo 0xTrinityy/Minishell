@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/08 14:19:46 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/09 20:51:40 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,13 @@
 # define ERR_UNLINK "Unlink error\n"
 # define NO_PATH "Path not found\n"
 # define INVALID_ID "not a valid identifier\n"
+# define INFILE 0
+# define HEREDOC 1
 
 # include <signal.h>
 # include "../libft/libft.h"
+
+
 
 enum	e_token
 {
@@ -72,10 +76,22 @@ enum	e_pars
 	TXT_D
 };
 
+typedef struct s_node t_node;
+
+typedef struct  s_node
+{
+	int     fd[2];
+	char    *limiter;
+	t_node  *next;
+	t_node  *prev;
+}   t_node;
+
 typedef struct	s_pars
 {
 	struct s_pars		*prev;
+	int                 doc;
 	char				*str;
+	char                *limiter;
 	enum e_token		*ID;
 	enum e_pars			token;
 	struct s_pars		*next;
@@ -94,6 +110,8 @@ typedef struct s_pipex
 	int		*pipe;
 	int		infile;
 	char    *in_str;
+	int     fd[2];
+	int     prev_pipes;
 	//char    *out_str;
 	int     out_nb;
 	int     *out_fd;
@@ -105,6 +123,8 @@ typedef struct s_pipex
 	char	**cmd_args;
 	char	*cmd;
     char    **env;
+    t_node  *node;
+    t_node  *last;
 }			t_pipe;
 
 
@@ -149,8 +169,12 @@ void	child_free1(t_pipe *file);
 /*************************TRIM-CMD*************************/
 
 void    one_cmd(t_pipe *file, t_pars **pars, char **envp);
-
-
+int	    here_doc(t_pipe *file);
+int     find_doc_fd(t_node *node, char *limiter);
+void    close_here_doc_pipe(t_node *node, int read, int write);
+void    create_node_and_list(t_pipe *file, char *limiter);
+t_pars* find_first_cmd(t_pars *pars);
+t_pars  *find_previous_cmd(t_pars *pars);
 /************************EXECUTION*************************/
 
 int    trimm_exec(t_pars **pars, char **envp);
