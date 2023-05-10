@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:18:24 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/09 20:41:03 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/10 14:52:17 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ static void    is_a_cmd(t_pars **pars, t_pipe *file, char **envp)
 	*pars = tmp;
 	if (file->cmd_nb > 0)
 		dup_cmdd(pars, file);
-	//printf("CMD a la fin du TRIM = %s et nombre de commande = %d\n", file->cmd_to_exec[0], file->cmd_nb);
+	printf(" nombre de commande = %d\n", file->cmd_nb);
 	return ;
 }
 
