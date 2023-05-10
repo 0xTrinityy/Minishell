@@ -78,6 +78,7 @@ int	main(int ac, char **av, char **envp)
 		add_history(str);
         i = ft_parcing(&pars, str, envp);
         printf("token = %u\n", pars->token);
+        printf("str = %s\n", pars->str);
 		if (i == 0)
 			ft_putstr_fd("error\n", 1);
         else if (i == 1)

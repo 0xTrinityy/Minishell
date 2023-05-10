@@ -50,7 +50,7 @@ static int	replace_expand(t_pars *pars, char **env)
 		if (pars->token == TXT_S)
 			del_quote(pars);
 		else if (pars->token == EXPAND || pars->token == TXT
-			|| pars->token == TXT_D)
+			|| pars->token == TXT_D || pars->token == CMD)
 			replace_dollar(pars, env, str);
 		pars = pars->next;
 	}

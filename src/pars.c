@@ -24,7 +24,7 @@ static int	len_redirect(enum e_token *ID)
 	return (i);
 }
 
-static int	ft_iter(char *str, enum e_token *ID)
+int	ft_iter(char *str, enum e_token *ID)
 {
 	int				i;
 	enum e_token	j;
@@ -51,7 +51,8 @@ static int	ft_iter(char *str, enum e_token *ID)
 	return (i);
 }
 
-static t_pars	*get_word(t_pars **pars, char *str
+
+t_pars	*get_word(t_pars **pars, char *str
 		, enum e_token *ID, t_pars *new)
 {
 	int		i;
@@ -73,11 +74,11 @@ static t_pars	*get_word(t_pars **pars, char *str
 	put_id(new->str, new->ID);
 	new->token = N_SORTED;
 	new->next = NULL;
-	new->prev = *pars;
+	// new->prev = *pars;
 	return (new);
 }
 
-static void	_lstadd_back(t_pars *tmp, t_pars **pars)
+void	_lstadd_back(t_pars *tmp, t_pars **pars)
 {
 	if (!*pars)
 		*pars = tmp;

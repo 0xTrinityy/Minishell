@@ -120,6 +120,6 @@ char	*is_expand(t_pars *pars, char *tmp, int i)
     while (i < j)
         tmp[u++] = pars->str[i++];
     tmp[u] = 0;
-    printf("tmp: %s\n", tmp);
+    // printf("tmp: %s\n", tmp);
     return (tmp);
 }
