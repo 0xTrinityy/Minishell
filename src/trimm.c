@@ -6,11 +6,15 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:18:24 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/06 11:02:12 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/10 14:52:17 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+
+//si on a un / ne pas verifier que c est une cmd et execute direct avec le path.
+
 
 char	*find_path(char **envp)
 {
@@ -101,15 +105,84 @@ static void    is_a_cmd(t_pars **pars, t_pipe *file, char **envp)
 	*pars = tmp;
 	if (file->cmd_nb > 0)
 		dup_cmdd(pars, file);
-	//printf("CMD a la fin du TRIM = %s et nombre de commande = %d\n", file->cmd_to_exec[0], file->cmd_nb);
+	printf(" nombre de commande = %d\n", file->cmd_nb);
 	return ;
+}
+
+
+t_pars* find_first_cmd(t_pars *pars)
+{
+	while (pars)
+	{
+		if (pars->token == CMD)
+		{
+			pars->doc = -1;
+			pars->limiter = NULL;
+			break ;
+		}
+		pars = pars->next;
+	}
+	return pars;
+}
+
+t_pars  *find_previous_cmd(t_pars *pars)
+{
+	while (pars && pars -> token != PIPE)
+		pars = pars -> prev;
+	while (pars && pars -> token != CMD)
+		pars = pars -> prev;
+	return pars;
+}
+
+void    set_doc(t_pipe *file, t_pars **pars)
+{
+	t_pars  *tmp;
+	t_pars  *cmd;
+	
+	tmp = *pars;
+	cmd = find_first_cmd(tmp);
+	tmp = *pars;
+	while (tmp)
+	{
+		if (tmp->token == R_DINPUT)
+		{
+			if (cmd)
+			{
+				cmd -> doc = HEREDOC;
+				cmd->limiter = tmp->next->str;
+			}
+			create_node_and_list(file, tmp->next->str);
+		}
+		else if (tmp->token == R_INPUT)
+		{
+			if (cmd)
+				cmd -> doc = INFILE;	
+		}
+		if (tmp->token == PIPE)
+			cmd = find_first_cmd(tmp->next);
+		tmp = tmp -> next;
+	}
+}
+
+static void init_pars(t_pars *pars)
+{
+	while (pars)
+	{
+		pars->limiter = NULL;
+		pars->doc = -1;
+		pars = pars->next;
+	}
 }
 
 int    trimm_exec(t_pars **pars, char **envp)
 {
 	t_pipe  file;
 	
+	ft_memset(&file, 0, sizeof(t_pipe));
+	init_pars(*pars);
 	is_a_cmd(pars, &file, envp);
+	set_doc(&file, pars);
+	here_doc(&file);
 	if (file.cmd_nb == 1)
 	{
 		one_cmd(&file, pars, envp);

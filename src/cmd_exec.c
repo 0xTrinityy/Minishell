@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 11:48:02 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/03 11:23:02 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/09 16:01:38 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ void	read_doc(t_pipe *file)
 	free(buffer);
 	close(fd);
 	file->infile = open(".here_doc", O_RDONLY);
-	dup2(file->infile, 0);
 }
 
 void	is_heredoc(t_pipe *file, t_pars **pars)

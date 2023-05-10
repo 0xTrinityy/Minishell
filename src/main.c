@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:49:01 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/08 14:33:24 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/09 19:01:50 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ft_free(t_pars *pars)
 	return ;
 }
 
-static char **cpy_env(char **envp, t_pipe *data)
+ char **cpy_env(char **envp, t_pipe *data)
 {
     int i;
     int j;
@@ -68,8 +68,9 @@ int	main(int ac, char **av, char **envp)
 
 	(void) ac;
 	(void) av;
+	ft_memset(&data, 0, sizeof(t_pipe));
 	pars = NULL;
-    data.env = cpy_env(envp, &data);
+    //data.env = cpy_env(envp, &data);
 	signal (SIGINT, &siginthandler);
 	signal (SIGQUIT, SIG_IGN);
 	str = readline("> ");
@@ -82,7 +83,7 @@ int	main(int ac, char **av, char **envp)
 		if (i == 0)
 			ft_putstr_fd("error\n", 1);
         else if (i == 1)
-			trimm_exec(&pars, data.env);
+			trimm_exec(&pars, envp);
         printf("%s\n", strerror(g_global));
         printf("i = %d\n", i);
         printf("? = %d\n", g_global);

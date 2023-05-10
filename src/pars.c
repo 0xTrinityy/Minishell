@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 14:02:39 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/05 17:21:21 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/09 20:20:02 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,19 @@ t_pars	*get_word(t_pars **pars, char *str
 
 void	_lstadd_back(t_pars *tmp, t_pars **pars)
 {
+	t_pars  *last;
+	
 	if (!*pars)
+	{
+		tmp->prev = NULL;
 		*pars = tmp;
+	}
 	else
-		ft_lstlast_(*pars)->next = tmp;
+	{
+		last = ft_lstlast_(*pars);
+		tmp->prev = last;
+		last->next = tmp;
+	}
 }
 
 int	create_pars(t_pars **pars, char *str, enum e_token *ID)
