@@ -187,8 +187,10 @@ static void	first_child(t_pipe *file, t_pars **pars, char **envp)
 
 void    one_cmd(t_pipe *file, t_pars **pars, char **envp)
 {	
+
 	//redirect_hdoc(pars, file);
 	file->doc = 0;
+
 	file->outfile = 1;
 	//out_read_v2(file, pars);
 	file->cmd_args = NULL;

@@ -144,6 +144,10 @@ enum e_pars	check_quoted(char *str, enum e_token *ID);
 
 t_pars	*ft_lstlast_(t_pars *lst);
 void	_lst_back(t_pars *tmp, t_pars **pars);
+t_pars  *get_word(t_pars **pars, char *str
+		, enum e_token *ID, t_pars *new);
+int ft_iter(char *str, enum e_token *ID);
+void    _lstadd_back(t_pars *tmp, t_pars **pars);
 
 // parcing.c
 

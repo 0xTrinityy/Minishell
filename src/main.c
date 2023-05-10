@@ -48,7 +48,7 @@ void	ft_free(t_pars *pars)
             return (0);
         i++;
     }
-    data->env[i] = 0;
+    data->env[i - 1] = 0;
     i = 0;
     while(envp[i])
     {
@@ -78,11 +78,15 @@ int	main(int ac, char **av, char **envp)
 	{
 		add_history(str);
         i = ft_parcing(&pars, str, envp);
+        printf("token = %u\n", pars->token);
+        printf("str = %s\n", pars->str);
 		if (i == 0)
 			ft_putstr_fd("error\n", 1);
         else if (i == 1)
 			trimm_exec(&pars, envp);
         printf("%s\n", strerror(g_global));
+        printf("i = %d\n", i);
+        printf("? = %d\n", g_global);
 		free(str);
 		ft_free(pars);
 		str = readline("> ");
