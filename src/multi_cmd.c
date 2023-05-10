@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/09 22:23:00 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/10 19:35:10 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,7 +277,9 @@ static void	multiple_cmd(t_pipe *file, char **envp, t_pars **pars)
 	if (!file->pid[file->pidx])
 	{
 		in = redirect_in(file, pars);
+		printf("INFILE = %d\n", in);
 		out = redirect_out(file, pars);
+		printf("OUTFILE = %d\n", out);
 		neww(in, out);
 		close_pipes(file);
 		fprintf(stderr, "%s\n", file->cmd_to_exec[file->pidx]);

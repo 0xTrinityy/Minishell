@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/10 16:57:52 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/10 19:01:31 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,19 +113,19 @@ static char    **tema_larg(t_pars **pars, t_pipe *file)
 	char    **arg;
 	
 	
-	arg = malloc(sizeof(char*) * 20000);
+	arg = malloc(sizeof(char*) * 100);
 	tmp = *pars;
 	i = 0;
 	arg[i] = file->cmd_to_exec[0];
 	i++;
 	//*pars = (*pars)->next;
-	printf("ELEMENT %s\n", (*pars)->str);
+	//printf("ELEMENT %s\n", (*pars)->str);
 	while ((*pars) != NULL && ((*pars)->token != R_OUTPUT && (*pars)->token != R_DOUTPUT && (*pars)->token !=  R_INPUT && (*pars)->token != R_DINPUT))
 	{
 		if((*pars)->token != CMD)
 		{
 			arg[i] = (*pars)->str;
-			printf("L'arg vaut = %s\n", arg[i]);
+			//printf("L'arg vaut = %s\n", arg[i]);
 			i++;
 		}
 		(*pars) = (*pars)->next;
@@ -161,14 +161,15 @@ static void	first_child(t_pipe *file, t_pars **pars, char **envp)
 		if ((*pars)->token == CMD)
 		{
 			count = 1;
-			if ((*pars)->next->str != NULL)
+			if ((*pars)->next != NULL)
 				file->cmd_args = tema_larg(pars, file);
 			else
 			{
+				file->cmd_args = malloc(sizeof(char *) * 2);
 				file->cmd_args[0] = file->cmd_to_exec[0];
+				//printf("cmd to exec = %s\n", file->cmd_to_exec[0]);
 				file->cmd_args[1] = 0;
 			}
-			//printf("cmd arg = %s\n", file->cmd_args[0]);
 			//printf("cmd arg = %s\n", file->cmd_args[1]);
 			file->cmd = get_cmd(file->cmd_paths, file->cmd_to_exec[0]);
 			break;
@@ -180,6 +181,7 @@ static void	first_child(t_pipe *file, t_pars **pars, char **envp)
 	{
 		msg_error(ERR_CMD, file);
 	}
+	fprintf(stderr, "%s\n", file->cmd_to_exec[0]);
 	//printf("cmd arg 2 = %s\n", file->cmd_args[0]);
 	//printf("cmd arg 2 = %s\n", file->cmd_args[1]);
 	execve(file->cmd, file->cmd_args, envp);
