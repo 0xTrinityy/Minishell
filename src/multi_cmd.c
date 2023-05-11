@@ -6,30 +6,20 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/10 19:35:10 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/11 00:00:38 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-//L'OFFICIEL
 
-/*char	*get_cmd(char **paths, char *cmd)
-{
-	char	*tmp;
-	char	*command;
 
-	while (*paths != NULL)
-	{
-		tmp = ft_strjoin(*paths, "/");
-		command = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (access(command, 0) == 0)
-			return (command);
-		free(command);
-		paths++;
-	}
-	return (NULL);
-}*/
+//probleme avec 2 cmd et + quand on a un here doc par cmd
+
+	//<< limit << lim cat | head -5
+	//<< limit cat | << lim cat 
+	
+//probleme avec 1 cmd
+	//<< limit << lim cat
 
 void create_node_and_list(t_pipe *file, char *limiter)
 {
@@ -75,8 +65,11 @@ static int    pipe_count(t_pars **pars)
 
 static void	neww(int infile, int outfile)
 {
-	dup2(infile, STDIN_FILENO);
-	close(infile);
+	if (infile != STDIN_FILENO)
+	{
+		dup2(infile, STDIN_FILENO);
+		close(infile);
+	}
 	if (outfile != STDOUT_FILENO)
 	{
 		dup2(outfile, STDOUT_FILENO);
@@ -200,7 +193,7 @@ static int    redirect_in(t_pipe *file, t_pars **pars)
 		}
 		*pars = tmp;
 		if (nb_rd == 0)
-			file->infile = file->fd[0];
+			file->infile = file->prev_pipes;
 		if (last == HEREDOC)
 			file->infile = find_doc_fd(file->node, cmd->limiter);
 		return (file->infile);
@@ -234,7 +227,10 @@ static int    redirect_out(t_pipe *file, t_pars **pars)
 		}
 		*pars = tmp;
 	}
-	//printf("LE COUNT = %d\n", count);
+	if (file->pidx == file->cmd_nb - 1)
+		file->outfile = STDOUT_FILENO;
+	else
+		file->outfile = file->fd[1];	
 	if (count != 0)
 	{
 		while ((*pars) != NULL && (*pars)->token != PIPE)
@@ -254,13 +250,6 @@ static int    redirect_out(t_pipe *file, t_pars **pars)
 			(*pars) = (*pars)->next;
 		}
 	}
-	else
-	{
-		if (file->pidx == file->cmd_nb - 1)
-			file->outfile = STDOUT_FILENO;
-		else
-			file->outfile = file->fd[1];
-	}
 	*pars = tmp;
 	return (file->outfile);
 }
@@ -277,9 +266,9 @@ static void	multiple_cmd(t_pipe *file, char **envp, t_pars **pars)
 	if (!file->pid[file->pidx])
 	{
 		in = redirect_in(file, pars);
-		printf("INFILE = %d\n", in);
+		printf("cmd :%s and his infile : %d\n", file->cmd_to_exec[file->pidx], in);
 		out = redirect_out(file, pars);
-		printf("OUTFILE = %d\n", out);
+		printf("cmd :%s and his outfile : %d\n", file->cmd_to_exec[file->pidx], out);
 		neww(in, out);
 		close_pipes(file);
 		fprintf(stderr, "%s\n", file->cmd_to_exec[file->pidx]);
@@ -319,6 +308,7 @@ void    mult_cmd(t_pipe *file, t_pars **pars, char **envp)
 	{
 		if (file->pidx != file->cmd_nb - 1 && pipe(file->fd) < 0)
 			msg_error(ERR_PIPE, file);
+		printf("Infile: %d Outfile: %d\n", file->fd[0], file->fd[1]);
 		multiple_cmd(file, envp, pars);
 		close(file->fd[1]);
 		if (file->prev_pipes != -1)
@@ -332,3 +322,4 @@ void    mult_cmd(t_pipe *file, t_pars **pars, char **envp)
 	parent_free(file);
 	return ;
 }
+

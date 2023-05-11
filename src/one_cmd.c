@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/10 19:01:31 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/11 05:22:00 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,37 +29,41 @@ static void parent_free_one(t_pipe *file)
 	free(file->cmd);
 }
 
-/*static t_pars* find_cmd_pars(t_pars *pars)
+static t_pars* find_cmd_pars(t_pars *pars)
 {
-	while ((pars) != NULL && pars->token != PIPE)
+	while ((pars) != NULL)
 	{
 		if ((pars)->token == CMD)
 			return pars;
 		pars = pars->next;
 	}
 	return (NULL);
-}*/
+}
 
 static int   one_cmd_in(t_pipe *file, t_pars **pars)
 {
 	int     last;
 	t_pars  *tmp;
-	//t_pars  *cmd;
+	t_pars  *cmd;
 
 	tmp = *pars;
 	last = 0;
+	
+	if (last == 0)
+		file->infile = STDIN_FILENO;
 	while ((*pars) != NULL)
 	{
 		if ((*pars)->token == R_INPUT)
 		{
 			last++;
+			last++;
 			file->infile = open((*pars)->next->str, O_RDONLY);
-			if (file->infile < 0)					
+			if (file->infile < 0)
 				msg_error(ERR_INFILE, file);
 		}
 		else if ((*pars)->token == R_DINPUT)
 		{
-			//cmd = find_cmd_pars(*pars);
+			cmd = find_cmd_pars(*pars);
 			last = HEREDOC;
 		}
 		(*pars) = (*pars)->next;
@@ -67,12 +71,13 @@ static int   one_cmd_in(t_pipe *file, t_pars **pars)
 	*pars = tmp;
 	if (last == 0)
 		file->infile = STDIN_FILENO;
-	//else if (last == HEREDOC)
-		//file->infile = find_doc_fd(file->node, cmd->limiter);
+	else if (last == HEREDOC)
+	{
+		file->infile = find_doc_fd(file->node, cmd->limiter);
+		//fprintf( stderr, "HERE DOC INFILE = %d\n", file->infile);
+	}
 	return (file->infile);
 }
-
-
 
 static int   one_cmd_out(t_pipe *file, t_pars **pars)
 {
@@ -144,9 +149,9 @@ static void	first_child(t_pipe *file, t_pars **pars, char **envp)
 	
 	
 	in = one_cmd_in(file, pars);
-	printf("INFILE = %d\n", in);
+	fprintf(stderr, "INFILE = %d\n", in);
 	out = one_cmd_out(file, pars);
-	printf("OUTFILE = %d\n", out);
+	fprintf(stderr, "OUTFILE = %d\n", out);
 	dup2(in, STDIN_FILENO);
 	dup2(out, STDOUT_FILENO);
 	count = 0 ;
@@ -167,7 +172,7 @@ static void	first_child(t_pipe *file, t_pars **pars, char **envp)
 			{
 				file->cmd_args = malloc(sizeof(char *) * 2);
 				file->cmd_args[0] = file->cmd_to_exec[0];
-				//printf("cmd to exec = %s\n", file->cmd_to_exec[0]);
+				printf("cmd to exec = %s\n", file->cmd_to_exec[0]);
 				file->cmd_args[1] = 0;
 			}
 			//printf("cmd arg = %s\n", file->cmd_args[1]);
@@ -189,10 +194,8 @@ static void	first_child(t_pipe *file, t_pars **pars, char **envp)
 
 void    one_cmd(t_pipe *file, t_pars **pars, char **envp)
 {	
-	//redirect_hdoc(pars, file);
 	file->doc = 0;
 	file->outfile = 1;
-	//out_read_v2(file, pars);
 	file->cmd_args = NULL;
 	file->pidx = fork();
 	if (file->pidx == 0)
