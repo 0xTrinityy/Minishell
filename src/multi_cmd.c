@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/11 00:00:38 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/12 14:38:27 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static char **tema_larg2(t_pipe *file, t_pars **pars)
 	
 	count = 0;
 	tmp = *pars;
-	arg = malloc(sizeof(char *) * 20000);
+	arg = malloc(sizeof(char *) * 100);
 	while (count != file->pidx && (*pars) != NULL)
 	{
 		if ((*pars)->token == PIPE)
@@ -101,6 +101,7 @@ static char **tema_larg2(t_pipe *file, t_pars **pars)
 	{
 		if ((*pars)->token != CMD && (*pars)->token != PIPE)
 		{
+			//fprintf(stdin,"LA ON EST SUR %s\n", (*pars)->str);
 			if((*pars)->token != CMD && (*pars)->token != R_INPUT && (*pars)->token != PIPE)
 			{
 				arg[count] = (*pars)->str;
@@ -274,8 +275,8 @@ static void	multiple_cmd(t_pipe *file, char **envp, t_pars **pars)
 		fprintf(stderr, "%s\n", file->cmd_to_exec[file->pidx]);
 		file->cmd_args = tema_larg2(file, pars);
 		file->cmd = get_cmd(file->cmd_paths, file->cmd_args[0]);
-		/*fprintf(stderr, "ARG to b executed is %s\n", file->cmd_args[0]);
-		fprintf(stderr, "ARG to b executed is %s\n", file->cmd_args[1]);*/
+		fprintf(stderr, "ARG to b executed is %s\n", file->cmd_args[0]);
+		fprintf(stderr, "ARG to b executed is %s\n", file->cmd_args[1]);
 		if (!file->cmd)
 		{
 			child_free1(file);
@@ -320,6 +321,7 @@ void    mult_cmd(t_pipe *file, t_pars **pars, char **envp)
 	while (++i < file->cmd_nb)
 		waitpid(file->pid[i], NULL, 0);
 	parent_free(file);
+	free(file->cmd);
 	return ;
 }
 
