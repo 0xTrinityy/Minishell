@@ -52,10 +52,9 @@ static int  check_ifs(char *str, enum e_token *ID)
     return (1);
 }
 
-int	ft_parcing(t_pars **pars, char *str, char **env)
+int	ft_parsing(t_pars **pars, char *str, char **env)
 {
 	enum e_token	*id;
-	int				i;
 
 	(void) env;
 	*pars = 0;
@@ -70,9 +69,7 @@ int	ft_parcing(t_pars **pars, char *str, char **env)
 	put_id(str, id);
     if (check_ifs(str, id))
         return (2);
-    i = create_pars(pars, str, id);
-	if (i == 0)
-		return (0);
+    create_pars(pars, str, id);
 	free(id);
 	put_token(pars, env);
 	if (!check_token(*pars))

@@ -74,7 +74,7 @@ t_pars	*get_word(t_pars **pars, char *str
 	put_id(new->str, new->ID);
 	new->token = N_SORTED;
 	new->next = NULL;
-	// new->prev = *pars;
+	new->prev = *pars;
 	return (new);
 }
 
@@ -82,7 +82,7 @@ void	_lstadd_back(t_pars *tmp, t_pars **pars)
 {
 	t_pars  *last;
 	
-	if (!*pars)
+	if (*pars == NULL)
 	{
 		tmp->prev = NULL;
 		*pars = tmp;
@@ -95,7 +95,7 @@ void	_lstadd_back(t_pars *tmp, t_pars **pars)
 	}
 }
 
-int	create_pars(t_pars **pars, char *str, enum e_token *ID)
+void	create_pars(t_pars **pars, char *str, enum e_token *ID)
 {
 	int		i;
 	t_pars	*tmp;
@@ -114,5 +114,4 @@ int	create_pars(t_pars **pars, char *str, enum e_token *ID)
 		}
 		i = i + ft_iter(str + i, ID + i);
 	}
-	return (1);
 }

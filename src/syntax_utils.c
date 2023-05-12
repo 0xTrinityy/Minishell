@@ -168,10 +168,12 @@ void    check_cmd_valid(t_pars *pars)
         {
             recreate_pars(pars, pars->str, pars->ID);
             pars = pars->next;
-            printf("pars = %s\n", pars->str);
+            pars->token = 1;
+            i = 0;
         }
         i++;
     }
+    return ;
 }
 
 void	replace_dollar(t_pars *pars, char **env, char *tmp)
@@ -182,6 +184,7 @@ void	replace_dollar(t_pars *pars, char **env, char *tmp)
 	i = 0;
 	if (pars->token == TXT_D)
 		del_quote(pars);
+    printf("%u\n", pars->token);
 	while (pars->str[i])
 	{
         u = 0;

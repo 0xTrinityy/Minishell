@@ -104,7 +104,7 @@ static enum e_pars	check_cmd(enum e_pars token, char *str, enum e_token *ID)
 	return (token);
 }
 
-static void    give_cmd(t_pars *pars)
+static void give_cmd(t_pars *pars)
 {
     int i;
 
@@ -113,8 +113,10 @@ static void    give_cmd(t_pars *pars)
     {
         if(is_redirect(pars->token))
         {
-            pars->next->token = ARG;
             pars = pars->next;
+            check_cmd(pars->token, pars->str, pars->ID);
+            if (pars->token == 0)
+                pars->token = TXT;
         }
         if(pars->token == PIPE)
             give_cmd(pars->next);

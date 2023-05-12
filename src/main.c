@@ -26,10 +26,28 @@ void	ft_free(t_pars *pars)
 	return ;
 }
 
- char **cpy_env(char **envp, t_pipe *data)
+void    malloc_word(char **env, t_pipe *data)
 {
     int i;
     int j;
+
+    i = 0;
+    while (env[i])
+    {
+        j = 0;
+        while(env[i][j])
+            j++;
+        data->env[i] = malloc(sizeof(char) * j + 1);
+        if (!data->env[i])
+            return ;
+        i++;
+    }
+    data->env[i - 1] = 0;
+}
+
+ char **cpy_env(char **envp, t_pipe *data)
+{
+    int i;
 
     i = 0;
     while(envp[i])
@@ -38,18 +56,7 @@ void	ft_free(t_pars *pars)
     if(!data->env)
         return (0);
     i = 0;
-    while(envp[i])
-    {
-        j = 0;
-        while(envp[i][j])
-            j++;
-        data->env[i] = malloc(sizeof(char) * j + 1);
-        if (!data->env[i])
-            return (0);
-        i++;
-    }
-    data->env[i - 1] = 0;
-    i = 0;
+    malloc_word(envp, data);
     while(envp[i])
     {
         data->env[i] = ft_strdup(envp[i]);
@@ -70,23 +77,16 @@ int	main(int ac, char **av, char **envp)
 	(void) av;
 	ft_memset(&data, 0, sizeof(t_pipe));
 	pars = NULL;
-    //data.env = cpy_env(envp, &data);
+    data.env = cpy_env(envp, &data);
 	signal (SIGINT, &siginthandler);
 	signal (SIGQUIT, SIG_IGN);
 	str = readline("> ");
 	while (str)
 	{
 		add_history(str);
-        i = ft_parcing(&pars, str, envp);
-        printf("token = %u\n", pars->token);
-        printf("str = %s\n", pars->str);
-		if (i == 0)
-			ft_putstr_fd("error\n", 1);
-        else if (i == 1)
+        i = ft_parsing(&pars, str, data.env);
+        if (i == 1)
 			trimm_exec(&pars, envp);
-        printf("%s\n", strerror(g_global));
-        printf("i = %d\n", i);
-        printf("? = %d\n", g_global);
 		free(str);
 		ft_free(pars);
 		str = readline("> ");
