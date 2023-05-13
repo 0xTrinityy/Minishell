@@ -46,6 +46,7 @@ static char	*ft_exist(char *tmp, char *str, char *env, char *exp)
 	int	i;
 
 	i = 0;
+    // write(1, "ok\n", 3);
 	size = (ft_strlen(str) - ft_strlen(exp))
 		+ (ft_strlen(env) - ft_strlen(exp) - 1);
 	tmp = malloc(sizeof(char) * size);
@@ -57,7 +58,7 @@ static char	*ft_exist(char *tmp, char *str, char *env, char *exp)
 		i++;
 	}
 	tmp[i] = 0;
-	ft_strlcat(tmp, ft_strchr(env, '='),
+	ft_strlcat(tmp, ft_strchr(env, '=') + 1,
 		ft_strlen(env) + ft_strlen(str));
 	i += ((int)ft_strlen(exp) + 1);
 	ft_strlcat(tmp, str + i, ft_strlen(str) + ft_strlen(env));
@@ -112,6 +113,69 @@ int	check_dote(t_pars *pars, int i)
 	return (-1);
 }
 
+void    _lst_add_between(t_pars *new, t_pars *pars)
+{
+    if(!pars)
+        new->next = NULL;
+    else
+    {
+        new->prev = pars;
+        new->next = pars->next;
+    }
+    if (!pars)
+        pars = new;
+    else
+        pars->next = new;
+}
+
+void    recreate_pars(t_pars *pars, char *str, enum e_token *ID)
+{
+    int		i;
+	t_pars	*tmp;
+    int     u;
+
+	i = 0;
+    u = 0;
+	while (str[i])
+	{
+		while (ID[i] == IFS && str[i])
+			i++;
+		if (ID[i] != FINISH)
+		{
+			tmp = get_word(&pars, str + i, ID + i, tmp);
+			_lst_add_between(tmp, pars);
+            if (pars->next != NULL)
+                pars = pars->next;
+		}
+		i = i + ft_iter(str + i, ID + i);
+	}
+    while(pars->prev != NULL)
+    {
+        pars = pars->prev;
+    }
+}
+
+void    check_cmd_valid(t_pars *pars)
+{
+    int i;
+    char    **tab;
+
+    i = 0;
+    tab = 0;
+    while (pars->str[i])
+    {
+        if (pars->ID[i] == IFS)
+        {
+            recreate_pars(pars, pars->str, pars->ID);
+            pars = pars->next;
+            pars->token = 1;
+            i = 0;
+        }
+        i++;
+    }
+    return ;
+}
+
 void	replace_dollar(t_pars *pars, char **env, char *tmp)
 {
 	int		i;
@@ -120,6 +184,7 @@ void	replace_dollar(t_pars *pars, char **env, char *tmp)
 	i = 0;
 	if (pars->token == TXT_D)
 		del_quote(pars);
+    printf("%u\n", pars->token);
 	while (pars->str[i])
 	{
         u = 0;
@@ -137,6 +202,10 @@ void	replace_dollar(t_pars *pars, char **env, char *tmp)
 		}
 		i++;
 	}
-	pars->token = ARG;
-	return ;
+    if (pars->token == TXT || pars->token == TXT_D
+              || pars->token == EXPAND)
+    	pars->token = ARG;
+    if (pars->token == CMD)
+        check_cmd_valid(pars);
+    return ;
 }

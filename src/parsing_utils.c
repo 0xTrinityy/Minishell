@@ -28,7 +28,7 @@ int	is_redirect(enum e_pars token)
 
 t_pars	*ft_lstlast_(t_pars *lst)
 {
-	while (lst != NULL)
+	while (lst->next != NULL)
 	{
 		if (lst->next == NULL)
 			return (lst);

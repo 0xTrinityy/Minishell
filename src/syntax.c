@@ -12,30 +12,7 @@
 
 #include "../includes/minishell.h"
 
-// static int	check_nb_cmd(t_pars *pars)
-// {
-// 	int		i;
-// 	int		j;
-// 	t_pars	*tmp;
-//
-// 	j = 0;
-// 	i = 0;
-// 	tmp = pars;
-// 	while (pars != NULL)
-// 	{
-// 		if (pars->token == CMD)
-// 			i++;
-// 		if (pars->token == PIPE)
-// 			j++;
-// 		pars = pars->next;
-// 	}
-// 	pars = tmp;
-// 	if (i == 0)
-// 		return (check_binary(pars));
-// 	if (i != j + 1)
-// 		return (0);
-// 	return (1);
-// }
+extern int  g_global;
 
 static int	replace_expand(t_pars *pars, char **env)
 {
@@ -50,7 +27,7 @@ static int	replace_expand(t_pars *pars, char **env)
 		if (pars->token == TXT_S)
 			del_quote(pars);
 		else if (pars->token == EXPAND || pars->token == TXT
-			|| pars->token == TXT_D)
+			|| pars->token == TXT_D || pars->token == CMD)
 			replace_dollar(pars, env, str);
 		pars = pars->next;
 	}
@@ -107,7 +84,7 @@ static int	check_arg(t_pars *pars, char **env)
 	return (1);
 }
 
-static int  replace_arg(t_pars *pars)
+static void  replace_arg(t_pars *pars)
 {
     t_pars  *tmp;
 
@@ -119,22 +96,37 @@ static int  replace_arg(t_pars *pars)
         pars = pars->next;
     }
     pars = tmp;
-    return (1);
+    return ;
 }
 
 int	check_syntax(t_pars *pars, char **env)
 {
-	int	i;
-
 	(void) env;
-	// i = check_nb_cmd(pars);
-    i = replace_arg(pars);
-	i = i + replace_expand(pars, env);
-    printf("str = %s\n", pars->str);
-	i = i + check_arg(pars, env);
+    replace_arg(pars);
+	replace_expand(pars, env);
+    if (!check_arg(pars, env))
+    {
+        g_global = 127;
+        return(0);
+    }
     is_builtin(pars);
-	if (i != 3)
-		return (0);
-    else
+    if (pars->token == CMD)
+    {
+        if (pars->next != NULL && pars->next->token == CMD)
+            pars = pars->next;
+    }
 	return (1);
 }
+
+    // tmp2 = pars;
+    // printf("str:");
+    // while(pars != NULL)
+    // {
+    //     printf(" %s", pars->str);
+    //     printf(" (%u)", pars->token);
+    //     pars = pars->next;
+    // }
+    // pars = tmp2;
+    // printf("\n");
+    // exit (0);
+

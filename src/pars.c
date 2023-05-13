@@ -24,7 +24,7 @@ static int	len_redirect(enum e_token *ID)
 	return (i);
 }
 
-static int	ft_iter(char *str, enum e_token *ID)
+int	ft_iter(char *str, enum e_token *ID)
 {
 	int				i;
 	enum e_token	j;
@@ -51,7 +51,8 @@ static int	ft_iter(char *str, enum e_token *ID)
 	return (i);
 }
 
-static t_pars	*get_word(t_pars **pars, char *str
+
+t_pars	*get_word(t_pars **pars, char *str
 		, enum e_token *ID, t_pars *new)
 {
 	int		i;
@@ -77,11 +78,11 @@ static t_pars	*get_word(t_pars **pars, char *str
 	return (new);
 }
 
-static void	_lstadd_back(t_pars *tmp, t_pars **pars)
+void	_lstadd_back(t_pars *tmp, t_pars **pars)
 {
 	t_pars  *last;
 	
-	if (!*pars)
+	if (*pars == NULL)
 	{
 		tmp->prev = NULL;
 		*pars = tmp;
@@ -94,7 +95,7 @@ static void	_lstadd_back(t_pars *tmp, t_pars **pars)
 	}
 }
 
-int	create_pars(t_pars **pars, char *str, enum e_token *ID)
+void	create_pars(t_pars **pars, char *str, enum e_token *ID)
 {
 	int		i;
 	t_pars	*tmp;
@@ -113,5 +114,4 @@ int	create_pars(t_pars **pars, char *str, enum e_token *ID)
 		}
 		i = i + ft_iter(str + i, ID + i);
 	}
-	return (1);
 }

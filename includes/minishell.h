@@ -144,10 +144,14 @@ enum e_pars	check_quoted(char *str, enum e_token *ID);
 
 t_pars	*ft_lstlast_(t_pars *lst);
 void	_lst_back(t_pars *tmp, t_pars **pars);
+t_pars  *get_word(t_pars **pars, char *str
+		, enum e_token *ID, t_pars *new);
+int ft_iter(char *str, enum e_token *ID);
+void    _lstadd_back(t_pars *tmp, t_pars **pars);
 
 // parcing.c
 
-int	ft_parcing(t_pars **pars, char *str, char **env);
+int	ft_parsing(t_pars **pars, char *str, char **env);
 enum e_token	*char_ID(char *str);
 
 void    is_cmd(t_pars **pars, t_pipe *file, char **envp);
@@ -209,11 +213,10 @@ enum e_pars		check_quoted(char *str, enum e_token *ID);
 
 // pars.c
 
-int				create_pars(t_pars **pars, char *str, enum e_token *ID);
+void				create_pars(t_pars **pars, char *str, enum e_token *ID);
 
 // parcing.c
 
-int				ft_parcing(t_pars **pars, char *str, char **env);
 void	put_id(char *str, enum e_token *ID);
 
 // syntax.c
@@ -222,7 +225,7 @@ int				check_syntax(t_pars *pars, char **env);
 
 // syntax_utils.c
 void			del_quote(t_pars *pars);
-void			replace_dollar(t_pars *pars, char **env, char *tmp);
+void    replace_dollar(t_pars *pars, char **env, char *tmp);
 
 // syntax_utils2.c
 int				check_syntax_redirect(t_pars *pars, char **env);
