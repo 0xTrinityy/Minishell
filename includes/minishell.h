@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/13 06:58:15 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/13 08:36:39 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,8 +208,12 @@ char	*get_cmd(char **paths, char *cmd);
 char	*find_path(char **envp);
 
 /*************************BUILT-IN**************************/
-
+void    builtin_exec(t_pars **pars, t_pipe *file);
 void    ft_echo(t_pars **pars, t_pipe *file);
+void    ft_env(t_pipe *file);
+void    ft_pwd(t_pipe *file);
+void    ft_export(t_pars **pars, t_pipe *file);
+
 // token2.c
 
 enum e_pars		check_quoted(char *str, enum e_token *ID);

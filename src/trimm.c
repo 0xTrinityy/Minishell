@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:18:24 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/13 06:45:39 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/13 08:17:43 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ static void    is_a_cmd(t_pars **pars, t_pipe *file, char **envp)
 		{
 			file->cmd_nb += 1;
 			file->builtin += 1;
+			break;
 			(*pars) = (*pars)->next;
 		}
 		file->cmd = get_cmd(file->cmd_paths, (*pars)->str);
@@ -189,7 +190,7 @@ int    trimm_exec(t_pars **pars, char **envp)
 	is_a_cmd(pars, &file, envp);
 	set_doc(&file, pars);
 	here_doc(&file);
-	if (file.cmd_nb == 1)
+	if (file.cmd_nb == 1 )
 	{
 		one_cmd(&file, pars, envp);
 		return (0);

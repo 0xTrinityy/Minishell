@@ -6,7 +6,7 @@
 #    By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/14 10:06:19 by tbelleng          #+#    #+#              #
-#    Updated: 2023/05/13 07:23:48 by tbelleng         ###   ########.fr        #
+#    Updated: 2023/05/13 08:41:31 by tbelleng         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,10 @@ SRC = $(SRC_DIR)/main.c			\
 		$(SRC_DIR)/here_doc.c		\
 		$(SRC_DIR)/built_in_exe.c	\
 		$(SRC_DIR)/ft_echo.c		\
+		$(SRC_DIR)/ft_env.c		    \
+		$(SRC_DIR)/ft_pwd.c		    \
+		$(SRC_DIR)/ft_export.c		\
+		
 
 
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(BIN_DIR)%.o)

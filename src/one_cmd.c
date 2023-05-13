@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/13 07:04:58 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/13 08:19:10 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ static void	first_child(t_pipe *file, t_pars **pars, char **envp)
 		close(out);
 	if (file->builtin != 0)
 	{
-		ft_echo(pars, file);
+		builtin_exec(pars, file);
 		return ;
 	}
 	while (*pars != NULL && ((*pars)->token != R_OUTPUT || (*pars)->token != R_DOUTPUT)) 
