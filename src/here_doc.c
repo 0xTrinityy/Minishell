@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 17:28:18 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/09 22:14:52 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/12 15:37:21 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int     find_doc_fd(t_node *head, char *limiter)
 	{
 		if (node->limiter == limiter)
 			break ;
+		node = node->next;
 	}
 	return (node->fd[0]);
 }
