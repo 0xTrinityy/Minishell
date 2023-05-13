@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/11 05:22:00 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/13 07:04:58 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,15 @@ static void parent_free_one(t_pipe *file)
 		close(file->infile);
 	if (file->outfile != 1)
 		close(file->outfile);
+	//if (file->builtin == 0)
+	//{
 	while (file->cmd_paths[++i])
 		free(file->cmd_paths[i]);
 	free(file->cmd_paths);
 	free(file->cmd_to_exec[0]);
 	free(file->cmd_to_exec);
 	free(file->cmd);
+	//}
 }
 
 static t_pars* find_cmd_pars(t_pars *pars)
@@ -161,6 +164,11 @@ static void	first_child(t_pipe *file, t_pars **pars, char **envp)
 		close(in);
 	if (out != 1)
 		close(out);
+	if (file->builtin != 0)
+	{
+		ft_echo(pars, file);
+		return ;
+	}
 	while (*pars != NULL && ((*pars)->token != R_OUTPUT || (*pars)->token != R_DOUTPUT)) 
 	{
 		if ((*pars)->token == CMD)

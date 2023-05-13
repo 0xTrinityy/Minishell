@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:18:24 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/12 13:50:44 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/13 06:45:39 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,12 @@ static void    is_a_cmd(t_pars **pars, t_pipe *file, char **envp)
 	file->cmd_paths = ft_split(file->paths, ':');
 	while ((*pars) != NULL)
 	{
+		if ((*pars)->token == BUILTIN)
+		{
+			file->cmd_nb += 1;
+			file->builtin += 1;
+			(*pars) = (*pars)->next;
+		}
 		file->cmd = get_cmd(file->cmd_paths, (*pars)->str);
 		if (file->cmd != NULL)
 		{

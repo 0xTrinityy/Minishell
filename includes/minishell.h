@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/09 20:51:40 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/13 06:58:15 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ typedef struct s_pipex
 	int		pid_numb;
 	int		pipe_nb;
 	int		cmd_nb;
+	int     builtin;
 	int     pipe_count;
 	int		doc;
 	int		*pipe;
@@ -112,7 +113,6 @@ typedef struct s_pipex
 	char    *in_str;
 	int     fd[2];
 	int     prev_pipes;
-	//char    *out_str;
 	int     out_nb;
 	int     *out_fd;
 	int		outfile;
@@ -207,6 +207,9 @@ int				cmd_comp(char *cmd);
 char	*get_cmd(char **paths, char *cmd);
 char	*find_path(char **envp);
 
+/*************************BUILT-IN**************************/
+
+void    ft_echo(t_pars **pars, t_pipe *file);
 // token2.c
 
 enum e_pars		check_quoted(char *str, enum e_token *ID);
