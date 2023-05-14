@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:49:01 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/09 19:01:50 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/14 17:37:36 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	main(int ac, char **av, char **envp)
 		add_history(str);
         i = ft_parsing(&pars, str, data.env);
         if (i == 1)
-			trimm_exec(&pars, envp);
+			trimm_exec(&pars, &data);
 		free(str);
 		ft_free(pars);
 		str = readline("> ");

@@ -6,12 +6,13 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 08:34:02 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/13 09:44:23 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/14 21:19:28 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../includes/minishell.h"
+
 
 static void	free_envp(char **new_env, int i)
 {
@@ -55,7 +56,7 @@ size_t	to_equal(char *str)
 	return (i);
 }
 
-int	new_or_replace(t_pipe *file, char *str)
+int	new_or_replace(t_pipe *data, char *str)
 {
 	int		i;
 	char	*var;
@@ -64,9 +65,9 @@ int	new_or_replace(t_pipe *file, char *str)
 	i = 0;
 	var_len = to_equal(str);
 	var = var_trimmed(str);
-	while (file->env[i])
+	while (data->env[i])
 	{
-		if (ft_strnstr(file->env[i], var, var_len) != NULL)
+		if (ft_strnstr(data->env[i], var, var_len) != NULL)
 			return (1);
 		i++;
 	}
@@ -92,7 +93,7 @@ char    *realloc_value(char *old, char *str, int size)
 }
 
 
-void new_value(t_pipe *file, char *str)
+void new_value(t_pipe *data, char *str)
 {
     int     i;
     int     j;
@@ -103,12 +104,12 @@ void new_value(t_pipe *file, char *str)
     j = 0;
     var_len = to_equal(str);
 	var = var_trimmed(str);
-	while (file->env[i])
+	while (data->env[i])
 	{
-	    if (ft_strnstr(file->env[i], var, var_len) != NULL)
+	    if (ft_strnstr(data->env[i], var, var_len) != NULL)
 	    {
 	        j = ft_strlen(str);
-	        file->env[i] = realloc_value(file->env[i], str, j);
+	        data->env[i] = realloc_value(data->env[i], str, j);
 	        break ;
 		}
 	    i++;
@@ -139,7 +140,7 @@ void new_value(t_pipe *file, char *str)
 	return (1);
 }*/
 
-static void	ft_export_arg(char *str, t_pipe *file)
+static void	ft_export_arg(char *str, t_pipe *data)
 {
 	int		i;
 	int     flag;
@@ -148,18 +149,12 @@ static void	ft_export_arg(char *str, t_pipe *file)
 	
 	i = 0;
 	flag = 0;
-	/*if (!valid_variable(str))
-	{	
-		printf("bash: export: %s : not a valid identifier", str);
-		exit(1);
-		//msg_error(INVALID_ID, str);
-	}*/
-	if (new_or_replace(file, str) == 1)
+	if (new_or_replace(data, str) == 1)
 	{
 		flag = 1;
-		new_value(file, str);
+		new_value(data, str);
 	}
-    while (file->env[i])
+    while (data->env[i])
     {
         i++;
 	}
@@ -167,9 +162,9 @@ static void	ft_export_arg(char *str, t_pipe *file)
 	if (!new_env)
 		return ;
 	i = 0;
-	while (file->env[i])
+	while (data->env[i])
 	{
-		new_env[i] = ft_strdup(file->env[i]);
+		new_env[i] = ft_strdup(data->env[i]);
 		if (!new_env[i])
 		{
 			free_envp(new_env, i);
@@ -179,17 +174,17 @@ static void	ft_export_arg(char *str, t_pipe *file)
 	}
 	if (flag == 1)
 	{
-		tmp = file->env;
+		tmp = data->env;
 		free(tmp);
-		file->env = new_env;
+		data->env = new_env;
 		return ;
 	}
 	new_env[i] = ft_strdup(str);
 	i++;
 	new_env[i] = 0;
-	tmp = file->env;
-	free(tmp);
-	file->env = new_env;
+	tmp = data->env;
+	//free(tmp);
+	data->env = new_env;
 }
 
 void	*ft_realloc(void **old, size_t old_c, size_t new_c)
@@ -210,12 +205,25 @@ void	*ft_realloc(void **old, size_t old_c, size_t new_c)
 	return (new);
 }
 
-void    ft_export(t_pars **pars, t_pipe *file)
+void    ft_export(t_pars **pars, t_pipe *data)
 {
+	int     i = 0;
+	t_pars  *tmp;
+	
+	tmp = *pars;
+	while ((*pars)->token != BUILTIN)
+		(*pars) = (*pars)->next;
+	(*pars) = (*pars)->next;
 	while ((*pars) != NULL && ((*pars)->token != R_OUTPUT && (*pars)->token != R_DOUTPUT && (*pars)->token != PIPE))
 	{
-		ft_export_arg((*pars)->str, file);
+		ft_export_arg((*pars)->str, data);
 		(*pars) = (*pars)->next;
+	}
+	*pars = tmp;
+	while (data->env[i])
+	{
+		printf("%s\n", data->env[i]);
+		i++;
 	}
 	return ;
 }

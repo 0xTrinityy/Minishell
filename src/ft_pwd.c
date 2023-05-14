@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 08:23:00 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/13 08:29:50 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/14 18:04:35 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ static char	*find_path_pwd(char **env)
 	return (*env + 4);
 }
 
-void    ft_pwd(t_pipe *file)
+void    ft_pwd(t_pipe *data)
 {
     char    *path;
 
-    path = find_path_pwd(file->env);
+    path = find_path_pwd(data->env);
     printf("%s", path);
 }

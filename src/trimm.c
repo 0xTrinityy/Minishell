@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:18:24 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/13 08:17:43 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/14 17:51:32 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,33 @@ char	*find_path(char **envp)
 	while (ft_strncmp("PATH", *envp, 4))
 		envp++;
 	return (*envp + 5);
+}
+
+static char	*find_path_spe(t_pipe *data)
+{
+	int	i;
+	int	no_path;
+
+	i = 0;
+	no_path = 0;
+	if (!data->env[0])
+	{
+		msg(NO_PATH);
+	}
+	i = 0;
+	while (data->env[i] != NULL)
+	{
+		if (ft_strnstr(data->env[i], "PATH", 6) != NULL)
+			no_path = 1;
+		i++;
+	}
+	if (no_path == 0)
+	{
+		msg(NO_PATH);
+	}
+	while (ft_strncmp("PATH", *data->env, 4))
+		data->env++;
+	return (*data->env + 5);
 }
 
 /*char	*get_cmd(char **paths, char *cmd)
@@ -82,13 +109,13 @@ static void    dup_cmdd(t_pars **pars, t_pipe *file)
 	*pars = tmp;
 }
 
-static void    is_a_cmd(t_pars **pars, t_pipe *file, char **envp)
+static void    is_a_cmd(t_pars **pars, t_pipe *file, t_pipe *data)
 {
 	t_pars *tmp;
 
 	tmp = *pars;
 	file->cmd_nb = 0;
-	file->paths = find_path(envp);
+	file->paths = find_path_spe(data);
 	file->cmd_paths = ft_split(file->paths, ':');
 	while ((*pars) != NULL)
 	{
@@ -181,23 +208,24 @@ static void init_pars(t_pars *pars)
 	}
 }
 
-int    trimm_exec(t_pars **pars, char **envp)
+int    trimm_exec(t_pars **pars, t_pipe *data)
 {
 	t_pipe  file;
 	
 	ft_memset(&file, 0, sizeof(t_pipe));
 	init_pars(*pars);
-	is_a_cmd(pars, &file, envp);
+	is_a_cmd(pars, &file, data);
 	set_doc(&file, pars);
 	here_doc(&file);
 	if (file.cmd_nb == 1 )
 	{
-		one_cmd(&file, pars, envp);
+		//printf("DEBUG");
+		one_cmd(&file, pars, data);
 		return (0);
 	}
 	if (file.cmd_nb > 1)
 	{
-		mult_cmd(&file, pars, envp);
+		//mult_cmd(&file, pars, envp);
 		return (0);
 	}
 	if (file.cmd_nb <= 0)

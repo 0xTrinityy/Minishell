@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/13 08:36:39 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/14 18:16:42 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ void	child_free1(t_pipe *file);
 
 /*************************TRIM-CMD*************************/
 
-void    one_cmd(t_pipe *file, t_pars **pars, char **envp);
+void    one_cmd(t_pipe *file, t_pars **pars, t_pipe *data);
 int	    here_doc(t_pipe *file);
 int     find_doc_fd(t_node *node, char *limiter);
 void    close_here_doc_pipe(t_node *node, int read, int write);
@@ -181,7 +181,7 @@ t_pars* find_first_cmd(t_pars *pars);
 t_pars  *find_previous_cmd(t_pars *pars);
 /************************EXECUTION*************************/
 
-int    trimm_exec(t_pars **pars, char **envp);
+int    trimm_exec(t_pars **pars, t_pipe *data);
 int	execution(t_pars **pars, char **envp);
 void	is_heredoc(t_pipe *file, t_pars **pars);
 void    infile_read(t_pipe *file, t_pars **pars);
@@ -208,11 +208,11 @@ char	*get_cmd(char **paths, char *cmd);
 char	*find_path(char **envp);
 
 /*************************BUILT-IN**************************/
-void    builtin_exec(t_pars **pars, t_pipe *file);
+void    builtin_exec(t_pars **pars, t_pipe *file, t_pipe *data);
 void    ft_echo(t_pars **pars, t_pipe *file);
-void    ft_env(t_pipe *file);
-void    ft_pwd(t_pipe *file);
-void    ft_export(t_pars **pars, t_pipe *file);
+void    ft_env(t_pipe *data);
+void    ft_pwd(t_pipe *data);
+void    ft_export(t_pars **pars, t_pipe *data);
 
 // token2.c
 

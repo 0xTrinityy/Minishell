@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/13 08:19:10 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/14 17:58:03 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ static char    **tema_larg(t_pars **pars, t_pipe *file)
 	return (arg);
 }
 
-static void	first_child(t_pipe *file, t_pars **pars, char **envp)
+static void	first_child(t_pipe *file, t_pars **pars, t_pipe *data)
 {
 	t_pars *tmp;
 	int count;
@@ -166,7 +166,8 @@ static void	first_child(t_pipe *file, t_pars **pars, char **envp)
 		close(out);
 	if (file->builtin != 0)
 	{
-		builtin_exec(pars, file);
+		printf("DEBUGGG le s\n");
+		builtin_exec(pars, file, data);
 		return ;
 	}
 	while (*pars != NULL && ((*pars)->token != R_OUTPUT || (*pars)->token != R_DOUTPUT)) 
@@ -197,17 +198,17 @@ static void	first_child(t_pipe *file, t_pars **pars, char **envp)
 	fprintf(stderr, "%s\n", file->cmd_to_exec[0]);
 	//printf("cmd arg 2 = %s\n", file->cmd_args[0]);
 	//printf("cmd arg 2 = %s\n", file->cmd_args[1]);
-	execve(file->cmd, file->cmd_args, envp);
+	execve(file->cmd, file->cmd_args, data->env);
 }
 
-void    one_cmd(t_pipe *file, t_pars **pars, char **envp)
+void    one_cmd(t_pipe *file, t_pars **pars, t_pipe *data)
 {	
 	file->doc = 0;
 	file->outfile = 1;
 	file->cmd_args = NULL;
 	file->pidx = fork();
 	if (file->pidx == 0)
-		first_child(file, pars, envp);
+		first_child(file, pars, data);
 	waitpid(file->pidx, NULL, 0);
 	parent_free_one(file);
 	return ;
