@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:18:24 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/14 17:51:32 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/15 14:15:52 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,18 +123,18 @@ static void    is_a_cmd(t_pars **pars, t_pipe *file, t_pipe *data)
 		{
 			file->cmd_nb += 1;
 			file->builtin += 1;
-			break;
+			//break;
 			(*pars) = (*pars)->next;
 		}
-		file->cmd = get_cmd(file->cmd_paths, (*pars)->str);
-		if (file->cmd != NULL)
+		//file->cmd = get_cmd(file->cmd_paths, (*pars)->str);
+		else if ((*pars)->token == CMD)
 		{
-			(*pars)->token = CMD;
-			//printf("l input %s est bien une commande\n", (*pars)->str);
 			file->cmd_nb += 1;
+			(*pars) = (*pars)->next;
 		}
 		//else if (ft_strncmp(file))
-		*pars = (*pars)->next;
+		else
+			*pars = (*pars)->next;
 	}
 	*pars = tmp;
 	if (file->cmd_nb > 0)
@@ -217,6 +217,7 @@ int    trimm_exec(t_pars **pars, t_pipe *data)
 	is_a_cmd(pars, &file, data);
 	set_doc(&file, pars);
 	here_doc(&file);
+	printf("HOW MANY CMD = %d\n", file.cmd_nb);
 	if (file.cmd_nb == 1 )
 	{
 		//printf("DEBUG");
