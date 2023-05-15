@@ -99,23 +99,27 @@ static void  replace_arg(t_pars *pars)
     return ;
 }
 
-int	check_syntax(t_pars *pars, char **env)
+t_pars	*check_syntax(t_pars *pars, char **env)
 {
 	(void) env;
     replace_arg(pars);
 	replace_expand(pars, env);
-    if (!check_arg(pars, env))
-    {
-        g_global = 127;
-        return(0);
-    }
-    is_builtin(pars);
     if (pars->token == CMD)
     {
         if (pars->next != NULL && pars->next->token == CMD)
+        {
             pars = pars->next;
+            give_cmd(pars, 1);
+            check_syntax(pars, env);
+        }
     }
-	return (1);
+    if (!check_arg(pars, env))
+    {
+        g_global = 127;
+        return(pars);
+    }
+    is_builtin(pars);
+	return (pars);
 }
 
     // tmp2 = pars;

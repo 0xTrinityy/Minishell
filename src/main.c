@@ -70,7 +70,6 @@ int	main(int ac, char **av, char **envp)
 {
 	char	*str;
 	t_pars	*pars;
-    int     i;
     t_pipe   data;
 
 	(void) ac;
@@ -84,8 +83,8 @@ int	main(int ac, char **av, char **envp)
 	while (str)
 	{
 		add_history(str);
-        i = ft_parsing(&pars, str, data.env);
-        if (i == 1)
+        ft_parsing(&pars, str, data.env);
+        if (g_global == 0)
 			trimm_exec(&pars, envp);
 		free(str);
 		ft_free(pars);

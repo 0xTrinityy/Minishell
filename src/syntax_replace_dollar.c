@@ -65,7 +65,7 @@ static char	*ft_exist(char *tmp, char *str, char *env, char *exp)
 	return (tmp);
 }
 
-static char	*replace_expand(char *str, char **env, char *exp)
+static char	*replace_value(char *str, char **env, char *exp)
 {
 	int		j;
 	char	*tmp;
@@ -183,8 +183,9 @@ void	replace_dollar(t_pars *pars, char **env, char *tmp)
 
 	i = 0;
 	if (pars->token == TXT_D)
+    {
 		del_quote(pars);
-    printf("%u\n", pars->token);
+    }
 	while (pars->str[i])
 	{
         u = 0;
@@ -194,18 +195,19 @@ void	replace_dollar(t_pars *pars, char **env, char *tmp)
 		{
 			i++;
 			tmp = is_expand(pars, tmp, i);
-			pars->str = replace_expand(pars->str, env, tmp);
+			pars->str = replace_value(pars->str, env, tmp);
 			if (!pars->str[0])
 				break ;
-			pars = new_id(pars);
+			pars = new_id(pars);        
 			i = -1;
 		}
 		i++;
 	}
+    if (pars->token == CMD)
+                check_cmd_valid(pars);
     if (pars->token == TXT || pars->token == TXT_D
               || pars->token == EXPAND)
     	pars->token = ARG;
-    if (pars->token == CMD)
-        check_cmd_valid(pars);
+    
     return ;
 }

@@ -138,7 +138,7 @@ void		put_token(t_pars **pars, char **env);
 
 // token2.c
 
-enum e_pars	check_quoted(char *str, enum e_token *ID);
+void    give_cmd(t_pars *pars, int i);
 
 // pars.c
 
@@ -147,7 +147,6 @@ void	_lst_back(t_pars *tmp, t_pars **pars);
 t_pars  *get_word(t_pars **pars, char *str
 		, enum e_token *ID, t_pars *new);
 int ft_iter(char *str, enum e_token *ID);
-void    _lstadd_back(t_pars *tmp, t_pars **pars);
 
 // parcing.c
 
@@ -188,10 +187,7 @@ void    infile_read(t_pipe *file, t_pars **pars);
 void	out_read(t_pipe *file, t_pars **pars);
 void	out_read_v2(t_pipe *file, t_pars **pars);
 void    mult_cmd(t_pipe *file, t_pars **pars, char **envp);
-//void    mult_cmd(t_pipe *file, t_pars **pars, char **envp);
-//void	multiple_cmd(t_pipe file, char **envp);
 void    redirect_hdoc(t_pars **pars, t_pipe *file);
-//char	*get_cmd(char **paths, char *cmd);
 
 /************************GNL******************************/
 
@@ -207,10 +203,6 @@ int				cmd_comp(char *cmd);
 char	*get_cmd(char **paths, char *cmd);
 char	*find_path(char **envp);
 
-// token2.c
-
-enum e_pars		check_quoted(char *str, enum e_token *ID);
-
 // pars.c
 
 void				create_pars(t_pars **pars, char *str, enum e_token *ID);
@@ -221,7 +213,7 @@ void	put_id(char *str, enum e_token *ID);
 
 // syntax.c
 
-int				check_syntax(t_pars *pars, char **env);
+t_pars				*check_syntax(t_pars *pars, char **env);
 
 // syntax_utils.c
 void			del_quote(t_pars *pars);

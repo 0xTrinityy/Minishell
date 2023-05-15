@@ -78,7 +78,7 @@ t_pars	*get_word(t_pars **pars, char *str
 	return (new);
 }
 
-void	_lstadd_back(t_pars *tmp, t_pars **pars)
+static void	_lstadd_back(t_pars *tmp, t_pars **pars)
 {
 	t_pars  *last;
 	

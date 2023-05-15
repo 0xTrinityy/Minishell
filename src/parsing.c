@@ -52,6 +52,33 @@ static int  check_ifs(char *str, enum e_token *ID)
     return (1);
 }
 
+void	put_id(char *str, enum e_token *ID)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\"')
+			ID[i] = D_QUOTE;
+		else if (str[i] == '\'')
+			ID[i] = S_QUOTE;
+		else if (str[i] == '|')
+			ID[i] = PIPE_C;
+		else if (str[i] == '<' || str[i] == '>')
+			ID[i] = REDIRECT;
+		else if (str[i] == '$')
+			ID[i] = DOLLAR;
+		else if (str[i] == ' ' || str[i] == '	' || str[i] == '\n')
+			ID[i] = IFS;
+		else
+			ID[i] = ALPHA_NUM;
+		i++;
+	}
+	ID[i] = FINISH;
+	return ;
+}
+
 int	ft_parsing(t_pars **pars, char *str, char **env)
 {
 	enum e_token	*id;
@@ -74,5 +101,7 @@ int	ft_parsing(t_pars **pars, char *str, char **env)
 	put_token(pars, env);
 	if (!check_token(*pars))
 		return (0);
-	return (check_syntax(*pars, env));
+    (*pars) = check_syntax(*pars, env);
+    printf("str(ft_parsing): %s\n", (*pars)->str);
+	return (1);
 }

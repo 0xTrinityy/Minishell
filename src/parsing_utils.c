@@ -36,30 +36,3 @@ t_pars	*ft_lstlast_(t_pars *lst)
 	}
 	return (lst);
 }
-
-void	put_id(char *str, enum e_token *ID)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\"')
-			ID[i] = D_QUOTE;
-		else if (str[i] == '\'')
-			ID[i] = S_QUOTE;
-		else if (str[i] == '|')
-			ID[i] = PIPE_C;
-		else if (str[i] == '<' || str[i] == '>')
-			ID[i] = REDIRECT;
-		else if (str[i] == '$')
-			ID[i] = DOLLAR;
-		else if (str[i] == ' ' || str[i] == '	' || str[i] == '\n')
-			ID[i] = IFS;
-		else
-			ID[i] = ALPHA_NUM;
-		i++;
-	}
-	ID[i] = FINISH;
-	return ;
-}
