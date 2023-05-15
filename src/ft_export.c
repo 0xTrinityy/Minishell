@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 08:34:02 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/14 21:19:28 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/15 13:30:13 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,6 @@ void	*ft_realloc(void **old, size_t old_c, size_t new_c)
 
 void    ft_export(t_pars **pars, t_pipe *data)
 {
-	int     i = 0;
 	t_pars  *tmp;
 	
 	tmp = *pars;
@@ -220,10 +219,10 @@ void    ft_export(t_pars **pars, t_pipe *data)
 		(*pars) = (*pars)->next;
 	}
 	*pars = tmp;
-	while (data->env[i])
+	/*while (data->env[i])
 	{
 		printf("%s\n", data->env[i]);
 		i++;
 	}
-	return ;
+	return ;*/
 }

@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/14 18:16:42 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/15 13:29:59 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,6 +213,7 @@ void    ft_echo(t_pars **pars, t_pipe *file);
 void    ft_env(t_pipe *data);
 void    ft_pwd(t_pipe *data);
 void    ft_export(t_pars **pars, t_pipe *data);
+void    ft_unset(t_pars **pars, t_pipe *data);
 
 // token2.c
 
