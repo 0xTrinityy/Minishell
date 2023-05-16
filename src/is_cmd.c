@@ -6,13 +6,13 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 17:34:49 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/05 16:39:57 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/15 17:55:45 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-/*char	*find_path(char **envp)
+char	*find_path(char **envp)
 {
 	int	i;
 	int	no_path;
@@ -39,7 +39,7 @@
 	while (ft_strncmp("PATH", *envp, 4))
 		envp++;
 	return (*envp + 5);
-}*/
+}
 
 char	*get_cmd(char **paths, char *cmd)
 {

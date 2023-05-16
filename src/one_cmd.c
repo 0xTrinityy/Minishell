@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/14 17:58:03 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/15 18:50:06 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ static char    **tema_larg(t_pars **pars, t_pipe *file)
 	return (arg);
 }
 
-static void	first_child(t_pipe *file, t_pars **pars, t_pipe *data)
+static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
 {
 	t_pars *tmp;
 	int count;
@@ -164,6 +164,8 @@ static void	first_child(t_pipe *file, t_pars **pars, t_pipe *data)
 		close(in);
 	if (out != 1)
 		close(out);
+	file->paths = find_path_spe(data);
+	file->cmd_paths = ft_split(file->paths, ':');
 	if (file->builtin != 0)
 	{
 		printf("DEBUGGG le s\n");
@@ -201,7 +203,7 @@ static void	first_child(t_pipe *file, t_pars **pars, t_pipe *data)
 	execve(file->cmd, file->cmd_args, data->env);
 }
 
-void    one_cmd(t_pipe *file, t_pars **pars, t_pipe *data)
+void    one_cmd(t_pipe *file, t_pars **pars, t_data *data)
 {	
 	file->doc = 0;
 	file->outfile = 1;

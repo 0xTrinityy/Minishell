@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:49:01 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/14 17:37:36 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/15 19:28:59 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ft_free(t_pars *pars)
 	return ;
 }
 
-void    malloc_word(char **env, t_pipe *data)
+void    malloc_word(char **env, t_data *data)
 {
     int i;
     int j;
@@ -42,27 +42,27 @@ void    malloc_word(char **env, t_pipe *data)
             return ;
         i++;
     }
-    data->env[i - 1] = 0;
+    data->env[i] = 0;
 }
 
- char **cpy_env(char **envp, t_pipe *data)
+void   cpy_env(char **envp, t_data *data)
 {
     int i;
 
     i = 0;
-    while(envp[i])
+    while(envp[i] != NULL)
         i++;
-    data->env = malloc(sizeof(char *) * i + 1);
+    data->env = malloc(sizeof(char *) * (i + 1));
     if(!data->env)
-        return (0);
+        return ;
     i = 0;
-    malloc_word(envp, data);
-    while(envp[i])
+    //malloc_word(envp, data);
+    while(envp[i] != NULL)
     {
         data->env[i] = ft_strdup(envp[i]);
         i++;
     }
-    return (data->env);
+    data->env[i] = NULL;
 }
 
 
@@ -71,13 +71,13 @@ int	main(int ac, char **av, char **envp)
 	char	*str;
 	t_pars	*pars;
     int     i;
-    t_pipe   data;
+    t_data   data;
 
 	(void) ac;
 	(void) av;
-	ft_memset(&data, 0, sizeof(t_pipe));
+	ft_memset(&data, 0, sizeof(t_data));
 	pars = NULL;
-    data.env = cpy_env(envp, &data);
+    cpy_env(envp, &data);
 	signal (SIGINT, &siginthandler);
 	signal (SIGQUIT, SIG_IGN);
 	str = readline("> ");

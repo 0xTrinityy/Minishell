@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 17:39:26 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/06 17:34:56 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/16 11:54:05 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int check_syntax_redirect(t_pars *pars, char **env)
                 return (0);
         }
         if (pars != NULL && pars->token == PIPE)
-            check_syntax(pars, env);
+            check_syntax(pars->next, env);
         pars = tmp;
     }
     return (1);

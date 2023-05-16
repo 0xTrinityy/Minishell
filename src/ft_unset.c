@@ -6,13 +6,13 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:40:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/15 13:33:32 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/15 18:52:50 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static char    **ft_unset_arg(t_pipe *data, char *str)
+static char    **ft_unset_arg(t_data *data, char *str)
 {
 	int     i;
 	int     k;
@@ -46,7 +46,7 @@ static char    **ft_unset_arg(t_pipe *data, char *str)
 	return (new);
 }
 
-void    ft_unset(t_pars **pars, t_pipe *data)
+void    ft_unset(t_pars **pars, t_data *data)
 {
 	int i;
 	t_pars  *tmp;

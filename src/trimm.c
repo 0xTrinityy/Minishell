@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:18:24 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/15 14:15:52 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/16 11:16:20 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 //si on a un / ne pas verifier que c est une cmd et execute direct avec le path.
 
 
-char	*find_path(char **envp)
+/*char	*find_path(char **envp)
 {
 	int	i;
 	int	no_path;
@@ -41,12 +41,13 @@ char	*find_path(char **envp)
 	while (ft_strncmp("PATH", *envp, 4))
 		envp++;
 	return (*envp + 5);
-}
+}*/
 
-static char	*find_path_spe(t_pipe *data)
+char	*find_path_spe(t_data *data)
 {
 	int	i;
 	int	no_path;
+	char    *new;
 
 	i = 0;
 	no_path = 0;
@@ -54,8 +55,7 @@ static char	*find_path_spe(t_pipe *data)
 	{
 		msg(NO_PATH);
 	}
-	i = 0;
-	while (data->env[i] != NULL)
+	while (data->env[i])
 	{
 		if (ft_strnstr(data->env[i], "PATH", 6) != NULL)
 			no_path = 1;
@@ -65,9 +65,12 @@ static char	*find_path_spe(t_pipe *data)
 	{
 		msg(NO_PATH);
 	}
-	while (ft_strncmp("PATH", *data->env, 4))
-		data->env++;
-	return (*data->env + 5);
+	i = 0;
+	while (ft_strncmp("PATH", data->env[i], 4))
+		i++;
+	new = ft_strdup(data->env[i]);
+	//new = ft_strdup(*data->env);	
+	return (new + 5);
 }
 
 /*char	*get_cmd(char **paths, char *cmd)
@@ -98,7 +101,7 @@ static void    dup_cmdd(t_pars **pars, t_pipe *file)
 	file->cmd_to_exec = malloc(sizeof(char *) * (file->cmd_nb + 1));
 	while ((*pars) != NULL)
 	{
-		if ((*pars)->token == CMD)
+		if ((*pars)->token == CMD || (*pars)->token == BUILTIN)
 		{
 			file->cmd_to_exec[i] = ft_strdup((*pars)->str);
 			i++;
@@ -109,12 +112,13 @@ static void    dup_cmdd(t_pars **pars, t_pipe *file)
 	*pars = tmp;
 }
 
-static void    is_a_cmd(t_pars **pars, t_pipe *file, t_pipe *data)
+static void    is_a_cmd(t_pars **pars, t_pipe *file, t_data *data)
 {
 	t_pars *tmp;
 
 	tmp = *pars;
 	file->cmd_nb = 0;
+	(void)data;
 	file->paths = find_path_spe(data);
 	file->cmd_paths = ft_split(file->paths, ':');
 	while ((*pars) != NULL)
@@ -130,6 +134,7 @@ static void    is_a_cmd(t_pars **pars, t_pipe *file, t_pipe *data)
 		else if ((*pars)->token == CMD)
 		{
 			file->cmd_nb += 1;
+			printf("CA PASSE\n");
 			(*pars) = (*pars)->next;
 		}
 		//else if (ft_strncmp(file))
@@ -148,7 +153,7 @@ t_pars* find_first_cmd(t_pars *pars)
 {
 	while (pars)
 	{
-		if (pars->token == CMD)
+		if (pars->token == CMD || pars->token == BUILTIN)
 		{
 			pars->doc = -1;
 			pars->limiter = NULL;
@@ -163,7 +168,7 @@ t_pars  *find_previous_cmd(t_pars *pars)
 {
 	while (pars && pars -> token != PIPE)
 		pars = pars -> prev;
-	while (pars && pars -> token != CMD)
+	while (pars && pars -> token != CMD && pars -> token != BUILTIN)
 		pars = pars -> prev;
 	return pars;
 }
@@ -208,7 +213,7 @@ static void init_pars(t_pars *pars)
 	}
 }
 
-int    trimm_exec(t_pars **pars, t_pipe *data)
+int    trimm_exec(t_pars **pars, t_data *data)
 {
 	t_pipe  file;
 	
@@ -226,7 +231,7 @@ int    trimm_exec(t_pars **pars, t_pipe *data)
 	}
 	if (file.cmd_nb > 1)
 	{
-		//mult_cmd(&file, pars, envp);
+		mult_cmd(&file, pars, data);
 		return (0);
 	}
 	if (file.cmd_nb <= 0)

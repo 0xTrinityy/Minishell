@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/15 13:29:59 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/15 18:55:57 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,12 +122,15 @@ typedef struct s_pipex
 	char	**cmd_paths;
 	char	**cmd_args;
 	char	*cmd;
-    char    **env;
     t_node  *node;
     t_node  *last;
 }			t_pipe;
 
 
+typedef struct s_data
+{
+	char    **env;
+}       t_data;
 
 
 /********************* PARCING *********************/
@@ -172,7 +175,7 @@ void	child_free1(t_pipe *file);
 
 /*************************TRIM-CMD*************************/
 
-void    one_cmd(t_pipe *file, t_pars **pars, t_pipe *data);
+void    one_cmd(t_pipe *file, t_pars **pars, t_data *data);
 int	    here_doc(t_pipe *file);
 int     find_doc_fd(t_node *node, char *limiter);
 void    close_here_doc_pipe(t_node *node, int read, int write);
@@ -181,13 +184,14 @@ t_pars* find_first_cmd(t_pars *pars);
 t_pars  *find_previous_cmd(t_pars *pars);
 /************************EXECUTION*************************/
 
-int    trimm_exec(t_pars **pars, t_pipe *data);
+int    trimm_exec(t_pars **pars, t_data *data);
 int	execution(t_pars **pars, char **envp);
 void	is_heredoc(t_pipe *file, t_pars **pars);
 void    infile_read(t_pipe *file, t_pars **pars);
 void	out_read(t_pipe *file, t_pars **pars);
 void	out_read_v2(t_pipe *file, t_pars **pars);
-void    mult_cmd(t_pipe *file, t_pars **pars, char **envp);
+void    mult_cmd(t_pipe *file, t_pars **pars, t_data *data);
+char	*find_path_spe(t_data *data);
 //void    mult_cmd(t_pipe *file, t_pars **pars, char **envp);
 //void	multiple_cmd(t_pipe file, char **envp);
 void    redirect_hdoc(t_pars **pars, t_pipe *file);
@@ -208,12 +212,13 @@ char	*get_cmd(char **paths, char *cmd);
 char	*find_path(char **envp);
 
 /*************************BUILT-IN**************************/
-void    builtin_exec(t_pars **pars, t_pipe *file, t_pipe *data);
+void    builtin_exec(t_pars **pars, t_pipe *file, t_data *data);
+void    builtin_exe_mult(t_pars **pars, t_pipe *file, t_data *data);
 void    ft_echo(t_pars **pars, t_pipe *file);
-void    ft_env(t_pipe *data);
-void    ft_pwd(t_pipe *data);
-void    ft_export(t_pars **pars, t_pipe *data);
-void    ft_unset(t_pars **pars, t_pipe *data);
+void    ft_env(t_data *data);
+void    ft_pwd(t_data *data);
+void    ft_export(t_pars **pars, t_data *data);
+void    ft_unset(t_pars **pars, t_data *data);
 
 // token2.c
 

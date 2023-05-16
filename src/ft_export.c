@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 08:34:02 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/15 13:30:13 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/16 11:35:50 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ size_t	to_equal(char *str)
 	return (i);
 }
 
-int	new_or_replace(t_pipe *data, char *str)
+int	new_or_replace(t_data *data, char *str)
 {
 	int		i;
 	char	*var;
@@ -65,7 +65,7 @@ int	new_or_replace(t_pipe *data, char *str)
 	i = 0;
 	var_len = to_equal(str);
 	var = var_trimmed(str);
-	while (data->env[i])
+	while (data->env[i] != 0)
 	{
 		if (ft_strnstr(data->env[i], var, var_len) != NULL)
 			return (1);
@@ -93,7 +93,7 @@ char    *realloc_value(char *old, char *str, int size)
 }
 
 
-void new_value(t_pipe *data, char *str)
+void new_value(t_data *data, char *str)
 {
     int     i;
     int     j;
@@ -140,7 +140,7 @@ void new_value(t_pipe *data, char *str)
 	return (1);
 }*/
 
-static void	ft_export_arg(char *str, t_pipe *data)
+static void	ft_export_arg(char *str, t_data *data)
 {
 	int		i;
 	int     flag;
@@ -154,7 +154,7 @@ static void	ft_export_arg(char *str, t_pipe *data)
 		flag = 1;
 		new_value(data, str);
 	}
-    while (data->env[i])
+    while (data->env[i] != 0)
     {
         i++;
 	}
@@ -162,7 +162,7 @@ static void	ft_export_arg(char *str, t_pipe *data)
 	if (!new_env)
 		return ;
 	i = 0;
-	while (data->env[i])
+	while (data->env[i] != 0)
 	{
 		new_env[i] = ft_strdup(data->env[i]);
 		if (!new_env[i])
@@ -205,7 +205,7 @@ void	*ft_realloc(void **old, size_t old_c, size_t new_c)
 	return (new);
 }
 
-void    ft_export(t_pars **pars, t_pipe *data)
+void    ft_export(t_pars **pars, t_data *data)
 {
 	t_pars  *tmp;
 	
@@ -219,10 +219,4 @@ void    ft_export(t_pars **pars, t_pipe *data)
 		(*pars) = (*pars)->next;
 	}
 	*pars = tmp;
-	/*while (data->env[i])
-	{
-		printf("%s\n", data->env[i]);
-		i++;
-	}
-	return ;*/
 }
