@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/15 18:50:06 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/17 13:39:14 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,23 @@ static void parent_free_one(t_pipe *file)
 		close(file->infile);
 	if (file->outfile != 1)
 		close(file->outfile);
-	//if (file->builtin == 0)
-	//{
-	while (file->cmd_paths[++i])
+	while (file->cmd_paths[i])
+	{
 		free(file->cmd_paths[i]);
+		i++;
+	}
+	/*i = 0;
+	if (file->cmd_args[i] != NULL)
+	{
+		while (file->cmd_args[i++])
+			free(file->cmd_args[i]);
+	}*/
+	free(file->cmd_args);
 	free(file->cmd_paths);
 	free(file->cmd_to_exec[0]);
 	free(file->cmd_to_exec);
 	free(file->cmd);
+	//free(file->paths);
 	//}
 }
 
@@ -164,8 +173,8 @@ static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
 		close(in);
 	if (out != 1)
 		close(out);
-	file->paths = find_path_spe(data);
-	file->cmd_paths = ft_split(file->paths, ':');
+	//file->paths = find_path_spe(data);
+	//file->cmd_paths = ft_split(file->paths, ':');
 	if (file->builtin != 0)
 	{
 		printf("DEBUGGG le s\n");

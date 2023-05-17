@@ -6,42 +6,41 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:18:24 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/16 11:16:20 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/17 14:10:47 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 
-//si on a un / ne pas verifier que c est une cmd et execute direct avec le path.
-
-
-/*char	*find_path(char **envp)
+static char    *path_cpy(t_data *data)
 {
-	int	i;
-	int	no_path;
-
+	int i;
+	int j;
+	int len;
+	char    *path;
+	
 	i = 0;
-	no_path = 0;
-	if (!envp[0])
-	{
-		msg(NO_PATH);
-	}
-	i = 0;
-	while (envp[i] != NULL)
-	{
-		if (ft_strnstr(envp[i], "PATH", 6) != NULL)
-			no_path = 1;
+	j = 0;
+	while (ft_strncmp("PATH", data->env[i], 4))
 		i++;
-	}
-	if (no_path == 0)
+	while (data->env[i][j] != '=')
+		j++;
+	j++;
+	len = ft_strlen(data->env[i]);
+	path = malloc(sizeof(char) * (len - 4));
+	if (!path)
+		return (NULL);
+	len = 0;
+	while (data->env[i][j] != '\0')
 	{
-		msg(NO_PATH);
+		path[len] = data->env[i][j];
+		len++;
+		j++;
 	}
-	while (ft_strncmp("PATH", *envp, 4))
-		envp++;
-	return (*envp + 5);
-}*/
+	path[len] = 0;
+	return (path);
+}
 
 char	*find_path_spe(t_data *data)
 {
@@ -65,12 +64,8 @@ char	*find_path_spe(t_data *data)
 	{
 		msg(NO_PATH);
 	}
-	i = 0;
-	while (ft_strncmp("PATH", data->env[i], 4))
-		i++;
-	new = ft_strdup(data->env[i]);
-	//new = ft_strdup(*data->env);	
-	return (new + 5);
+	new = path_cpy(data);
+	return (new);
 }
 
 /*char	*get_cmd(char **paths, char *cmd)
@@ -238,6 +233,7 @@ int    trimm_exec(t_pars **pars, t_data *data)
 	{
 		msg_error(ERR_CMD, &file);
 	}
+	free(file.paths);
 	return (0);
 }
 

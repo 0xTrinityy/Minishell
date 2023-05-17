@@ -6,20 +6,11 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/16 14:09:33 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/17 14:41:53 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-
-//probleme avec 2 cmd et + quand on a un here doc par cmd
-
-	//<< limit << lim cat | head -5
-	//<< limit cat | << lim cat 
-	
-//probleme avec 1 cmd
-	//<< limit << lim cat
 
 void create_node_and_list(t_pipe *file, char *limiter)
 {
@@ -104,7 +95,7 @@ static char **tema_larg2(t_pipe *file, t_pars **pars)
 			if((*pars)->token != CMD && (*pars)->token != R_INPUT && (*pars)->token != PIPE)
 			{
 				arg[count] = (*pars)->str;
-				printf("L'arg vaut = %s\n", arg[count]);
+				//printf("L'arg vaut = %s\n", arg[count]);
 				count++;
 			}
 			(*pars) = (*pars)->next;
@@ -319,8 +310,8 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 		}
 		file->cmd_args = tema_larg2(file, pars);
 		file->cmd = get_cmd(file->cmd_paths, file->cmd_args[0]);
-		fprintf(stderr, "ARG to b executed is %s\n", file->cmd_args[0]);
-		fprintf(stderr, "ARG to b executed is %s\n", file->cmd_args[1]);
+		//fprintf(stderr, "ARG to b executed is %s\n", file->cmd_args[0]);
+		//fprintf(stderr, "ARG to b executed is %s\n", file->cmd_args[1]);
 		if (!file->cmd)
 		{
 			child_free1(file);
@@ -362,10 +353,10 @@ void    mult_cmd(t_pipe *file, t_pars **pars, t_data *data)
 		file->pidx++;
 	}
 	close_here_doc_pipe(file->node, 1, 0);
+	i = -1;
 	while (++i < file->cmd_nb)
 		waitpid(file->pid[i], NULL, 0);
 	parent_free(file);
 	free(file->cmd);
 	return ;
 }
-
