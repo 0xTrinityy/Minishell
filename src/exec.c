@@ -50,3 +50,31 @@ void	ft_exit(t_pars *pars, char *str)
 	g_global = 2;
 	exit (0);
 }
+
+void    new_pwd(char *str, char **env)
+{
+    
+}
+
+void    ft_cd(t_pars *pars, char **env)
+{
+    int i;
+
+    pars = pars->next;
+    if (pars->next != NULL && pars->next->token == ARG)
+    {
+        printf("cd: too many arguments\n");
+        g_global = 1;
+        return ;
+    }
+    i = chdir(pars->str);
+    if (i == -1)
+    {
+        g_global = 1;
+        ft_putstr_fd("cd: ",1);
+        ft_putstr_fd(pars->str, 1);
+        ft_putstr_fd(": No such file or directory\n", 1);
+        return ;
+    }
+    new_pwd(pars->str, **env);
+}

@@ -24,6 +24,7 @@ SRC = $(SRC_DIR)/main.c						\
 		$(SRC_DIR)/token_give_cmd.c			\
 		$(SRC_DIR)/syntax.c					\
 		$(SRC_DIR)/syntax_replace_dollar.c	\
+		$(SRC_DIR)/syntax_replace_dollar2.c	\
 		$(SRC_DIR)/syntax_utils2.c			\
 		$(SRC_DIR)/syntax_utils3.c			\
 		$(SRC_DIR)/parsing_utils.c			\

@@ -132,6 +132,8 @@ typedef struct s_pipex
 
 /********************* PARCING *********************/
 
+void    check_cmd_valid(t_pars *pars);
+
 // token.c
 
 void		put_token(t_pars **pars, char **env);
@@ -239,7 +241,7 @@ void    is_builtin(t_pars *pars);
 void	siginthandler(int signal);
 
 void			ft_free_all(void);
-void			ft_free(t_pars *pars);
+void			ft_free(t_pars **pars);
 
 // free.c
 int	malloc_sec(t_pars *pars, t_pars *new);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 13:18:01 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/09 19:31:46 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/15 15:49:59 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	put_token(t_pars **pars, char **env)
 	t_pars	*tmp;
 
 	i = 0;
-    (void) env;
+	(void)env;
 	tmp = (*pars);
 	while ((*pars) != NULL)
 	{
@@ -66,6 +66,6 @@ void	put_token(t_pars **pars, char **env)
 		(*pars) = (*pars)->next;
 	}
 	(*pars) = tmp;
-    give_cmd(*pars, 0);
-    (*pars) = tmp;
+	give_cmd(*pars, 0);
+	(*pars) = tmp;
 }

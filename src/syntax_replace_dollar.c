@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   syntax_utils.c                                     :+:      :+:    :+:   */
+/*   syntax_replace_dollar.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 09:45:27 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/05 09:48:56 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/15 17:19:43 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,52 +14,24 @@
 
 extern int	g_global;
 
-void	del_quote(t_pars *pars)
-{
-	int		i;
-	char	*tmp;
-
-	i = 1;
-	tmp = malloc(sizeof(char) * ft_strlen(pars->str));
-	while (i < ((int)ft_strlen(pars->str) - 1))
-	{
-		tmp[i - 1] = pars->str[i];
-		i++;
-	}
-	tmp[i - 1] = 0;
-	pars->ID = (enum e_token *) malloc(sizeof(enum e_token)
-			* (ft_strlen(tmp) + 1));
-	if (!pars->ID)
-	{
-		free(pars->ID);
-		ft_free_all();
-	}
-	put_id(tmp, pars->ID);
-	pars->str = tmp;
-	pars->token = ARG;
-	return ;
-}
-
 static char	*ft_exist(char *tmp, char *str, char *env, char *exp)
 {
 	int	size;
 	int	i;
 
 	i = 0;
-    // write(1, "ok\n", 3);
-	size = (ft_strlen(str) - ft_strlen(exp))
-		+ (ft_strlen(env) - ft_strlen(exp) - 1);
+	size = (ft_strlen(str) - ft_strlen(exp)) + (ft_strlen(env) - ft_strlen(exp)
+			- 1);
 	tmp = malloc(sizeof(char) * size);
 	if (!tmp)
-		exit (0);
+		exit(0);
 	while (str[i] != '$')
 	{
 		tmp[i] = str[i];
 		i++;
 	}
 	tmp[i] = 0;
-	ft_strlcat(tmp, ft_strchr(env, '=') + 1,
-		ft_strlen(env) + ft_strlen(str));
+	ft_strlcat(tmp, ft_strchr(env, '=') + 1, ft_strlen(env) + ft_strlen(str));
 	i += ((int)ft_strlen(exp) + 1);
 	ft_strlcat(tmp, str + i, ft_strlen(str) + ft_strlen(env));
 	return (tmp);
@@ -100,7 +72,7 @@ int	check_dote(t_pars *pars, int i)
 	tmp = malloc(sizeof(char) * (ft_strlen(pars->str) + 2));
 	while (j < i)
 	{
-		tmp[j] = pars->str [j];
+		tmp[j] = pars->str[j];
 		j++;
 	}
 	i += 2;
@@ -113,82 +85,15 @@ int	check_dote(t_pars *pars, int i)
 	return (-1);
 }
 
-void    _lst_add_between(t_pars *new, t_pars *pars)
+t_pars	*find_dollar(t_pars *pars, char **env, char *tmp)
 {
-    if(!pars)
-        new->next = NULL;
-    else
-    {
-        new->prev = pars;
-        new->next = pars->next;
-    }
-    if (!pars)
-        pars = new;
-    else
-        pars->next = new;
-}
-
-void    recreate_pars(t_pars *pars, char *str, enum e_token *ID)
-{
-    int		i;
-	t_pars	*tmp;
-    int     u;
+	int	i;
+	int	u;
 
 	i = 0;
-    u = 0;
-	while (str[i])
-	{
-		while (ID[i] == IFS && str[i])
-			i++;
-		if (ID[i] != FINISH)
-		{
-			tmp = get_word(&pars, str + i, ID + i, tmp);
-			_lst_add_between(tmp, pars);
-            if (pars->next != NULL)
-                pars = pars->next;
-		}
-		i = i + ft_iter(str + i, ID + i);
-	}
-    while(pars->prev != NULL)
-    {
-        pars = pars->prev;
-    }
-}
-
-void    check_cmd_valid(t_pars *pars)
-{
-    int i;
-    char    **tab;
-
-    i = 0;
-    tab = 0;
-    while (pars->str[i])
-    {
-        if (pars->ID[i] == IFS)
-        {
-            recreate_pars(pars, pars->str, pars->ID);
-            pars = pars->next;
-            pars->token = 1;
-            i = 0;
-        }
-        i++;
-    }
-    return ;
-}
-
-void	replace_dollar(t_pars *pars, char **env, char *tmp)
-{
-	int		i;
-	int		u;
-
-	i = 0;
-	if (pars->token == TXT_D)
-    {
-		del_quote(pars);
-    }
 	while (pars->str[i])
 	{
-        u = 0;
+		u = 0;
 		if (pars->ID[i] == DOLLAR && pars->str[i + 1] == '?')
 			i = check_dote(pars, i);
 		else if (pars->ID[i] == DOLLAR)
@@ -198,16 +103,27 @@ void	replace_dollar(t_pars *pars, char **env, char *tmp)
 			pars->str = replace_value(pars->str, env, tmp);
 			if (!pars->str[0])
 				break ;
-			pars = new_id(pars);        
+			pars = new_id(pars);
 			i = -1;
 		}
 		i++;
 	}
-    if (pars->token == CMD)
-                check_cmd_valid(pars);
-    if (pars->token == TXT || pars->token == TXT_D
-              || pars->token == EXPAND)
-    	pars->token = ARG;
-    
-    return ;
+	return (pars);
+}
+
+void	replace_dollar(t_pars *pars, char **env, char *tmp)
+{
+	int	i;
+
+	i = 0;
+	if (pars->token == TXT_D)
+	{
+		del_quote(pars);
+	}
+	pars = find_dollar(pars, env, tmp);
+	if (pars->token == CMD)
+		check_cmd_valid(pars);
+	if (pars->token == TXT || pars->token == TXT_D || pars->token == EXPAND)
+		pars->token = ARG;
+	return ;
 }

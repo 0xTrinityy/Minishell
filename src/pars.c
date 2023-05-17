@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 14:02:39 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/09 20:20:02 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/15 15:31:26 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,10 @@ int	ft_iter(char *str, enum e_token *ID)
 	return (i);
 }
 
-
-t_pars	*get_word(t_pars **pars, char *str
-		, enum e_token *ID, t_pars *new)
+t_pars	*get_word(t_pars **pars, char *str, enum e_token *ID, t_pars *new)
 {
-	int		i;
-	int		j;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = ft_iter(str, ID) + 1;
@@ -67,8 +65,8 @@ t_pars	*get_word(t_pars **pars, char *str
 	if (!new->str)
 		exit(malloc_sec(*pars, new));
 	ft_strlcpy(new->str, str, j);
-	new->ID = (enum e_token *) malloc(sizeof(enum e_token)
-			* (ft_strlen(new->str) + 1));
+	new->ID = (enum e_token *)malloc(sizeof(enum e_token) * (ft_strlen(new->str)
+				+ 1));
 	if (!new->ID)
 		exit(malloc_sec(*pars, new));
 	put_id(new->str, new->ID);
@@ -80,8 +78,8 @@ t_pars	*get_word(t_pars **pars, char *str
 
 static void	_lstadd_back(t_pars *tmp, t_pars **pars)
 {
-	t_pars  *last;
-	
+	t_pars	*last;
+
 	if (*pars == NULL)
 	{
 		tmp->prev = NULL;
