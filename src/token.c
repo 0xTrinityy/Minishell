@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 13:18:01 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/09 19:31:46 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/15 15:49:59 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,104 +51,21 @@ static enum e_pars	check_redirect(enum e_pars token, char *str)
 	return (token);
 }
 
-// static int    is_a_cmd(char *str, char **envp)
-// {
-// 	char	**tab;
-// 	char	*path;
-// 	char	*cmd;
-//
-// 	tab = 0;
-// 	path = 0;
-// 	cmd = 0;
-// 	path = find_path(envp);
-// 	tab = ft_split(path, ':');
-// 	cmd = get_cmd(tab, str);
-// 	ft_free_tab(tab);
-// 	if (cmd != NULL)
-// 	{
-// 		free(cmd);
-// 		return (1);
-// 	}
-// 	free(cmd);
-// 	return (0);
-// }
-//
-// static int	is_a_builtin(char *cmd)
-// {
-// 	if (strcmp(cmd, "unset") == 0)
-// 		return (1);
-// 	else if (strcmp(cmd, "pwd") == 0)
-// 		return (1);
-// 	else if (strcmp(cmd, "cd") == 0)
-// 		return (1);
-// 	else if (strcmp(cmd, "exit") == 0)
-// 		return (2);
-// 	else if (strcmp(cmd, "export") == 0)
-// 		return (1);
-// 	else if (strcmp(cmd, "echo") == 0)
-// 		return (1);
-// 	else if (strcmp(cmd, "env") == 0)
-// 		return (1);
-// 	else
-// 		return (0);
-// }
-
-static enum e_pars	check_cmd(enum e_pars token, char *str, enum e_token *ID)
-{
-	if (token == N_SORTED)
-	{
-		token = check_quoted(str, ID);
-		if (token == N_SORTED)
-			token = TXT;
-	}
-	return (token);
-}
-
-static void give_cmd(t_pars *pars)
-{
-    int i;
-
-    i = 0;
-    while (pars != NULL)
-    {
-        if(is_redirect(pars->token))
-        {
-            pars = pars->next;
-            check_cmd(pars->token, pars->str, pars->ID);
-            if (pars->token == 0)
-                pars->token = TXT;
-        }
-        if(pars->token == PIPE)
-            give_cmd(pars->next);
-        if (i == 0 && pars->token == N_SORTED)
-        {
-            pars->token = CMD;
-            i = 1;
-        }
-        else
-            check_cmd(pars->token, pars->str, pars->ID);
-        if (pars->token == 0)
-            pars->token = TXT;
-        pars = pars->next;
-    }
-}
-
 void	put_token(t_pars **pars, char **env)
 {
 	int		i;
 	t_pars	*tmp;
 
 	i = 0;
-    (void) env;
+	(void)env;
 	tmp = (*pars);
 	while ((*pars) != NULL)
 	{
 		(*pars)->token = check_pipe((*pars)->token, (*pars)->str, (*pars)->ID);
 		(*pars)->token = check_redirect((*pars)->token, (*pars)->str);
-		// (*pars)->token = check_cmd((*pars)->token, (*pars)->str, (*pars)->ID, env);
 		(*pars) = (*pars)->next;
 	}
 	(*pars) = tmp;
-    give_cmd(*pars);
-    (*pars) = tmp;
+	give_cmd(*pars, 0);
+	(*pars) = tmp;
 }

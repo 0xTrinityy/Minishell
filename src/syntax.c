@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 08:58:14 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/06 16:35:12 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/15 15:33:33 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-extern int  g_global;
+extern int	g_global;
 
 static int	replace_expand(t_pars *pars, char **env)
 {
 	t_pars	*tmp;
 	char	*str;
 
-	(void) env;
+	(void)env;
 	str = 0;
 	tmp = pars;
 	while (pars != NULL)
@@ -84,49 +84,52 @@ static int	check_arg(t_pars *pars, char **env)
 	return (1);
 }
 
-static void  replace_arg(t_pars *pars)
+static void	replace_arg(t_pars *pars)
 {
-    t_pars  *tmp;
+	t_pars	*tmp;
 
-    tmp = pars;
-    pars = pars->next;
-    while (pars != NULL && (pars->token == ARG || pars->token == CMD))
-    {
-        pars->token = ARG;
-        pars = pars->next;
-    }
-    pars = tmp;
-    return ;
+	tmp = pars;
+	pars = pars->next;
+	while (pars != NULL && (pars->token == ARG || pars->token == CMD))
+	{
+		pars->token = ARG;
+		pars = pars->next;
+	}
+	pars = tmp;
+	return ;
 }
 
-int	check_syntax(t_pars *pars, char **env)
+t_pars	*check_syntax(t_pars *pars, char **env)
 {
-	(void) env;
-    replace_arg(pars);
+	(void)env;
+	replace_arg(pars);
 	replace_expand(pars, env);
-    if (!check_arg(pars, env))
-    {
-        g_global = 127;
-        return(0);
-    }
-    is_builtin(pars);
-    if (pars->token == CMD)
-    {
-        if (pars->next != NULL && pars->next->token == CMD)
-            pars = pars->next;
-    }
-	return (1);
+	if (pars->token == CMD)
+	{
+		if (pars->next != NULL && pars->next->token == CMD)
+		{
+			pars = pars->next;
+			give_cmd(pars, 1);
+			check_syntax(pars, env);
+		}
+	}
+	if (!check_arg(pars, env))
+	{
+		g_global = 127;
+		return (pars);
+	}
+	is_builtin(pars);
+	return (pars);
 }
 
-    // tmp2 = pars;
-    // printf("str:");
-    // while(pars != NULL)
-    // {
-    //     printf(" %s", pars->str);
-    //     printf(" (%u)", pars->token);
-    //     pars = pars->next;
-    // }
-    // pars = tmp2;
-    // printf("\n");
-    // exit (0);
-
+// tmp2 = pars;
+// printf("str:");
+// while(pars != NULL)
+// {
+//     printf(" %s", pars->str);
+//     printf(" (%u)", pars->token);
+//     pars = pars->next;
+// }
+// pars = tmp2;
+// printf("\n");
+// exit (0);
