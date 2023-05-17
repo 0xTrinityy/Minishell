@@ -225,7 +225,6 @@ void    ft_unset(t_pars **pars, t_data *data);
 
 // token2.c
 
-enum e_pars		check_quoted(char *str, enum e_token *ID);
 
 
 // pars.c

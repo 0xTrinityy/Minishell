@@ -65,7 +65,6 @@ void	check_cmd_valid(t_pars *pars)
 	{
 		if (pars->ID[i] == IFS)
 		{
-            write(1, "ok\n", 3);
 			recreate_pars(pars, pars->str, pars->ID);
 			pars = pars->next;
 			pars->token = 1;
