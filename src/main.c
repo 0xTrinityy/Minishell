@@ -49,18 +49,20 @@ void	malloc_word(char **env, t_pipe *data)
 	int	i;
 	int	j;
 
-	i = 0;
-	while (env[i])
-	{
-		j = 0;
-		while (env[i][j])
-			j++;
-		data->env[i] = malloc(sizeof(char) * (j + 1));
-		if (!data->env[i])
-			return ;
-		i++;
-	}
-	data->env[i - 1] = 0;
+    i = 0;
+    while(envp[i] != NULL)
+        i++;
+    data->env = malloc(sizeof(char *) * (i + 1));
+    if(!data->env)
+        return ;
+    i = 0;
+    //malloc_word(envp, data);
+    while(envp[i] != NULL)
+    {
+        data->env[i] = ft_strdup(envp[i]);
+        i++;
+    }
+    data->env[i] = NULL;
 }
 
 char	**cpy_env(char **envp, t_pipe *data)
@@ -88,8 +90,8 @@ int	main(int ac, char **av, char **envp)
 {
 	char	*str;
 	t_pars	*pars;
-	t_pipe	data;
-    t_pars  *tmp;
+  t_data	data;
+  t_pars  *tmp;
 
 	(void)ac;
 	(void)av;
@@ -103,10 +105,10 @@ int	main(int ac, char **av, char **envp)
 	{
 		add_history(str);
 		ft_parsing(&pars, str, data.env);
-        tmp = pars;
+    tmp = pars;
 		if (g_global == 0)
 			trimm_exec(&pars, envp);
-        pars = tmp;
+    pars = tmp;
 		free(str);
 		ft_free(&pars);
 		str = readline("> ");
