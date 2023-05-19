@@ -6,11 +6,12 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/19 02:55:20 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/19 18:08:27 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+extern int g_global;
 
 void create_node_and_list(t_pipe *file, char *limiter)
 {
@@ -294,12 +295,44 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 	int     out;
 	
 	i = 0;
-	file->pid[file->pidx] = fork();
 	printf("fork()-----------------------------\n");
+	file->pid[file->pidx] = fork();
 	if (!file->pid[file->pidx])
 	{
 		in = redirect_in(file, pars);
 		//printf("cmd :%s and his infile : %d\n", file->cmd_to_exec[file->pidx], in);
+		if (in < 0)
+		{
+			close(file->fd[0]);
+			close(file->fd[1]);
+			int i = -1;
+			while (data->env[++i])
+				free(data->env[i]);
+			free(data->env);
+			i = -1;
+			while (file->cmd_paths[++i])
+				free(file->cmd_paths[i]);
+			free(file->cmd_paths);
+			i = -1;
+			while(file->cmd_to_exec[++i])
+				free(file->cmd_to_exec[i]);
+			free(file->cmd_to_exec);
+			free(file->cmd);
+			free(file->paths);
+			free(file->pid);
+			t_pars *tmp;
+			while ((*pars) != NULL)
+			{
+				tmp = (*pars)->next;
+				free((*pars)->ID);
+				free((*pars)->str);
+				free(*pars);
+				*pars = tmp;
+			}
+			msg(ERR_INFILE);
+			exit (126);
+		}
+		
 		out = redirect_out(file, pars);
 		//printf("cmd :%s and his outfile : %d\n", file->cmd_to_exec[file->pidx], out);
 		neww(in, out);
@@ -316,11 +349,33 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 		//fprintf(stderr, "ARG to b executed is %s\n", file->cmd_args[1]);
 		if (!file->cmd)
 		{
-			child_free1(file);
-			close_all1(file);
-			parent_free1(file);
+			int i = -1;
+			while (data->env[++i])
+				free(data->env[i]);
+			free(data->env);
+			free(file->cmd_args);
+			i = -1;
+			while (file->cmd_paths[++i])
+				free(file->cmd_paths[i]);
+			free(file->cmd_paths);
+			i = -1;
+			while(file->cmd_to_exec[++i])
+				free(file->cmd_to_exec[i]);
+			free(file->cmd_to_exec);
+			free(file->cmd);
+			free(file->paths);
+			free(file->pid);
+			t_pars *tmp;
+			while ((*pars) != NULL)
+			{
+				tmp = (*pars)->next;
+				free((*pars)->ID);
+				free((*pars)->str);
+				free(*pars);
+				*pars = tmp;
+			}
 			msg(ERR_CMD);
-			exit(1);
+			exit (127);
 		}
 		execve(file->cmd, file->cmd_args, data->env);
 		printf("EXEC FAIL\n");
@@ -333,6 +388,7 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 void    mult_cmd(t_pipe *file, t_pars **pars, t_data *data)
 {
 	int    i;
+	int     status = 0;
 	
 	i = -1;
 	file->infile = 0;
@@ -357,7 +413,9 @@ void    mult_cmd(t_pipe *file, t_pars **pars, t_data *data)
 	close_here_doc_pipe(file->node, 1, 0);
 	i = -1;
 	while (++i < file->cmd_nb)
-		waitpid(file->pid[i], NULL, 0);
+		waitpid(file->pid[i], &status, 0);
+	if (WIFEXITED(status))
+        g_global = WEXITSTATUS(status);
 	parent_free(file);
 	return ;
 }

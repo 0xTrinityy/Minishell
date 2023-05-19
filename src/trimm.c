@@ -6,12 +6,12 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:18:24 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/19 03:19:17 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/19 18:36:36 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
+extern int g_global;
 
 static char    *path_cpy(t_data *data)
 {
@@ -218,9 +218,9 @@ int    trimm_exec(t_pars **pars, t_data *data)
 	//init_pars(*pars);
 	is_a_cmd(pars, &file, data);
 	//set_doc(&file, pars);
-	//printf("a on un hdoc = %d\n", file.doc);
-	/*if (file.doc > 0)
-		here_doc(&file);*/
+	printf("a on un hdoc = %d\n", file.doc);
+	//if (file.doc > 0)
+	//	here_doc(&file);
 	printf("HOW MANY CMD = %d\n", file.cmd_nb);
 	if (file.cmd_nb == 1 )
 	{
@@ -235,6 +235,11 @@ int    trimm_exec(t_pars **pars, t_data *data)
 	}
 	else if (file.cmd_nb <= 0)
 	{
+		int i = -1;
+		while (file.cmd_paths[++i])
+			free(file.cmd_paths[i]);
+		free(file.cmd_paths);
+		free(file.paths);
 		msg_error(ERR_CMD, &file);
 	}
 	//free(file.paths);

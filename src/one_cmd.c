@@ -6,11 +6,12 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/19 03:52:40 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/19 18:07:51 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+extern int g_global;
 
 static void parent_free_one(t_pipe *file)
 {
@@ -175,8 +176,31 @@ static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
 	fprintf(stderr, "INFILE = %d\n", in);
 	if (in < 0)
 	{
-		perror(ERR_INFILE);
-		exit (1);
+		int i = -1;
+		while (data->env[++i])
+			free(data->env[i]);
+		free(data->env);
+		i = -1;
+		while (file->cmd_paths[++i])
+			free(file->cmd_paths[i]);
+		free(file->cmd_paths);
+		i = -1;
+		while(file->cmd_to_exec[++i])
+			free(file->cmd_to_exec[i]);
+		free(file->cmd_to_exec);
+		free(file->cmd);
+		free(file->paths);
+		t_pars *tmp;
+		while ((*pars) != NULL)
+		{
+			tmp = (*pars)->next;
+			free((*pars)->ID);
+			free((*pars)->str);
+			free(*pars);
+			*pars = tmp;
+		}
+		msg(ERR_INFILE);
+		exit (126);
 	}
 	out = one_cmd_out(file, pars);
 	fprintf(stderr, "OUTFILE = %d\n", out);
@@ -245,7 +269,7 @@ static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
 			*pars = tmp;
 		}
 		msg(ERR_CMD);
-		exit (1);
+		exit (127);
 	}
 	fprintf(stderr, "%s\n", file->cmd_to_exec[0]);
 	//printf("cmd arg 2 = %s\n", file->cmd_args[0]);
@@ -271,6 +295,9 @@ static void    one_built_in(t_pipe *file, t_pars **pars, t_data *data)
 
 void    one_cmd(t_pipe *file, t_pars **pars, t_data *data)
 {	
+	int status;
+
+	status = 0;
 	file->doc = 0;
 	file->outfile = 1;
 	file->cmd_args = NULL;
@@ -285,7 +312,9 @@ void    one_cmd(t_pipe *file, t_pars **pars, t_data *data)
 	file->pidx = fork();
 	if (file->pidx == 0)
 		first_child(file, pars, data);
-	waitpid(file->pidx, NULL, 0);
+	waitpid(file->pidx, &status, 0);
+	if (WIFEXITED(status))
+        g_global = WEXITSTATUS(status);
 	parent_free_one(file);
 	return ;
 }
