@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:18:24 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/17 14:10:47 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/19 03:19:17 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static char    *path_cpy(t_data *data)
 		len++;
 		j++;
 	}
-	path[len] = 0;
+	path[len] = '\0';
 	return (path);
 }
 
@@ -93,12 +93,13 @@ static void    dup_cmdd(t_pars **pars, t_pipe *file)
 	
 	tmp = *pars;
 	i = 0;
-	file->cmd_to_exec = malloc(sizeof(char *) * (file->cmd_nb + 1));
+	file->cmd_to_exec = malloc(sizeof(char *) * (file->cmd_nb + file->builtin + 1));
 	while ((*pars) != NULL)
 	{
 		if ((*pars)->token == CMD || (*pars)->token == BUILTIN)
 		{
 			file->cmd_to_exec[i] = ft_strdup((*pars)->str);
+			printf("strdup: %p\n", file->cmd_to_exec[i]);
 			i++;
 		}
 		*pars = (*pars)->next;
@@ -183,6 +184,7 @@ void    set_doc(t_pipe *file, t_pars **pars)
 			if (cmd)
 			{
 				cmd -> doc = HEREDOC;
+				file->doc = 1;
 				cmd->limiter = tmp->next->str;
 			}
 			create_node_and_list(file, tmp->next->str);
@@ -213,10 +215,12 @@ int    trimm_exec(t_pars **pars, t_data *data)
 	t_pipe  file;
 	
 	ft_memset(&file, 0, sizeof(t_pipe));
-	init_pars(*pars);
+	//init_pars(*pars);
 	is_a_cmd(pars, &file, data);
-	set_doc(&file, pars);
-	here_doc(&file);
+	//set_doc(&file, pars);
+	//printf("a on un hdoc = %d\n", file.doc);
+	/*if (file.doc > 0)
+		here_doc(&file);*/
 	printf("HOW MANY CMD = %d\n", file.cmd_nb);
 	if (file.cmd_nb == 1 )
 	{
@@ -224,16 +228,16 @@ int    trimm_exec(t_pars **pars, t_data *data)
 		one_cmd(&file, pars, data);
 		return (0);
 	}
-	if (file.cmd_nb > 1)
+	else if (file.cmd_nb > 1)
 	{
 		mult_cmd(&file, pars, data);
 		return (0);
 	}
-	if (file.cmd_nb <= 0)
+	else if (file.cmd_nb <= 0)
 	{
 		msg_error(ERR_CMD, &file);
 	}
-	free(file.paths);
+	//free(file.paths);
 	return (0);
 }
 

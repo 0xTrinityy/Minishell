@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/15 18:55:57 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/17 17:10:29 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,8 +187,8 @@ t_pars  *find_previous_cmd(t_pars *pars);
 
 int    trimm_exec(t_pars **pars, t_data *data);
 int	execution(t_pars **pars, char **envp);
-void	is_heredoc(t_pipe *file, t_pars **pars);
-void    infile_read(t_pipe *file, t_pars **pars);
+//void	is_heredoc(t_pipe *file, t_pars **pars);
+//void    infile_read(t_pipe *file, t_pars **pars);
 void	out_read(t_pipe *file, t_pars **pars);
 void	out_read_v2(t_pipe *file, t_pars **pars);
 

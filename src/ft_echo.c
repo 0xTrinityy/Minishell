@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 06:29:45 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/13 09:45:06 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/18 16:20:45 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,14 @@ void    ft_echo(t_pars **pars, t_pipe *file)
 		if (ft_strncmp((*pars)->str, "-n", 2) == 0 && flag == 0)
 		{
 			flag++;
-			(*pars) = (*pars)->next;
+			if ((*pars)->next != NULL)
+				(*pars) = (*pars)->next;
 		}
-		printf("%s ", (*pars)->str);
+		if ((*pars)->str)
+			printf("%s ", (*pars)->str);
 		(*pars) = (*pars)->next;
 	}
 	if (flag == 0)
 		printf("\n");
-	//*pars = tmp;
 	return ;
 }

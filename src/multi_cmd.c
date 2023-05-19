@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/17 14:41:53 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/19 02:55:20 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static char **tema_larg2(t_pipe *file, t_pars **pars)
 	
 	count = 0;
 	tmp = *pars;
-	arg = malloc(sizeof(char *) * 100);
+	arg = malloc(sizeof(char *) * 10);
 	while (count != file->pidx && (*pars) != NULL)
 	{
 		if ((*pars)->token == PIPE)
@@ -229,6 +229,7 @@ static int    redirect_out(t_pipe *file, t_pars **pars)
 			if ((*pars)->token == R_OUTPUT)
 			{
 				file->outfile = open((*pars)->next->str, O_TRUNC | O_CREAT | O_RDWR, 0000644);
+				fprintf(stdout, "OK LA ON EST DANS UN REDIRECT qui vaut = %d", file->outfile);
 				if (file->outfile < 0)
 					msg_error(ERR_OUTFILE, file);
 			}
@@ -294,6 +295,7 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 	
 	i = 0;
 	file->pid[file->pidx] = fork();
+	printf("fork()-----------------------------\n");
 	if (!file->pid[file->pidx])
 	{
 		in = redirect_in(file, pars);
@@ -357,6 +359,5 @@ void    mult_cmd(t_pipe *file, t_pars **pars, t_data *data)
 	while (++i < file->cmd_nb)
 		waitpid(file->pid[i], NULL, 0);
 	parent_free(file);
-	free(file->cmd);
 	return ;
 }

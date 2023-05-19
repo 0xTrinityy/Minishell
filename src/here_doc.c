@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 17:28:18 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/12 15:37:21 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/18 23:05:55 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ int write_to_pipes(t_pipe *file)
 	
 	status = 0;
 	pid = fork();
+printf("fork()-----------------------------\n");
 	/*if (pid == -1);
 		*/
 	if (pid == 0)

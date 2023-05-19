@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:49:01 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/15 15:29:41 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/18 18:08:14 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void    cpy_env(char **envp, t_data *data)
 		i++;
 	data->env = malloc(sizeof(char *) * (i + 1));
 	if (!data->env)
-		return ;
+		return ; 
 	i = 0;
 	while (envp[i])
 	{
@@ -73,7 +73,6 @@ int	main(int ac, char **av, char **envp)
 
 	(void)ac;
 	(void)av;
-    printf("%s\n", envp[0]);
 	ft_memset(&data, 0, sizeof(t_data));
 	pars = NULL;
 	cpy_env(envp, &data);
@@ -92,5 +91,6 @@ int	main(int ac, char **av, char **envp)
 		ft_free(&pars);
 		str = readline("> ");
 	}
+	free(str);
     free_env(data.env);
 }

@@ -6,7 +6,7 @@
 #    By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/14 10:06:19 by tbelleng          #+#    #+#              #
-#    Updated: 2023/05/15 17:55:27 by tbelleng         ###   ########.fr        #
+#    Updated: 2023/05/18 22:24:12 by tbelleng         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,6 @@ SRC = $(SRC_DIR)/main.c			\
 		$(SRC_DIR)/parsing_utils.c	\
 		$(SRC_DIR)/signal.c			\
 		$(SRC_DIR)/free.c			\
-		$(SRC_DIR)/cmd_exec.c		\
 		$(SRC_DIR)/gnl.c			\
 		$(SRC_DIR)/is_cmd.c			\
 		$(SRC_DIR)/multi_cmd.c		\
@@ -39,8 +38,6 @@ SRC = $(SRC_DIR)/main.c			\
 		$(SRC_DIR)/for_free.c		\
 		$(SRC_DIR)/gnl_utils.c		\
 		$(SRC_DIR)/one_cmd.c		\
-		$(SRC_DIR)/in_file.c		\
-		$(SRC_DIR)/out_file.c		\
 		$(SRC_DIR)/trimm.c			\
 		$(SRC_DIR)/here_doc.c		\
 		$(SRC_DIR)/built_in_exe.c	\
@@ -60,7 +57,7 @@ LIB = -Llibft -lft
 
 INCLUDES = ./includes
 
-CFLAGS = -Wall -Werror -Wextra -I$(INCLUDES) -g3
+CFLAGS = -Wall -Wextra -I$(INCLUDES) -g3
 
 all :	$(BIN_DIR) $(NAME)
 
