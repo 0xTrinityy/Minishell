@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 08:34:02 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/16 11:35:50 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/19 19:10:53 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,13 @@ int	new_or_replace(t_data *data, char *str)
 	while (data->env[i] != 0)
 	{
 		if (ft_strnstr(data->env[i], var, var_len) != NULL)
+		{
+			free (var);
 			return (1);
+		}
 		i++;
 	}
+	free(var);
 	return (0);
 }
 
@@ -110,6 +114,7 @@ void new_value(t_data *data, char *str)
 	    {
 	        j = ft_strlen(str);
 	        data->env[i] = realloc_value(data->env[i], str, j);
+	        free(var);
 	        break ;
 		}
 	    i++;
@@ -182,8 +187,10 @@ static void	ft_export_arg(char *str, t_data *data)
 	new_env[i] = ft_strdup(str);
 	i++;
 	new_env[i] = 0;
-	tmp = data->env;
-	//free(tmp);
+	i = -1;
+	while (data->env[++i])
+		free(data->env[i]);
+	free(data->env);
 	data->env = new_env;
 }
 
