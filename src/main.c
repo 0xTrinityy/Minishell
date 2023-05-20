@@ -69,7 +69,6 @@ int	main(int ac, char **av, char **envp)
 	char	*str;
 	t_pars	*pars;
     t_data	data;
-    t_pars  *tmp;
 
 	(void)ac;
 	(void)av;
@@ -82,11 +81,9 @@ int	main(int ac, char **av, char **envp)
 	while (str)
 	{
 		add_history(str);
-		ft_parsing(&pars, str, data.env);
-    tmp = pars;
-		if (g_global == 0)
+		if (ft_parsing(&pars, str, data.env) != 2 && g_global == 0)
 			trimm_exec(&pars, &data);
-    pars = tmp;
+        printf("g_global = %d\n", g_global);
 		free(str);
 		ft_free(&pars);
 		str = readline("> ");

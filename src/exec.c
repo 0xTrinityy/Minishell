@@ -51,30 +51,54 @@ void	ft_exit(t_pars *pars, char *str)
 	exit (0);
 }
 
-void    new_pwd(char *str, char **env)
+static char    *get_home(char **env)
 {
-    
+    (void) env;
+    return("/mnt/nfs/homes/luciefer")
 }
 
-void    ft_cd(t_pars *pars, char **env)
+static int    change_dir(char *str)
 {
-    int i;
+    char *tmp;
 
-    pars = pars->next;
-    if (pars->next != NULL && pars->next->token == ARG)
+    tmp = getcwd(NULL, 0);
+    if (tmp == NULL)
     {
-        printf("cd: too many arguments\n");
-        g_global = 1;
-        return ;
+        printf("erreur no path");
+        return (0);
     }
-    i = chdir(pars->str);
+    i = chdir(str);
     if (i == -1)
     {
         g_global = 1;
         ft_putstr_fd("cd: ",1);
         ft_putstr_fd(pars->str, 1);
         ft_putstr_fd(": No such file or directory\n", 1);
+        return (0);
+    }
+    free(tmp);
+    return (1);
+}
+
+void    ft_cd(t_pars *pars, char **env)
+{
+    int i;
+    char    *path;
+
+    if (!pars->next || is_redirect(pars->next->token))
+        path = get_home(env);
+    else
+    {
+        pars = pars->next;
+        path = pars->str;
+    }
+    if (pars->next != NULL && pars->next->token == ARG)
+    {
+        printf("cd: too many arguments\n");
+        g_global = 1;
         return ;
     }
-    new_pwd(pars->str, **env);
+    if(!change_dir(path))
+        return ;
+    g_global = 0;
 }

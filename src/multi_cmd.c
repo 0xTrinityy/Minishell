@@ -12,6 +12,8 @@
 
 #include "../includes/minishell.h"
 
+extern int  g_global;
+
 void create_node_and_list(t_pipe *file, char *limiter)
 {
 	t_node  *node;
@@ -319,6 +321,7 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 			child_free1(file);
 			close_all1(file);
 			parent_free1(file);
+            g_global = 127;
 			msg(ERR_CMD);
 			exit(1);
 		}

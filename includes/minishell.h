@@ -130,6 +130,7 @@ typedef struct s_pipex
 typedef struct s_data
 {
 	char    **env;
+    char    *pwd;
 }       t_data;
 
 
@@ -219,7 +220,7 @@ void    builtin_exec(t_pars **pars, t_pipe *file, t_data *data);
 void    builtin_exe_mult(t_pars **pars, t_pipe *file, t_data *data);
 void    ft_echo(t_pars **pars, t_pipe *file);
 void    ft_env(t_data *data);
-void    ft_pwd(t_data *data);
+void    ft_pwd(void);
 void    ft_export(t_pars **pars, t_data *data);
 void    ft_unset(t_pars **pars, t_data *data);
 
