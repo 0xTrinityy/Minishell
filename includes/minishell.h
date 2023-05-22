@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/21 13:18:01 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/22 13:46:15 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,7 +221,7 @@ void    builtin_exe_mult(t_pars **pars, t_pipe *file, t_data *data);
 void    ft_echo(t_pars **pars, t_pipe *file);
 
 void    ft_env(t_data *data, t_pipe *file);
-void    ft_pwd(t_data *data);
+void    ft_pwd(void);
 
 void    ft_export(t_pars **pars, t_data *data);
 void    ft_unset(t_pars **pars, t_data *data);

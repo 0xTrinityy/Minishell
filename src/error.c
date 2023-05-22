@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 13:48:02 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/18 14:50:28 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/22 15:45:58 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	close_pipes(t_pipe *file)
 void	parent_free(t_pipe *file)
 {
 	int	i;
+	t_node *tmp;
 
 	i = -1;
 	if (file->infile > 0)
@@ -53,6 +54,12 @@ void	parent_free(t_pipe *file)
 	//i = -1;
 	/*while (file->cmd_args[i++])
 		free(file->cmd_args[i]);*/
+	while(file->node)
+	{
+		tmp = file->node->next;
+		free(file->node);
+		file->node = tmp;
+	}
 	i = -1;
 	while (file->cmd_to_exec[++i])
 	{
