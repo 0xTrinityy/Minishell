@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/19 18:07:51 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/21 13:16:16 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,10 +286,14 @@ static void    one_built_in(t_pipe *file, t_pars **pars, t_data *data)
 	fprintf(stderr, "INFILE = %d\n", in);
 	out = one_cmd_out(file, pars);
 	fprintf(stderr, "OUTFILE = %d\n", out);
-	dup2(in, STDIN_FILENO);
-	dup2(out, STDOUT_FILENO);
+	//dup2(out, STDOUT_FILENO);
+	if (in != 0)
+		close(in);
 	printf("Execution d'un builtin\n");
 	builtin_exec(pars, file, data);
+	if (out != 1)
+		close(out);
+	return ;
 }
 
 
@@ -302,13 +306,15 @@ void    one_cmd(t_pipe *file, t_pars **pars, t_data *data)
 	file->outfile = 1;
 	file->cmd_args = NULL;
 	file->pidx = 0;
-	printf("fork()-----------------------------\n");
 	if (file->builtin == 1)
 	{
+		printf("ON ENTRE BIEN DANS BUILTIN\n");
 		one_built_in(file, pars, data);
 		parent_free_one(file);
 		return ;
 	}
+	printf("fork()-----------------------------\n");
+	printf("ON ENTRE BIEN DANS EXECV");
 	file->pidx = fork();
 	if (file->pidx == 0)
 		first_child(file, pars, data);

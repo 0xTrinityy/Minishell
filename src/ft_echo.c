@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 06:29:45 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/18 16:20:45 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/21 13:46:05 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void    ft_echo(t_pars **pars, t_pipe *file)
 	
 	flag = 0;
 	i = 2;
-	(void)file;
+	(void)file;	
 	tmp = *pars;
 	if ((*pars)->next != NULL)
 		(*pars) = (*pars)->next;
@@ -33,10 +33,10 @@ void    ft_echo(t_pars **pars, t_pipe *file)
 				(*pars) = (*pars)->next;
 		}
 		if ((*pars)->str)
-			printf("%s ", (*pars)->str);
+			ft_putstr_fd((*pars)->str, file->outfile);
 		(*pars) = (*pars)->next;
 	}
 	if (flag == 0)
-		printf("\n");
+		ft_putstr_fd("\n", file->outfile);
 	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:18:24 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/19 18:36:36 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/21 11:04:46 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,13 +214,15 @@ int    trimm_exec(t_pars **pars, t_data *data)
 {
 	t_pipe  file;
 	
+	if (!(*pars)->str[0])
+		return (0);
 	ft_memset(&file, 0, sizeof(t_pipe));
-	//init_pars(*pars);
+	init_pars(*pars);
 	is_a_cmd(pars, &file, data);
-	//set_doc(&file, pars);
+	set_doc(&file, pars);
 	printf("a on un hdoc = %d\n", file.doc);
-	//if (file.doc > 0)
-	//	here_doc(&file);
+	if (file.doc > 0)
+		here_doc(&file, pars, data);
 	printf("HOW MANY CMD = %d\n", file.cmd_nb);
 	if (file.cmd_nb == 1 )
 	{

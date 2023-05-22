@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 07:22:10 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/15 18:50:17 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/21 13:17:40 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void    builtin_exec(t_pars **pars, t_pipe *file, t_data *data)
             else if (strcmp((*pars)->str, "echo") == 0)
                 ft_echo(pars, file);
             else if (strcmp((*pars)->str, "env") == 0)
-                ft_env(data);
+                ft_env(data, file);
             break;
         }
     }
@@ -74,7 +74,7 @@ void    builtin_exe_mult(t_pars **pars, t_pipe *file, t_data *data)
             else if (strcmp((*pars)->str, "echo") == 0)
                 ft_echo(pars, file);
             else if (strcmp((*pars)->str, "env") == 0)
-                ft_env(data);
+                ft_env(data, file);
             break;
         }
     }

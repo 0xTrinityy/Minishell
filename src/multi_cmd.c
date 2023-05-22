@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/19 18:08:27 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/22 13:35:07 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -329,10 +329,10 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 				free(*pars);
 				*pars = tmp;
 			}
+			free(pars);
 			msg(ERR_INFILE);
 			exit (126);
 		}
-		
 		out = redirect_out(file, pars);
 		//printf("cmd :%s and his outfile : %d\n", file->cmd_to_exec[file->pidx], out);
 		neww(in, out);
@@ -345,8 +345,8 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 		}
 		file->cmd_args = tema_larg2(file, pars);
 		file->cmd = get_cmd(file->cmd_paths, file->cmd_args[0]);
-		//fprintf(stderr, "ARG to b executed is %s\n", file->cmd_args[0]);
-		//fprintf(stderr, "ARG to b executed is %s\n", file->cmd_args[1]);
+		fprintf(stderr, "ARG to b executed is %s\n", file->cmd_args[0]);
+		fprintf(stderr, "CMD to b executed is %s\n", file->cmd);
 		if (!file->cmd)
 		{
 			int i = -1;

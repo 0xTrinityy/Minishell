@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/17 17:10:29 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/21 13:18:01 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,7 @@ void	child_free1(t_pipe *file);
 /*************************TRIM-CMD*************************/
 
 void    one_cmd(t_pipe *file, t_pars **pars, t_data *data);
-int	    here_doc(t_pipe *file);
+int	    here_doc(t_pipe *file, t_pars **pars, t_data *data);
 int     find_doc_fd(t_node *node, char *limiter);
 void    close_here_doc_pipe(t_node *node, int read, int write);
 void    create_node_and_list(t_pipe *file, char *limiter);
@@ -218,7 +218,7 @@ char	*find_path(char **envp);
 void    builtin_exec(t_pars **pars, t_pipe *file, t_data *data);
 void    builtin_exe_mult(t_pars **pars, t_pipe *file, t_data *data);
 void    ft_echo(t_pars **pars, t_pipe *file);
-void    ft_env(t_data *data);
+void    ft_env(t_data *data, t_pipe *file);
 void    ft_pwd(t_data *data);
 void    ft_export(t_pars **pars, t_data *data);
 void    ft_unset(t_pars **pars, t_data *data);
