@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 08:34:02 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/19 19:10:53 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/22 12:04:52 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*var_trimmed(char *str)
 	while (str[len] != '=')
 		len++;
 	len++;
-	tab = malloc(sizeof(char *) * (len + 1));
+	tab = malloc(sizeof(char) * (len + 1));
 	i = 0;
 	while (i < len)
 	{
@@ -65,11 +65,12 @@ int	new_or_replace(t_data *data, char *str)
 	i = 0;
 	var_len = to_equal(str);
 	var = var_trimmed(str);
+	printf("ici la var vaut = %s\n", var);
 	while (data->env[i] != 0)
 	{
 		if (ft_strnstr(data->env[i], var, var_len) != NULL)
 		{
-			free (var);
+			free(var);
 			return (1);
 		}
 		i++;
@@ -92,6 +93,7 @@ char    *realloc_value(char *old, char *str, int size)
         new[i] = str[i];
         i++;
     }
+    str[i] = 0;
     free(old);
     return (new);
 }
@@ -112,52 +114,30 @@ void new_value(t_data *data, char *str)
 	{
 	    if (ft_strnstr(data->env[i], var, var_len) != NULL)
 	    {
-	        j = ft_strlen(str);
-	        data->env[i] = realloc_value(data->env[i], str, j);
-	        free(var);
+	        free(data->env[i]);
+	        data->env[i] = ft_strdup(str);
+	        free (var);
 	        break ;
 		}
 	    i++;
 	}
 }
 
-/*void	msg_error(char *err, char *str)
-{
-	perror(err);
-	printf("bash: export: %s : ", str);
-	exit(1);
-}*/
-
-/*int     valid_variable(char *str)
-{
-	int     i;
-	
-	i = 0;
-	while(str[i] != '=' && str[0] != '=')
-	{
-		if (str[i] == '_')
-			i++;
-		else if (ft_isalnum(str[i]))
-			i++;
-		else
-			return (0);
-	}
-	return (1);
-}*/
-
 static void	ft_export_arg(char *str, t_data *data)
 {
 	int		i;
 	int     flag;
 	char	**new_env;
-	char    **tmp;
+	//char    **tmp;
 	
 	i = 0;
 	flag = 0;
 	if (new_or_replace(data, str) == 1)
 	{
 		flag = 1;
+		printf("ici on replace la value");
 		new_value(data, str);
+		return ;
 	}
     while (data->env[i] != 0)
     {
@@ -169,28 +149,22 @@ static void	ft_export_arg(char *str, t_data *data)
 	i = 0;
 	while (data->env[i] != 0)
 	{
-		new_env[i] = ft_strdup(data->env[i]);
+		new_env[i] = (data->env[i]);
 		if (!new_env[i])
 		{
 			free_envp(new_env, i);
-			exit (1); //A CHANGER AVEC LE VRAI EXIT
+			exit (1);
 		}
 		i++;
 	}
-	if (flag == 1)
-	{
-		tmp = data->env;
-		free(tmp);
-		data->env = new_env;
-		return ;
-	}
+	printf("ICI, AVANT AJOUT, ENVP VAUT %d\n", i);
 	new_env[i] = ft_strdup(str);
 	i++;
 	new_env[i] = 0;
 	i = -1;
-	while (data->env[++i])
+	/*while (data->env[++i])
 		free(data->env[i]);
-	free(data->env);
+	free(data->env);*/
 	data->env = new_env;
 }
 

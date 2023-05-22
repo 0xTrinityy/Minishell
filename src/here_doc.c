@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 17:28:18 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/19 18:26:10 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/21 13:41:27 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void    close_here_doc_pipe(t_node *head, int read, int write)
 	}
 }
 
-void handle_write(t_pipe *file)
+void handle_write(t_pipe *file, t_pars **pars, t_data *data)
 {
 	char    *line;
 	t_node  *node;
@@ -78,10 +78,42 @@ void handle_write(t_pipe *file)
 		node = node->next;
 	}
 	/*FUNCTION POUR TOUT FREE*/
+	
+	int i = -1;
+	while (data->env[++i])
+		free(data->env[i]);
+	free(data->env);
+		/*while (file->cmd_args[i])
+		{
+			free(file->cmd_args[i]);
+			i++;
+		}*/
+	free(file->node->prev);
+	free(file->node);
+	free(file->cmd_args);
+	i = -1;
+	while (file->cmd_paths[++i])
+		free(file->cmd_paths[i]);
+	free(file->cmd_paths);
+	i = -1;
+	while(file->cmd_to_exec[++i])
+		free(file->cmd_to_exec[i]);
+	free(file->cmd_to_exec);
+	free(file->cmd);
+	free(file->paths);
+	t_pars *tmp;
+	while ((*pars) != NULL)
+	{
+		tmp = (*pars)->next;
+		free((*pars)->ID);
+		free((*pars)->str);
+		free(*pars);
+		*pars = tmp;
+	}
 	exit(0);
 }
 
-int write_to_pipes(t_pipe *file)
+int write_to_pipes(t_pipe *file, t_pars **pars, t_data *data)
 {
 	int     status;
 	pid_t   pid;
@@ -92,20 +124,20 @@ printf("fork()-----------------------------\n");
 	/*if (pid == -1);
 		*/
 	if (pid == 0)
-		handle_write(file);
+		handle_write(file, pars, data);
 	else
 	{
 		close_here_doc_pipe(file->node, 0, 1);
 		waitpid(pid, &status, 0);
 	}
-	/*if (WIFSIGNALED(status) == SIGINT)
-		return -1;*/
+	if (WIFSIGNALED(status) == SIGINT)
+		return -1;
 	return 0;
 }
 
-int	here_doc(t_pipe *file)
+int	here_doc(t_pipe *file, t_pars **pars, t_data *data)
 {
 	init_pipes(file);
-	return (write_to_pipes(file));
+	return (write_to_pipes(file, pars, data));
 }
 
