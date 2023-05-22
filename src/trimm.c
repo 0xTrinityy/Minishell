@@ -99,7 +99,7 @@ static void    dup_cmdd(t_pars **pars, t_pipe *file)
 		if ((*pars)->token == CMD || (*pars)->token == BUILTIN)
 		{
 			file->cmd_to_exec[i] = ft_strdup((*pars)->str);
-			printf("strdup: %p\n", file->cmd_to_exec[i]);
+			// printf("strdup: %p\n", file->cmd_to_exec[i]);
 			i++;
 		}
 		*pars = (*pars)->next;
@@ -130,7 +130,7 @@ static void    is_a_cmd(t_pars **pars, t_pipe *file, t_data *data)
 		else if ((*pars)->token == CMD)
 		{
 			file->cmd_nb += 1;
-			printf("CA PASSE\n");
+			// printf("CA PASSE\n");
 			(*pars) = (*pars)->next;
 		}
 		//else if (ft_strncmp(file))
@@ -140,7 +140,7 @@ static void    is_a_cmd(t_pars **pars, t_pipe *file, t_data *data)
 	*pars = tmp;
 	if (file->cmd_nb > 0)
 		dup_cmdd(pars, file);
-	printf(" nombre de commande = %d\n", file->cmd_nb);
+	// printf(" nombre de commande = %d\n", file->cmd_nb);
 	return ;
 }
 
@@ -214,14 +214,18 @@ int    trimm_exec(t_pars **pars, t_data *data)
 {
 	t_pipe  file;
 	
+    if (!(*pars)->str[0])
+    {
+        return (0);
+    }
 	ft_memset(&file, 0, sizeof(t_pipe));
 	//init_pars(*pars);
 	is_a_cmd(pars, &file, data);
 	//set_doc(&file, pars);
-	printf("a on un hdoc = %d\n", file.doc);
+	// printf("a on un hdoc = %d\n", file.doc);
 	//if (file.doc > 0)
 	//	here_doc(&file);
-	printf("HOW MANY CMD = %d\n", file.cmd_nb);
+	// printf("HOW MANY CMD = %d\n", file.cmd_nb);
 	if (file.cmd_nb == 1 )
 	{
 		//printf("DEBUG");

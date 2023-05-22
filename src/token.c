@@ -38,12 +38,12 @@ static enum e_pars	check_redirect(enum e_pars token, char *str)
 			token = R_INPUT;
 		return (token);
 	}
-	while (str[i] == '>' && str[i])
+	while (str[i] == '>' && str[i + 1] == '>' && str[i] && str[i + 1])
 	{
 		i++;
 		token = R_DOUTPUT;
 	}
-	while (str[i] == '<' && str[i])
+	while (str[i] == '<' && str[i + 1] == '<' && str[i] && str[i + 1])
 	{
 		i++;
 		token = R_DINPUT;

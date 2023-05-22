@@ -14,30 +14,31 @@
 
 extern int	g_global;
 
-static char	*ft_exist(char *tmp, char *str, char *env, char *exp)
+static void ft_exist(char *tmp, t_pars *pars, char *env, char *exp)
 {
 	int	size;
 	int	i;
 
 	i = 0;
-	size = (ft_strlen(str) - ft_strlen(exp)) + (ft_strlen(env) - ft_strlen(exp)
+	size = (ft_strlen(pars->str) - ft_strlen(exp)) + (ft_strlen(env) - ft_strlen(exp)
 			- 1);
 	tmp = malloc(sizeof(char) * size);
 	if (!tmp)
 		exit(0);
-	while (str[i] != '$')
+	while (pars->str[i] != '$')
 	{
-		tmp[i] = str[i];
+		tmp[i] = pars->str[i];
 		i++;
 	}
 	tmp[i] = 0;
-	ft_strlcat(tmp, ft_strchr(env, '=') + 1, ft_strlen(env) + ft_strlen(str));
+	ft_strlcat(tmp, ft_strchr(env, '=') + 1, ft_strlen(env) + ft_strlen(pars->str));
 	i += ((int)ft_strlen(exp) + 1);
-	ft_strlcat(tmp, str + i, ft_strlen(str) + ft_strlen(env));
-	return (tmp);
+	ft_strlcat(tmp, pars->str + i, ft_strlen(pars->str) + ft_strlen(env));
+    free(pars->str);
+	pars->str = tmp;
 }
 
-static char	*replace_value(char *str, char **env, char *exp)
+static void replace_value(t_pars **pars, char **env, char *exp)
 {
 	int		j;
 	char	*tmp;
@@ -48,28 +49,41 @@ static char	*replace_value(char *str, char **env, char *exp)
 	{
 		if (ft_strnstr(env[j], exp, ft_strlen(exp)) != NULL
 			&& env[j][ft_strlen(exp)] == '=')
-			return (ft_exist(tmp, str, env[j], exp));
+        {
+		    ft_exist(tmp, (*pars), env[j], exp);
+            printf("str: %s\n", (*pars)->str);
+            return ; 
+        }
 		else
 			j++;
 	}
 	j = 0;
-	if ((ft_strlen(str) - ft_strlen(exp) - 1) == 0)
-		return ("");
-	tmp = malloc(sizeof(char) * (ft_strlen(str) - ft_strlen(exp) - 1) + 1);
-	ft_strcpy_dollar(tmp, str);
+	if ((ft_strlen((*pars)->str) - ft_strlen(exp) - 1) == 0)
+    {
+        free((*pars)->str);
+	    (*pars)->str = malloc(sizeof(char) * 1);
+        if (!(*pars)->str)
+            return ;
+		(*pars)->str[0] = 0;
+        return ;
+    }
+	tmp = malloc(sizeof(char) * (ft_strlen((*pars)->str) - ft_strlen(exp) - 1) + 1);
+	ft_strcpy_dollar(tmp, (*pars)->str);
 	j += (int)ft_strlen(exp) + 1;
-	if (str[j])
-		ft_strlcat(str + j, tmp, ft_strlen(str + j));
-	return (tmp);
+	if ((*pars)->str[j])
+		ft_strlcat((*pars)->str + j, tmp, ft_strlen((*pars)->str + j));
+    free((*pars)->str);
+	(*pars)->str = tmp;
 }
 
 int	check_dote(t_pars *pars, int i)
 {
 	char	*tmp;
+    char    *nb;
 	int		j;
 
 	j = 0;
-	tmp = malloc(sizeof(char) * (ft_strlen(pars->str) + 2));
+	tmp = malloc(sizeof(char) * (ft_strlen(pars->str) + 3));
 	while (j < i)
 	{
 		tmp[j] = pars->str[j];
@@ -77,9 +91,12 @@ int	check_dote(t_pars *pars, int i)
 	}
 	i += 2;
 	tmp[j] = 0;
-	ft_strlcat(tmp, ft_itoa(g_global), ft_strlen(pars->str) + 3);
+    nb = ft_itoa(g_global);
+	ft_strlcat(tmp, nb, ft_strlen(pars->str) + 3);
+    free (nb);
 	if (pars->str[i])
 		ft_strlcat(tmp, pars->str + i, ft_strlen(pars->str));
+    free(pars->str);
 	pars->str = tmp;
 	pars = new_id(pars);
 	return (-1);
@@ -100,7 +117,8 @@ t_pars	*find_dollar(t_pars *pars, char **env, char *tmp)
 		{
 			i++;
 			tmp = is_expand(pars, tmp, i);
-			pars->str = replace_value(pars->str, env, tmp);
+			replace_value(&pars, env, tmp);
+            free(tmp);
 			if (!pars->str[0])
 				break ;
 			pars = new_id(pars);

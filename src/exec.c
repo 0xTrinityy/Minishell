@@ -98,6 +98,12 @@ void    ft_cd(t_pars *pars, char **env)
         g_global = 1;
         return ;
     }
+    if (pars->str[0] == '-' && pars->str[1] == '-')
+    {
+        printf("cd: --: invalid option\n");
+        g_global = 2;
+        return ;
+    }
     if(!change_dir(path))
         return ;
     g_global = 0;
