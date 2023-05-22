@@ -33,7 +33,7 @@ int	cmd_first(t_pars *pars, char **env)
 	if (!is_redirect(pars->token))
 		return (0);
 	pars = pars->next;
-	if (pars->token != ARG)
+	if (pars == NULL || pars->token != ARG)
 		return (0);
 	pars = pars->next;
 	if (pars != NULL && pars->token == PIPE)

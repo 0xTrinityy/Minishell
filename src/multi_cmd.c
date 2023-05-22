@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
 extern int g_global;
 
 void create_node_and_list(t_pipe *file, char *limiter)

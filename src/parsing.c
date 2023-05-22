@@ -95,12 +95,18 @@ int	ft_parsing(t_pars **pars, char *str, char **env)
 		return (0);
 	put_id(str, id);
 	if (check_ifs(str, id))
+    {
+        free (id);
+        g_global = 0;
 		return (2);
+    }
 	create_pars(pars, str, id);
 	free(id);
 	put_token(pars, env);
 	if (!check_token(*pars))
-		return (0);
-	(*pars) = check_syntax(*pars, env);
-	return (1);
+        ;
+    else
+	    (*pars) = check_syntax(*pars, env);
+    g_global = 0;
+ 	return (1);
 }

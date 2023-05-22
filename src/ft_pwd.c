@@ -12,17 +12,17 @@
 
 # include "../includes/minishell.h"
 
-static char	*find_path_pwd(char **env)
-{
-	while (ft_strncmp("PWD", *env, 3))
-		env++;
-	return (*env + 4);
-}
+extern int  g_global;
 
-void    ft_pwd(t_data *data)
+void    ft_pwd(void)
 {
     char    *path;
 
-    path = find_path_pwd(data->env);
-    printf("%s", path);
+    g_global = 1;
+    path = getcwd(NULL, 0); 
+    if (path == NULL)
+        printf("error pwd\n");
+    printf("%s\n", path);
+    free (path);
+    g_global = 0;
 }

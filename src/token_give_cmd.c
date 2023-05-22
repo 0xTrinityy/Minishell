@@ -12,6 +12,8 @@
 
 #include "../includes/minishell.h"
 
+extern int g_global;
+
 static enum e_pars	check_quoted(char *str, enum e_token *ID)
 {
 	int			i;
@@ -54,6 +56,11 @@ void	give_cmd(t_pars *pars, int i)
 		if (is_redirect(pars->token))
 		{
 			pars = pars->next;
+            if (pars == NULL)
+            {
+                g_global = 1;
+                return ;
+            }
 			pars->token = check_cmd(pars->token, pars->str, pars->ID);
 			if (pars->token == 0)
 				pars->token = TXT;

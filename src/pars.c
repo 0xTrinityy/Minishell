@@ -12,6 +12,8 @@
 
 #include "../includes/minishell.h"
 
+extern int  g_global;
+
 static int	len_redirect(enum e_token *ID)
 {
 	int	i;
@@ -93,12 +95,46 @@ static void	_lstadd_back(t_pars *tmp, t_pars **pars)
 	}
 }
 
+int simple_quote(char *str, t_pars **pars)
+{
+    if (str[0] == '"' || str[0] == '\'')
+    {
+        if (!str[1])
+        {
+            
+            g_global = 2;
+	        (*pars) = (t_pars *)malloc(sizeof(t_pars));
+	        if (!(*pars))
+		        exit(0);
+	        (*pars)->str = malloc(sizeof(char) * 2);
+	        if (!(*pars)->str)
+		        exit(0);
+        (*pars)->str[0] = str[0];
+            (*pars)->str[1] = 0;
+            (*pars)->ID = (enum e_token *)malloc(sizeof(enum e_token) * 2);
+	        if (!(*pars)->ID)
+		        exit(0);
+            (*pars)->ID[0] = S_QUOTE;
+            (*pars)->ID[1] = FINISH;
+            (*pars)->token = CMD;
+            (*pars)->next = NULL;
+            (*pars)->prev = NULL;
+            return (0);
+        }
+    }
+    return (1);
+}
+
 void	create_pars(t_pars **pars, char *str, enum e_token *ID)
 {
 	int		i;
 	t_pars	*tmp;
 
 	i = 0;
+    if (!simple_quote(str, pars))
+    {
+        return ;
+    }
 	while (str[i])
 	{
 		while (ID[i] == IFS && str[i])

@@ -26,7 +26,7 @@ void    builtin_exec(t_pars **pars, t_pipe *file, t_data *data)
             if (strcmp((*pars)->str, "unset") == 0)
                 ft_unset(pars, data);
             else if (strcmp((*pars)->str, "pwd") == 0)
-                ft_pwd(data);
+                ft_pwd();
             /*else if (strcmp((*pars)->str, "cd") == 0)
                 ft_cd(pars, file);*/
             /*else if (strcmp((*pars)->str, "exit") == 0)
@@ -64,7 +64,7 @@ void    builtin_exe_mult(t_pars **pars, t_pipe *file, t_data *data)
             if (strcmp((*pars)->str, "unset") == 0)
                 ft_unset(pars, data);
             else if (strcmp((*pars)->str, "pwd") == 0)
-                ft_pwd(data);
+                ft_pwd();
             /*else if (strcmp((*pars)->str, "cd") == 0)
                 ft_cd(pars, file);*/
             /*else if (strcmp((*pars)->str, "exit") == 0)

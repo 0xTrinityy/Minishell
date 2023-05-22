@@ -11,7 +11,8 @@
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-extern int g_global;
+
+extern int  g_global;
 
 static void parent_free_one(t_pipe *file)
 {
@@ -268,6 +269,7 @@ static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
 			free(*pars);
 			*pars = tmp;
 		}
+        g_global = 127;
 		msg(ERR_CMD);
 		exit (127);
 	}

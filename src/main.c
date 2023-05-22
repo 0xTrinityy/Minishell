@@ -23,8 +23,8 @@ void	ft_free(t_pars **pars)
 	while (*pars != NULL)
 	{
         next = (*pars)->next;
-	    free((*pars)->str);
-		free((*pars)->ID);
+        free((*pars)->str);
+	   	free((*pars)->ID);
         free((*pars));
 		*pars = next;
 	}
@@ -61,7 +61,7 @@ void    cpy_env(char **envp, t_data *data)
 		i++;
 	}
     data->env[i] = 0;
-	//return (data->env);
+	//return (data->env)< 1 < 2 < 3 < 4 < 5 cat;
 }
 
 int	main(int ac, char **av, char **envp)
@@ -81,9 +81,8 @@ int	main(int ac, char **av, char **envp)
 	while (str)
 	{
 		add_history(str);
-		if (ft_parsing(&pars, str, data.env) !=  2 && g_global == 0)
+		if (ft_parsing(&pars, str, data.env) != 2 && g_global == 0)
 			trimm_exec(&pars, &data);
-		printf("VARIABLE = %d\n\n", g_global);
 		free(str);
 		ft_free(&pars);
 		str = readline("> ");
