@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/23 16:00:46 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/23 17:26:45 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -352,6 +352,10 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 			while (file->cmd_to_exec[++i])
 				free(file->cmd_to_exec[i]);
 			free(file->cmd_to_exec);
+			i = -1;
+			while (file->cmd_paths[++i])
+				free(file->cmd_paths[i]);
+			free(file->cmd_paths);
 			free(file->paths);
 			free(file->pid);
 			while(file->node)

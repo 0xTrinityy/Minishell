@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 11:18:26 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/17 18:35:00 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/23 18:33:09 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 extern int	g_global;
 
-void	ft_exec(t_pars *pars, char *str, char **env)
+/*void	ft_exec(t_pars *pars, char **env)
 {
 	if (is_a_cmd(pars->str, env) == 2)
-		ft_exit(pars, str);
-}
+		ft_exit(pars);
+}*/
 
 int	nb_fd(t_pars *pars)
 {
@@ -38,15 +38,15 @@ int	nb_fd(t_pars *pars)
 	return (i);
 }
 
-void	ft_exit(t_pars *pars, char *str)
+void	ft_exit(t_pars *pars)
 {
 	int	i;
 
 	i = 0;
 	while (i < nb_fd(pars))
 		close(i++);
-	ft_free(pars);
-	free(str);
+	ft_free(&pars);
+	//free(str);
 	g_global = 2;
 	exit (0);
 }
@@ -54,17 +54,19 @@ void	ft_exit(t_pars *pars, char *str)
 static char    *get_home(char **env)
 {
     (void) env;
-    return("/mnt/nfs/homes/luciefer")
+    return("/mnt/nfs/homes/luciefer");
 }
 
 static int    change_dir(char *str)
 {
     char *tmp;
+    int     i;
 
+    i = 0;
     tmp = getcwd(NULL, 0);
     if (tmp == NULL)
     {
-        printf("erreur no path");
+        printf("error no path");
         return (0);
     }
     i = chdir(str);
@@ -72,8 +74,9 @@ static int    change_dir(char *str)
     {
         g_global = 1;
         ft_putstr_fd("cd: ",1);
-        ft_putstr_fd(pars->str, 1);
+        ft_putstr_fd(str, 1);
         ft_putstr_fd(": No such file or directory\n", 1);
+        free(tmp);
         return (0);
     }
     free(tmp);
@@ -82,7 +85,6 @@ static int    change_dir(char *str)
 
 void    ft_cd(t_pars *pars, char **env)
 {
-    int i;
     char    *path;
 
     if (!pars->next || is_redirect(pars->next->token))
