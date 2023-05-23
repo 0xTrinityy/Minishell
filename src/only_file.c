@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 15:27:15 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/23 16:26:40 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/23 17:03:25 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void    only_file_handler(t_pars **pars)
 	while ((*pars) != NULL)
 	{
 		if ((*pars)->token == R_INPUT)
+		{
 			opening = open((*pars)->next->str, O_RDONLY);
 			if (opening < 0)
 			{
@@ -53,14 +54,18 @@ void    only_file_handler(t_pars **pars)
 				break;
 			}
 			close(opening);
+		}
 		if ((*pars)->token == R_OUTPUT || (*pars)->token == R_DOUTPUT)
+		{
 			opening = open((*pars)->next->str, O_TRUNC | O_CREAT | O_RDWR, 0000644);
 			if (opening < 0)
 			{
 				only_error(ERR_OUTFILE);
 				break;
 			}
+			printf("gonna close : %d\n", opening);
 			close(opening);
+		}
 		(*pars) = (*pars)->next;
 	}
 	*pars = tmp;
