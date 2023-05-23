@@ -14,9 +14,17 @@
 
 extern int	g_global;
 
-void	ft_free_all(void)
+int	ft_free_all(t_pars **pars, enum e_token *id, int i)
 {
-	exit(0);
+    free(id);
+    if (pars != NULL)
+        ft_free(pars);
+    if (i == 1)
+    {
+        g_global = 0;
+        return (2);
+    }
+	return (0);
 }
 
 static int	check_token(t_pars *pars)
@@ -87,26 +95,17 @@ int	ft_parsing(t_pars **pars, char *str, char **env)
 	*pars = 0;
 	id = (enum e_token *)malloc(sizeof(enum e_token) * (ft_strlen(str) + 1));
 	if (!id)
-	{
-		free(id);
-		ft_free_all();
-	}
+		return (ft_free_all(pars, id, 0));
 	if (!str)
-		return (0);
+		return (ft_free_all(pars, id, 0));
 	put_id(str, id);
 	if (check_ifs(str, id))
-    {
-        free (id);
-        g_global = 0;
-		return (2);
-    }
+		return (ft_free_all(pars, id, 1));
 	create_pars(pars, str, id);
 	free(id);
 	put_token(pars, env);
 	if (!check_token(*pars))
-        ;
-    else
-	    (*pars) = check_syntax(*pars, env);
-    g_global = 0;
+        return (1);
+	(*pars) = check_syntax(*pars, env);
  	return (1);
 }

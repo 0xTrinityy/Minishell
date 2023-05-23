@@ -89,7 +89,7 @@ static void	replace_arg(t_pars *pars)
 	t_pars	*tmp;
 
 	tmp = pars;
-    while (pars->token != CMD)
+    while (pars != NULL && pars->token != CMD)
         pars = pars->next;
     if (pars != NULL)
 	    pars = pars->next;
@@ -122,6 +122,7 @@ t_pars	*check_syntax(t_pars *pars, char **env)
 		return (pars);
 	}
 	is_builtin(pars);
+    g_global = 0;
 	return (pars);
 }
 

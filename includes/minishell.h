@@ -163,7 +163,7 @@ void    is_cmd(t_pars **pars, t_pipe *file, char **envp);
 
 /***************************************************/
 
-void	ft_free_all();
+int 	ft_free_all(t_pars **pars, enum e_token *id, int i);
 int	    msg(char *err);
 void	msg_error(char *err, t_pipe *data);
 void	close_pipes(t_pipe *file);
@@ -265,7 +265,6 @@ void    is_builtin(t_pars *pars);
 // signal.c
 void	siginthandler(int signal);
 
-void			ft_free_all(void);
 void			ft_free(t_pars **pars);
 
 // free.c
