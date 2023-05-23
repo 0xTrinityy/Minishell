@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:40:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/22 13:17:57 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/23 15:06:28 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,22 @@ static void    ft_unset_arg(t_data *data, char *str)
 {
 	int     i;
 	int     k;
+	int     flag;
 	char    **new;
 	size_t  var_len;
 	
-	
 	i = 0;
 	k = 0;
-	while (data->env[i])
+	var_len = 0;
+	flag = 0;
+	while(data->env[i])
+	{
+		if (ft_strnstr(data->env[i], str, var_len) != NULL && (data->env[i][var_len] == '='))
+			flag = 1;
 		i++;
+	}
+	if (flag != 1)
+		return ;
 	new = malloc(sizeof(char *) * (i - 1));
 	if (!new)
 		return ;
@@ -37,17 +45,15 @@ static void    ft_unset_arg(t_data *data, char *str)
 		}
 		else
 		{
-			new[k] = ft_strdup(data->env[i]);
+			new[k] = (data->env[i]);
 			k++;
 			i++;
 		}
 	}
-	//new[k] = 0;
+	new[k] = 0;
 	i = 0;
-	while (data->env[i])
-		free(data->env[i]);
+	free(data->env);
 	data->env = new;
-	//return (new);
 }
 
 void    ft_unset(t_pars **pars, t_data *data)

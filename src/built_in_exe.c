@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 07:22:10 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/21 13:17:40 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/23 14:43:49 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ void    builtin_exec(t_pars **pars, t_pipe *file, t_data *data)
             else if (strcmp((*pars)->str, "pwd") == 0)
                 ft_pwd();
             /*else if (strcmp((*pars)->str, "cd") == 0)
-                ft_cd(pars, file);*/
-            /*else if (strcmp((*pars)->str, "exit") == 0)
+                ft_cd(pars, file);
+            else if (strcmp((*pars)->str, "exit") == 0)
                 ft_exit(pars, file);*/
             else if (strcmp((*pars)->str, "export") == 0)
                 ft_export(pars, data);

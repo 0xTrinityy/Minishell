@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 08:34:02 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/22 12:04:52 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/23 13:50:01 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,8 @@ static void	ft_export_arg(char *str, t_data *data)
 	i++;
 	new_env[i] = 0;
 	i = -1;
+	//printf("l'adresse est %p\n", data->env);
+	free(data->env);
 	/*while (data->env[++i])
 		free(data->env[i]);
 	free(data->env);*/
