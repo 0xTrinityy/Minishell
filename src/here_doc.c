@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 17:28:18 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/21 13:41:27 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/22 15:34:07 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ void handle_write(t_pipe *file, t_pars **pars, t_data *data)
 		node = node->next;
 	}
 	/*FUNCTION POUR TOUT FREE*/
-	
 	int i = -1;
 	while (data->env[++i])
 		free(data->env[i]);

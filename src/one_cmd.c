@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/21 13:16:16 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/22 16:12:22 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ extern int  g_global;
 static void parent_free_one(t_pipe *file)
 {
 	int     i;
+	t_node  *tmp;
 	
 	i = -1;
 	if (file->infile > 0)
@@ -32,6 +33,12 @@ static void parent_free_one(t_pipe *file)
 	free(file->cmd_to_exec);
 	free(file->cmd);
 	//printf("gonna free the paths from path spe (file paths) %p\n", file->paths);
+	while(file->node)
+	{
+		tmp = file->node->next;
+		free(file->node);
+		file->node = tmp;
+	}
 	free(file->paths);
 }
 
@@ -254,6 +261,7 @@ static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
 		while (file->cmd_paths[++i])
 			free(file->cmd_paths[i]);
 		free(file->cmd_paths);
+		free(file->node);
 		i = -1;
 		while(file->cmd_to_exec[++i])
 			free(file->cmd_to_exec[i]);

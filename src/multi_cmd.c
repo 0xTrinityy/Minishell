@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/22 13:35:07 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/22 16:01:00 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,6 +294,7 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 	int     i;
 	int     in;
 	int     out;
+	t_node *tmp1;
 	
 	i = 0;
 	printf("fork()-----------------------------\n");
@@ -330,7 +331,6 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 				free(*pars);
 				*pars = tmp;
 			}
-			free(pars);
 			msg(ERR_INFILE);
 			exit (126);
 		}
@@ -342,6 +342,33 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 		if (is_built_ins(pars, file))
 		{
 			builtin_exe_mult(pars, file, data);
+			close(file->fd[0]);
+			close(file->fd[1]);
+			int i = -1;
+			while (data->env[++i])
+				free(data->env[i]);
+			free(data->env);
+			i = -1;
+			while (file->cmd_to_exec[++i])
+				free(file->cmd_to_exec[i]);
+			free(file->cmd_to_exec);
+			free(file->paths);
+			free(file->pid);
+			while(file->node)
+			{
+				tmp1 = file->node->next;
+				free(file->node);
+				file->node = tmp1;
+			}
+			t_pars *tmp;
+			while ((*pars) != NULL)
+			{
+				tmp = (*pars)->next;
+				free((*pars)->ID);
+				free((*pars)->str);
+				free(*pars);
+				*pars = tmp;
+			}
 			exit (1);
 		}
 		file->cmd_args = tema_larg2(file, pars);
@@ -366,6 +393,12 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 			free(file->cmd);
 			free(file->paths);
 			free(file->pid);
+			while(file->node)
+			{
+				tmp1 = file->node->next;
+				free(file->node);
+				file->node = tmp1;
+			}
 			t_pars *tmp;
 			while ((*pars) != NULL)
 			{
