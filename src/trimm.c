@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:18:24 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/22 15:21:13 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/23 16:24:24 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,6 +217,12 @@ int    trimm_exec(t_pars **pars, t_data *data)
 	if (!(*pars)->str[0])
 		return (0);
 	ft_memset(&file, 0, sizeof(t_pipe));
+	if (only_file(pars))
+	{
+		printf("Ok on est bien dans only file\n");
+		only_file_handler(pars);
+		return (0);
+	}
 	init_pars(*pars);
 	is_a_cmd(pars, &file, data);
 	set_doc(&file, pars);

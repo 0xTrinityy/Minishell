@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/22 13:46:15 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/23 16:23:22 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,8 @@ void	parent_free1(t_pipe *file);
 void	child_free1(t_pipe *file);
 
 /*************************TRIM-CMD*************************/
-
+void    only_file_handler(t_pars **pars);
+int    only_file(t_pars **pars);
 void    one_cmd(t_pipe *file, t_pars **pars, t_data *data);
 int	    here_doc(t_pipe *file, t_pars **pars, t_data *data);
 int     find_doc_fd(t_node *node, char *limiter);

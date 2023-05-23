@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_utils3.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 08:47:22 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/15 15:51:33 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/23 15:18:57 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	del_quote(t_pars *pars)
 	if (!pars->ID)
 	{
 		free(pars->ID);
-		ft_free_all();
+		exit (0);
 	}
 	put_id(tmp, pars->ID);
     free(pars->str);
