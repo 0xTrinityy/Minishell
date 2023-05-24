@@ -6,19 +6,19 @@
 /*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/24 15:31:36 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/24 13:42:43 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-extern int  g_global;
+extern int		g_global;
 
-static void parent_free_one(t_pipe *file)
+static void	parent_free_one(t_pipe *file)
 {
-	int     i;
-	t_node  *tmp;
-	
+	int		i;
+	t_node	*tmp;
+
 	i = -1;
 	if (file->infile > 0)
 		close(file->infile);
@@ -32,8 +32,7 @@ static void parent_free_one(t_pipe *file)
 		free(file->cmd_to_exec[i]);
 	free(file->cmd_to_exec);
 	free(file->cmd);
-	//printf("gonna free the paths from path spe (file paths) %p\n", file->paths);
-	while(file->node)
+	while (file->node)
 	{
 		tmp = file->node->next;
 		free(file->node);
@@ -42,28 +41,19 @@ static void parent_free_one(t_pipe *file)
 	free(file->paths);
 }
 
-static t_pars* find_cmd_pars(t_pars *pars)
+static t_pars	*find_cmd_pars(t_pars *pars)
 {
 	while ((pars) != NULL)
 	{
 		if ((pars)->token == CMD)
-			return pars;
+			return (pars);
 		pars = pars->next;
 	}
 	return (NULL);
 }
 
-static int   one_cmd_in(t_pipe *file, t_pars **pars)
+static int	reading_in(t_pars **pars, t_pipe *file, int last, t_pars *cmd)
 {
-	int     last;
-	t_pars  *tmp;
-	t_pars  *cmd;
-
-	tmp = *pars;
-	last = 0;
-	
-	if (last == 0)
-		file->infile = STDIN_FILENO;
 	while ((*pars) != NULL)
 	{
 		if ((*pars)->token == R_INPUT)
@@ -83,24 +73,36 @@ static int   one_cmd_in(t_pipe *file, t_pars **pars)
 		}
 		(*pars) = (*pars)->next;
 	}
+	return (last);
+}
+
+static int	one_cmd_in(t_pipe *file, t_pars **pars)
+{
+	int		last;
+	t_pars	*tmp;
+	t_pars	*cmd;
+
+	tmp = *pars;
+	cmd = NULL;
+	last = 0;
+	if (last == 0)
+		file->infile = STDIN_FILENO;
+	last = reading_in(pars, file, last, cmd);
 	*pars = tmp;
+	if (last == -1)
+		return (-1);
 	if (last == 0)
 		file->infile = STDIN_FILENO;
 	else if (last == HEREDOC)
-	{
 		file->infile = find_doc_fd(file->node, cmd->limiter);
-		//fprintf( stderr, "HERE DOC INFILE = %d\n", file->infile);
-	}
 	return (file->infile);
 }
 
-static int   one_cmd_out(t_pipe *file, t_pars **pars)
+static int	reading_out(t_pars **pars, t_pipe *file, int last)
 {
-	t_pars  *tmp;
-	int last;
-	
+	t_pars	*tmp;
+
 	tmp = *pars;
-	last = 0;
 	while ((*pars) != NULL)
 	{
 		if ((*pars)->token == R_OUTPUT)
@@ -108,7 +110,8 @@ static int   one_cmd_out(t_pipe *file, t_pars **pars)
 			last++;
 			if (file->outfile != 1)
 				close(file->outfile);
-			file->outfile = open((*pars)->next->str, O_TRUNC | O_CREAT | O_RDWR, 0000644);
+			file->outfile = open((*pars)->next->str, O_TRUNC | O_CREAT | O_RDWR,
+					0000644);
 			if (file->outfile < 0)
 				msg_error(ERR_OUTFILE, file);
 		}
@@ -122,19 +125,32 @@ static int   one_cmd_out(t_pipe *file, t_pars **pars)
 		(*pars) = (*pars)->next;
 	}
 	(*pars) = tmp;
+	return (last);
+}
+
+static int	one_cmd_out(t_pipe *file, t_pars **pars)
+{
+	t_pars	*tmp;
+	int		last;
+
+	tmp = *pars;
+	last = 0;
+	last = reading_out(pars, file, last);
 	if (last == 0)
 		file->outfile = STDOUT_FILENO;
 	return (file->outfile);
 }
 
-static int      arg_count(t_pars **pars)
+static int	arg_count(t_pars **pars)
 {
-	t_pars  *tmp;
-	int count;
+	t_pars	*tmp;
+	int		count;
 
 	tmp = *pars;
 	count = 0;
-	while ((*pars) != NULL && ((*pars)->token != R_OUTPUT && (*pars)->token != R_DOUTPUT && (*pars)->token !=  R_INPUT && (*pars)->token != R_DINPUT))
+	while ((*pars) != NULL && ((*pars)->token != R_OUTPUT
+			&& (*pars)->token != R_DOUTPUT && (*pars)->token != R_INPUT
+			&& (*pars)->token != R_DINPUT))
 	{
 		count++;
 		(*pars) = (*pars)->next;
@@ -143,26 +159,25 @@ static int      arg_count(t_pars **pars)
 	return (count);
 }
 
-static char    **tema_larg(t_pars **pars, t_pipe *file)
+static char	**tema_larg(t_pars **pars, t_pipe *file)
 {
-	t_pars  *tmp;
-	int     i;
-	char    **arg;
-	
+	t_pars	*tmp;
+	int		i;
+	char	**arg;
+
 	i = arg_count(pars);
-	arg = malloc(sizeof(char*) * (i + 1));
+	arg = malloc(sizeof(char *) * (i + 1));
 	tmp = *pars;
 	i = 0;
 	arg[i] = (file->cmd_to_exec[0]);
 	i++;
-	//*pars = (*pars)->next;
-	//printf("ELEMENT %s\n", (*pars)->str);
-	while ((*pars) != NULL && ((*pars)->token != R_OUTPUT && (*pars)->token != R_DOUTPUT && (*pars)->token !=  R_INPUT && (*pars)->token != R_DINPUT))
+	while ((*pars) != NULL && ((*pars)->token != R_OUTPUT
+			&& (*pars)->token != R_DOUTPUT && (*pars)->token != R_INPUT
+			&& (*pars)->token != R_DINPUT))
 	{
-		if((*pars)->token != CMD)
+		if ((*pars)->token != CMD)
 		{
 			arg[i] = ((*pars)->str);
-			//printf("L'arg vaut = %s\n", arg[i]);
 			i++;
 		}
 		(*pars) = (*pars)->next;
@@ -172,58 +187,75 @@ static char    **tema_larg(t_pars **pars, t_pipe *file)
 	return (arg);
 }
 
-static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
+static void	free_one_cmd_infile(t_pars **pars, t_pipe *file, t_data *data)
 {
-	t_pars *tmp;
-	int count;
-	int in;
-	int out;
-	
-	signal(SIGQUIT, &siginthandler_fork);
-	in = one_cmd_in(file, pars);
-	fprintf(stderr, "INFILE = %d\n", in);
-	if (in < 0)
+	int		i;
+	t_pars	*tmp;
+
+	i = -1;
+	while (data->env[++i])
+		free(data->env[i]);
+	free(data->env);
+	i = -1;
+	while (file->cmd_paths[++i])
+		free(file->cmd_paths[i]);
+	free(file->cmd_paths);
+	i = -1;
+	while (file->cmd_to_exec[++i])
+		free(file->cmd_to_exec[i]);
+	free(file->cmd_to_exec);
+	free(file->cmd);
+	free(file->paths);
+	while ((*pars) != NULL)
 	{
-		int i = -1;
-		while (data->env[++i])
-			free(data->env[i]);
-		free(data->env);
-		i = -1;
-		while (file->cmd_paths[++i])
-			free(file->cmd_paths[i]);
-		free(file->cmd_paths);
-		i = -1;
-		while(file->cmd_to_exec[++i])
-			free(file->cmd_to_exec[i]);
-		free(file->cmd_to_exec);
-		free(file->cmd);
-		free(file->paths);
-		t_pars *tmp;
-		while ((*pars) != NULL)
-		{
-			tmp = (*pars)->next;
-			free((*pars)->id);
-			free((*pars)->str);
-			free(*pars);
-			*pars = tmp;
-		}
-		msg(ERR_INFILE);
-		exit (126);
+		tmp = (*pars)->next;
+		free((*pars)->ID);
+		free((*pars)->str);
+		free(*pars);
+		*pars = tmp;
 	}
-	out = one_cmd_out(file, pars);
-	fprintf(stderr, "OUTFILE = %d\n", out);
-	dup2(in, STDIN_FILENO);
-	dup2(out, STDOUT_FILENO);
-	count = 0 ;
+}
+
+static void	free_one_cmd_nofound(t_pars **pars, t_pipe *file, t_data *data)
+{
+	int		i;
+	t_pars	*tmp;
+
+	i = -1;
+	while (data->env[++i])
+		free(data->env[i]);
+	free(data->env);
+	free(file->cmd_args);
+	i = -1;
+	while (file->cmd_paths[++i])
+		free(file->cmd_paths[i]);
+	free(file->cmd_paths);
+	free(file->node);
+	i = -1;
+	while (file->cmd_to_exec[++i])
+		free(file->cmd_to_exec[i]);
+	free(file->cmd_to_exec);
+	free(file->cmd);
+	free(file->paths);
+	while ((*pars) != NULL)
+	{
+		tmp = (*pars)->next;
+		free((*pars)->ID);
+		free((*pars)->str);
+		free(*pars);
+		*pars = tmp;
+	}
+}
+
+static void	getting_args(t_pars **pars, t_pipe *file)
+{
+	t_pars	*tmp;
+	int		count;
+
 	tmp = *pars;
-	//printf("PARS STR = %s\n", (*pars)->str);
-	if (in > 0)
-		close(in);
-	if (out != 1)
-		close(out);
-	//file->paths = find_path_spe(data);
-	//file->cmd_paths = ft_split(file->paths, ':');
-	while (*pars != NULL && ((*pars)->token != R_OUTPUT || (*pars)->token != R_DOUTPUT)) 
+	count = 0;
+	while (*pars != NULL && ((*pars)->token != R_OUTPUT
+			|| (*pars)->token != R_DOUTPUT))
 	{
 		if ((*pars)->token == CMD)
 		{
@@ -234,82 +266,67 @@ static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
 			{
 				file->cmd_args = malloc(sizeof(char *) * 2);
 				file->cmd_args[0] = (file->cmd_to_exec[0]);
-				//printf("cmd to exec = %s\n", file->cmd_to_exec[0]);
+				//printf(" on ajoute l'arg = %s\n", file->cmd_args[0]);
 				file->cmd_args[1] = NULL;
 			}
-			//printf("cmd arg = %s\n", file->cmd_args[1]);
 			file->cmd = get_cmd(file->cmd_paths, file->cmd_to_exec[0]);
-			break;
+			//printf("juste avant d'exec on a cmd = %s et args = %s\n", file->cmd, file->cmd_args[0]);
+			break ;
 		}
 		*pars = (*pars)->next;
 	}
 	*pars = tmp;
-	if(!file->cmd)
+}
+
+static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
+{
+	int	in;
+	int	out;
+
+	in = one_cmd_in(file, pars);
+	if (in < 0)
 	{
-		//parent_free_one(file);
-		int i = -1;
-		while (data->env[++i])
-			free(data->env[i]);
-		free(data->env);
-		/*while (file->cmd_args[i])
-		{
-			free(file->cmd_args[i]);
-			i++;
-		}*/
-		free(file->cmd_args);
-		i = -1;
-		while (file->cmd_paths[++i])
-			free(file->cmd_paths[i]);
-		free(file->cmd_paths);
-		free(file->node);
-		i = -1;
-		while(file->cmd_to_exec[++i])
-			free(file->cmd_to_exec[i]);
-		free(file->cmd_to_exec);
-		free(file->cmd);
-		free(file->paths);
-		t_pars *tmp;
-		while ((*pars) != NULL)
-		{
-			tmp = (*pars)->next;
-			free((*pars)->id);
-			free((*pars)->str);
-			free(*pars);
-			*pars = tmp;
-		}
-        g_global = 127;
-		msg(ERR_CMD);
-		exit (127);
+		free_one_cmd_infile(pars, file, data);
+		msg(ERR_INFILE);
+		exit(126);
 	}
-	fprintf(stderr, "%s\n", file->cmd_to_exec[0]);
-	//printf("cmd arg 2 = %s\n", file->cmd_args[0]);
-	//printf("cmd arg 2 = %s\n", file->cmd_args[1]);
+	out = one_cmd_out(file, pars);
+	dup2(in, STDIN_FILENO);
+	dup2(out, STDOUT_FILENO);
+	if (in > 0)
+		close(in);
+	if (out != 1)
+		close(out);
+	//printf("%s\n", file->cmd_to_exec[0]);
+	getting_args(pars, file);
+	printf("CMD = %s\n", file->cmd);
+	if (!file->cmd)
+	{
+		free_one_cmd_nofound(pars, file, data);
+		msg(ERR_CMD);
+		exit(127);
+	}
 	execve(file->cmd, file->cmd_args, data->env);
 }
 
-static void    one_built_in(t_pipe *file, t_pars **pars, t_data *data)
+static void	one_built_in(t_pipe *file, t_pars **pars, t_data *data)
 {
-	int in;
-	int out;   
+	int	in;
+	int	out;
 
 	in = one_cmd_in(file, pars);
-	fprintf(stderr, "INFILE = %d\n", in);
 	out = one_cmd_out(file, pars);
-	fprintf(stderr, "OUTFILE = %d\n", out);
-	//dup2(out, STDOUT_FILENO);
 	if (in != 0)
 		close(in);
-	printf("Execution d'un builtin\n");
 	builtin_exec(pars, file, data);
 	if (out != 1)
 		close(out);
 	return ;
 }
 
-
-void    one_cmd(t_pipe *file, t_pars **pars, t_data *data)
-{	
-	int status;
+void	one_cmd(t_pipe *file, t_pars **pars, t_data *data)
+{
+	int	status;
 
 	status = 0;
 	file->doc = 0;
@@ -318,13 +335,10 @@ void    one_cmd(t_pipe *file, t_pars **pars, t_data *data)
 	file->pidx = 0;
 	if (file->builtin == 1)
 	{
-		printf("ON ENTRE BIEN DANS BUILTIN\n");
 		one_built_in(file, pars, data);
 		parent_free_one(file);
 		return ;
 	}
-	printf("fork()-----------------------------\n");
-	printf("ON ENTRE BIEN DANS EXECV");
 	file->pidx = fork();
 	if (file->pidx == 0)
 		first_child(file, pars, data);
@@ -332,7 +346,7 @@ void    one_cmd(t_pipe *file, t_pars **pars, t_data *data)
 	if (status == 131)
 		ft_putstr_fd("Quit (core dumped)\n", 1);
 	if (WIFEXITED(status))
-        g_global = WEXITSTATUS(status);
+		g_global = WEXITSTATUS(status);
 	parent_free_one(file);
 	return ;
 }

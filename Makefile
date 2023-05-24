@@ -6,7 +6,7 @@
 #    By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/14 10:06:19 by tbelleng          #+#    #+#              #
-#    Updated: 2023/05/23 18:19:54 by tbelleng         ###   ########.fr        #
+#    Updated: 2023/05/23 22:30:41 by tbelleng         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,8 +50,7 @@ SRC = $(SRC_DIR)/main.c						\
 		$(SRC_DIR)/only_file.c				\
 		$(SRC_DIR)/exec.c					\
 		$(SRC_DIR)/cd.c						\
-		
-
+		$(SRC_DIR)/here_doc_utils.c	\
 
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(BIN_DIR)%.o)
 

@@ -6,20 +6,21 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:18:24 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/23 16:24:24 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/24 13:45:12 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-extern int g_global;
 
-static char    *path_cpy(t_data *data)
+extern int	g_global;
+
+static char	*path_cpy(t_data *data)
 {
-	int i;
-	int j;
-	int len;
-	char    *path;
-	
+	int		i;
+	int		j;
+	int		len;
+	char	*path;
+
 	i = 0;
 	j = 0;
 	while (ft_strncmp("PATH", data->env[i], 4))
@@ -44,9 +45,9 @@ static char    *path_cpy(t_data *data)
 
 char	*find_path_spe(t_data *data)
 {
-	int	i;
-	int	no_path;
-	char    *new;
+	int		i;
+	int		no_path;
+	char	*new;
 
 	i = 0;
 	no_path = 0;
@@ -68,53 +69,11 @@ char	*find_path_spe(t_data *data)
 	return (new);
 }
 
-/*char	*get_cmd(char **paths, char *cmd)
+static void	is_a_cmd(t_pars **pars, t_pipe *file, t_data *data)
 {
-	char	*tmp;
-	char	*command;
-
-	while (*paths != NULL)
-	{
-		tmp = ft_strjoin(*paths, "/");
-		command = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (access(command, 0) == 0)
-			return (command);
-		free(command);
-		paths++;
-	}
-	return (NULL);
-}*/
-
-static void    dup_cmdd(t_pars **pars, t_pipe *file)
-{
-	t_pars  *tmp;
-	int     i;
-	
-	tmp = *pars;
-	i = 0;
-	file->cmd_to_exec = malloc(sizeof(char *) * (file->cmd_nb + file->builtin + 1));
-	while ((*pars) != NULL)
-	{
-		if ((*pars)->token == CMD || (*pars)->token == BUILTIN)
-		{
-			file->cmd_to_exec[i] = ft_strdup((*pars)->str);
-			// printf("strdup: %p\n", file->cmd_to_exec[i]);
-			i++;
-		}
-		*pars = (*pars)->next;
-	}
-	file->cmd_to_exec[i] = 0;
-	*pars = tmp;
-}
-
-static void    is_a_cmd(t_pars **pars, t_pipe *file, t_data *data)
-{
-	t_pars *tmp;
+	t_pars	*tmp;
 
 	tmp = *pars;
-	file->cmd_nb = 0;
-	(void)data;
 	file->paths = find_path_spe(data);
 	file->cmd_paths = ft_split(file->paths, ':');
 	while ((*pars) != NULL)
@@ -123,116 +82,29 @@ static void    is_a_cmd(t_pars **pars, t_pipe *file, t_data *data)
 		{
 			file->cmd_nb += 1;
 			file->builtin += 1;
-			//break;
 			(*pars) = (*pars)->next;
 		}
-		//file->cmd = get_cmd(file->cmd_paths, (*pars)->str);
 		else if ((*pars)->token == CMD)
 		{
 			file->cmd_nb += 1;
-			// printf("CA PASSE\n");
 			(*pars) = (*pars)->next;
 		}
-		//else if (ft_strncmp(file))
 		else
 			*pars = (*pars)->next;
 	}
 	*pars = tmp;
 	if (file->cmd_nb > 0)
 		dup_cmdd(pars, file);
-	// printf(" nombre de commande = %d\n", file->cmd_nb);
 	return ;
 }
 
-
-t_pars* find_first_cmd(t_pars *pars)
+static int	trimm_end(t_pars **pars, t_pipe file, t_data *data)
 {
-	while (pars)
-	{
-		if (pars->token == CMD || pars->token == BUILTIN)
-		{
-			pars->doc = -1;
-			pars->limiter = NULL;
-			break ;
-		}
-		pars = pars->next;
-	}
-	return pars;
-}
+	int	i;
 
-t_pars  *find_previous_cmd(t_pars *pars)
-{
-	while (pars && pars -> token != PIPE)
-		pars = pars -> prev;
-	while (pars && pars -> token != CMD && pars -> token != BUILTIN)
-		pars = pars -> prev;
-	return pars;
-}
-
-void    set_doc(t_pipe *file, t_pars **pars)
-{
-	t_pars  *tmp;
-	t_pars  *cmd;
-	
-	tmp = *pars;
-	cmd = find_first_cmd(tmp);
-	tmp = *pars;
-	while (tmp)
+	i = 0;
+	if (file.cmd_nb == 1)
 	{
-		if (tmp->token == R_DINPUT)
-		{
-			if (cmd)
-			{
-				cmd -> doc = HEREDOC;
-				file->doc = 1;
-				cmd->limiter = tmp->next->str;
-			}
-			create_node_and_list(file, tmp->next->str);
-		}
-		else if (tmp->token == R_INPUT)
-		{
-			if (cmd)
-				cmd -> doc = INFILE;	
-		}
-		if (tmp->token == PIPE)
-			cmd = find_first_cmd(tmp->next);
-		tmp = tmp -> next;
-	}
-}
-
-static void init_pars(t_pars *pars)
-{
-	while (pars)
-	{
-		pars->limiter = NULL;
-		pars->doc = -1;
-		pars = pars->next;
-	}
-}
-
-int    trimm_exec(t_pars **pars, t_data *data)
-{
-	t_pipe  file;
-
-	if (!(*pars)->str[0])
-		return (0);
-	ft_memset(&file, 0, sizeof(t_pipe));
-	if (only_file(pars))
-	{
-		printf("Ok on est bien dans only file\n");
-		only_file_handler(pars);
-		return (0);
-	}
-	init_pars(*pars);
-	is_a_cmd(pars, &file, data);
-	set_doc(&file, pars);
-	printf("a on un hdoc = %d\n", file.doc);
-	if (file.doc > 0)
-		here_doc(&file, pars, data);
-	printf("HOW MANY CMD = %d\n", file.cmd_nb);
-	if (file.cmd_nb == 1 )
-	{
-		//printf("DEBUG");
 		one_cmd(&file, pars, data);
 		return (0);
 	}
@@ -243,47 +115,33 @@ int    trimm_exec(t_pars **pars, t_data *data)
 	}
 	else if (file.cmd_nb <= 0)
 	{
-		int i = -1;
+		i = -1;
 		while (file.cmd_paths[++i])
 			free(file.cmd_paths[i]);
 		free(file.cmd_paths);
 		free(file.paths);
 		msg_error(ERR_CMD, &file);
 	}
-	//free(file.paths);
 	return (0);
 }
 
-
-
-
-
-
-
-/*
-static void    is_a_cmd(t_pars **pars, t_pipe *file, char **envp)
+int	trimm_exec(t_pars **pars, t_data *data)
 {
-	t_pars *tmp;
-	
-	tmp = *pars;
-	file->cmd_nb = 0;
-	file->paths = find_path(envp);
-	file->cmd_paths = ft_split(file->paths, ':');
-	while ((*pars) != NULL)
+	t_pipe	file;
+
+	if (!(*pars)->str[0])
+		return (0);
+	ft_memset(&file, 0, sizeof(t_pipe));
+	if (only_file(pars))
 	{
-		file->cmd_args = ft_split((*pars)->str, ' ');
-		file->cmd = get_cmd(file->cmd_paths, file->cmd_args[0]);
-		if (file->cmd != NULL)
-		{
-			printf("LA CMD EST = %s\n", file->cmd);
-			(*pars)->token = CMD;
-			file->cmd_nb += 1;
-		}
-		*pars = (*pars)->next;
+		only_file_handler(pars);
+		return (0);
 	}
-	*pars = tmp;
-	if (file->cmd_nb > 0)
-		dup_cmdd(pars, file);
-	printf("CMD a la fin du TRIM = %s\n", file->cmd_to_exec[0]);
-	return ;
-}*/
+	init_pars(*pars);
+	is_a_cmd(pars, &file, data);
+	set_doc(&file, pars);
+	if (file.doc > 0)
+		here_doc(&file, pars, data);
+	trimm_end(pars, file, data);
+	return (0);
+}

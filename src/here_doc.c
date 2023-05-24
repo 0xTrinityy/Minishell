@@ -6,7 +6,7 @@
 /*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 17:28:18 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/24 18:37:35 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/23 23:31:49 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,7 @@ void	init_pipes(t_pipe *file)
 	node = file->node;
 	while (node)
 	{
-		/*VERFIER RETOUR FONCTION PIPE TOUT FREE */
 		pipe(node->fd);
-		/*       */
 		node = node->next;
 	}
 }
@@ -55,15 +53,43 @@ void	close_here_doc_pipe(t_node *head, int read, int write)
 	}
 }
 
+
+static void	free_heredoc(t_pars **pars, t_pipe *file)
+{
+	int		i;
+	t_pars	*tmp;
+
+	free(file->node->prev);
+	free(file->node);
+	free(file->cmd_args);
+	i = -1;
+	while (file->cmd_paths[++i])
+		free(file->cmd_paths[i]);
+	free(file->cmd_paths);
+	i = -1;
+	while (file->cmd_to_exec[++i])
+		free(file->cmd_to_exec[i]);
+	free(file->cmd_to_exec);
+	free(file->cmd);
+	free(file->paths);
+	while ((*pars) != NULL)
+	{
+		tmp = (*pars)->next;
+		free((*pars)->ID);
+		free((*pars)->str);
+		free(*pars);
+		*pars = tmp;
+	}
+	return ;
+}
+
 void	handle_write(t_pipe *file, t_pars **pars, t_data *data)
 {
 	char	*line;
 	t_node	*node;
 	int		i;
-	t_pars	*tmp;
 
 	node = file->node;
-	/*CACTH SIGNAL */
 	while (node)
 	{
 		while (1)
@@ -84,32 +110,7 @@ void	handle_write(t_pipe *file, t_pars **pars, t_data *data)
 	while (data->env[++i])
 		free(data->env[i]);
 	free(data->env);
-	/*while (file->cmd_args[i])
-		{
-			free(file->cmd_args[i]);
-			i++;
-		}*/
-	free(file->node->prev);
-	free(file->node);
-	free(file->cmd_args);
-	i = -1;
-	while (file->cmd_paths[++i])
-		free(file->cmd_paths[i]);
-	free(file->cmd_paths);
-	i = -1;
-	while (file->cmd_to_exec[++i])
-		free(file->cmd_to_exec[i]);
-	free(file->cmd_to_exec);
-	free(file->cmd);
-	free(file->paths);
-	while ((*pars) != NULL)
-	{
-		tmp = (*pars)->next;
-		free((*pars)->id);
-		free((*pars)->str);
-		free(*pars);
-		*pars = tmp;
-	}
+	free_heredoc(pars, file);
 	exit(0);
 }
 
@@ -120,9 +121,8 @@ int	write_to_pipes(t_pipe *file, t_pars **pars, t_data *data)
 
 	status = 0;
 	pid = fork();
-	printf("fork()-----------------------------\n");
-	/*if (pid == -1);
-		*/
+	if (pid == -1)
+		return (0);
 	if (pid == 0)
 		handle_write(file, pars, data);
 	else

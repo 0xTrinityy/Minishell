@@ -48,10 +48,7 @@ void	parent_free(t_pipe *file)
 	if (file->outfile != 1)
 		close(file->outfile);
 	while (file->cmd_paths[++i])
-	{
-		//printf("gonna free this adress %p\n", file->cmd_paths[i]);
 		free(file->cmd_paths[i]);
-	}
 	free(file->cmd_args);
 	free(file->cmd_paths);
 	while (file->node)
@@ -62,36 +59,9 @@ void	parent_free(t_pipe *file)
 	}
 	i = -1;
 	while (file->cmd_to_exec[++i])
-	{
-		//printf("gonna free this adress %p\n", file->cmd_to_exec[i]);
 		free(file->cmd_to_exec[i]);
-	}
 	free(file->cmd_to_exec);
 	free(file->cmd);
 	free(file->paths);
 	free(file->pid);
-}
-
-void	pid_err(t_pipe *file)
-{
-	parent_free(file);
-}
-
-void	infile_error(char *err, t_pipe *file)
-{
-	perror(err);
-	file->infile = -1;
-}
-
-void	error_free(t_pipe *file)
-{
-	int	i;
-
-	i = 0;
-	while (file->cmd_args[i] != NULL)
-	{
-		free(file->cmd_args[i]);
-		i++;
-	}
-	free(file->cmd_args);
 }
