@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   multi_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/23 17:26:45 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/24 15:31:01 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,7 +326,7 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 			while ((*pars) != NULL)
 			{
 				tmp = (*pars)->next;
-				free((*pars)->ID);
+				free((*pars)->id);
 				free((*pars)->str);
 				free(*pars);
 				*pars = tmp;
@@ -368,7 +368,7 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 			while ((*pars) != NULL)
 			{
 				tmp = (*pars)->next;
-				free((*pars)->ID);
+				free((*pars)->id);
 				free((*pars)->str);
 				free(*pars);
 				*pars = tmp;
@@ -407,7 +407,7 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 			while ((*pars) != NULL)
 			{
 				tmp = (*pars)->next;
-				free((*pars)->ID);
+				free((*pars)->id);
 				free((*pars)->str);
 				free(*pars);
 				*pars = tmp;

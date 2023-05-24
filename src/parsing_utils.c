@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 09:34:13 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/01 11:14:08 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/24 13:39:52 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-extern int  g_global;
+extern int	g_global;
 
 int	is_redirect(enum e_pars token)
 {
@@ -39,25 +39,52 @@ t_pars	*ft_lstlast_(t_pars *lst)
 	return (lst);
 }
 
-void    check_pipe(t_pars *pars)
+void	check_pipe(t_pars *pars)
 {
-    t_pars  *tmp;
-    int     i;
-    int     j;
+	t_pars	*tmp;
+	int		i;
+	int		j;
 
-    i = 0;
-    j = 0;
-    tmp = pars;
-    while(pars != NULL)
-    {
-        if (pars->token == CMD)
-            i++;
-        else if (pars->token == PIPE)
-            j++;
-        pars = pars->next;
-    }
-    pars = tmp;
-    if (i != j + 1)
-        g_global = 2;
-    return ;
+	i = 0;
+	j = 0;
+	tmp = pars;
+	while (pars != NULL)
+	{
+		if (pars->token == CMD || pars->token == BUILTIN)
+			i++;
+		else if (pars->token == PIPE)
+			j++;
+		pars = pars->next;
+	}
+	pars = tmp;
+	if (i != j + 1)
+		g_global = 2;
+	return ;
+}
+
+int	ft_iter(char *str, enum e_token *ID)
+{
+	int				i;
+	enum e_token	j;
+
+	i = 0;
+	if (ID[i] == D_QUOTE || ID[i] == S_QUOTE)
+	{
+		j = ID[i];
+		i++;
+		while ((ID[i] != j && ID[i] != j) && str[i])
+			i++;
+		if (!str[i])
+			return (0);
+		else
+			i++;
+	}
+	else if (ID[i] == REDIRECT || ID[i] == PIPE_C)
+		i = len_redirect(ID, str);
+	else
+	{
+		while (ID[i] != IFS && str[i] && ID[i] != REDIRECT && ID[i] != PIPE_C)
+			i++;
+	}
+	return (i);
 }

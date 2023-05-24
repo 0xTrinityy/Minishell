@@ -6,13 +6,13 @@
 /*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 15:49:44 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/15 15:49:46 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/24 15:23:25 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-extern int g_global;
+extern int			g_global;
 
 static enum e_pars	check_quoted(char *str, enum e_token *ID)
 {
@@ -56,12 +56,9 @@ void	give_cmd(t_pars *pars, int i)
 		if (is_redirect(pars->token))
 		{
 			pars = pars->next;
-            if (pars == NULL)
-            {
-                g_global = 1;
-                return ;
-            }
-			pars->token = check_cmd(pars->token, pars->str, pars->ID);
+			if (pars == NULL)
+				return ;
+			pars->token = check_cmd(pars->token, pars->str, pars->id);
 			if (pars->token == 0)
 				pars->token = TXT;
 		}
@@ -73,7 +70,7 @@ void	give_cmd(t_pars *pars, int i)
 			i = 1;
 		}
 		else
-			pars->token = check_cmd(pars->token, pars->str, pars->ID);
+			pars->token = check_cmd(pars->token, pars->str, pars->id);
 		if (pars->token == 0)
 			pars->token = TXT;
 		pars = pars->next;

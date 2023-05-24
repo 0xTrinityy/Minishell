@@ -6,7 +6,7 @@
 /*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:57:38 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/15 15:30:45 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/24 13:37:18 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@ extern int	g_global;
 
 int	ft_free_all(t_pars **pars, enum e_token *id, int i)
 {
-    free(id);
-    if (pars != NULL)
-        ft_free(pars);
-    if (i == 1)
-    {
-        g_global = 0;
-        return (2);
-    }
+	free(id);
+	if (pars != NULL)
+		ft_free(pars);
+	if (i == 1)
+	{
+		g_global = 0;
+		return (2);
+	}
 	return (0);
 }
 
@@ -105,8 +105,8 @@ int	ft_parsing(t_pars **pars, char *str, char **env)
 	free(id);
 	put_token(pars, env);
 	if (!check_token(*pars))
-        return (1);
+		return (1);
 	(*pars) = check_syntax(*pars, env);
-    check_pipe(*pars);
- 	return (1);
+	check_pipe(*pars);
+	return (1);
 }

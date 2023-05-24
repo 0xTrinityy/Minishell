@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   one_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/22 16:12:22 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/24 15:31:36 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,7 @@ static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
 	int in;
 	int out;
 	
-	
+	signal(SIGQUIT, &siginthandler_fork);
 	in = one_cmd_in(file, pars);
 	fprintf(stderr, "INFILE = %d\n", in);
 	if (in < 0)
@@ -202,7 +202,7 @@ static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
 		while ((*pars) != NULL)
 		{
 			tmp = (*pars)->next;
-			free((*pars)->ID);
+			free((*pars)->id);
 			free((*pars)->str);
 			free(*pars);
 			*pars = tmp;
@@ -272,7 +272,7 @@ static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
 		while ((*pars) != NULL)
 		{
 			tmp = (*pars)->next;
-			free((*pars)->ID);
+			free((*pars)->id);
 			free((*pars)->str);
 			free(*pars);
 			*pars = tmp;
@@ -329,6 +329,8 @@ void    one_cmd(t_pipe *file, t_pars **pars, t_data *data)
 	if (file->pidx == 0)
 		first_child(file, pars, data);
 	waitpid(file->pidx, &status, 0);
+	if (status == 131)
+		ft_putstr_fd("Quit (core dumped)\n", 1);
 	if (WIFEXITED(status))
         g_global = WEXITSTATUS(status);
 	parent_free_one(file);

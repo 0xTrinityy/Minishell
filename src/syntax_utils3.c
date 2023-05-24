@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_utils3.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 08:47:22 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/23 15:18:57 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/24 15:23:19 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,19 @@ void	del_quote(t_pars *pars)
 		i++;
 	}
 	tmp[i - 1] = 0;
-    free(pars->ID);
-	pars->ID = (enum e_token *)malloc(sizeof(enum e_token) * (ft_strlen(tmp)
+	free(pars->id);
+	pars->id = (enum e_token *)malloc(sizeof(enum e_token) * (ft_strlen(tmp)
 				+ 1));
-	if (!pars->ID)
+	if (!pars->id)
 	{
-		free(pars->ID);
-		exit (0);
+		free(pars->id);
+		exit(0);
 	}
-	put_id(tmp, pars->ID);
-    free(pars->str);
+	put_id(tmp, pars->id);
+	free(pars->str);
 	pars->str = tmp;
-	pars->token = ARG;
+	if (pars->token == TXT_D || pars->token == TXT_S)
+		pars->token = ARG;
 	return ;
 }
 
