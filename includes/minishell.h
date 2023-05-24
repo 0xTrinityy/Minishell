@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/22 13:46:15 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/23 20:59:07 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,8 @@ void	parent_free1(t_pipe *file);
 void	child_free1(t_pipe *file);
 
 /*************************TRIM-CMD*************************/
-
+void    only_file_handler(t_pars **pars);
+int    only_file(t_pars **pars);
 void    one_cmd(t_pipe *file, t_pars **pars, t_data *data);
 int	    here_doc(t_pipe *file, t_pars **pars, t_data *data);
 int     find_doc_fd(t_node *node, char *limiter);
@@ -221,11 +222,12 @@ char	*find_path(char **envp);
 /*************************BUILT-IN**************************/
 void    builtin_exec(t_pars **pars, t_pipe *file, t_data *data);
 void    builtin_exe_mult(t_pars **pars, t_pipe *file, t_data *data);
+size_t	to_equal(char *str);
 void    ft_echo(t_pars **pars, t_pipe *file);
-
+void	ft_exit(t_pars *pars);
 void    ft_env(t_data *data, t_pipe *file);
 void    ft_pwd(void);
-
+void    ft_cd(t_pars *pars, char **env);
 void    ft_export(t_pars **pars, t_data *data);
 void    ft_unset(t_pars **pars, t_data *data);
 
