@@ -64,6 +64,15 @@ void    cpy_env(char **envp, t_data *data)
 	//return (data->env)< 1 < 2 < 3 < 4 < 5 cat;
 }
 
+static void printf_err(t_pars **pars)
+{
+    if (g_global == 2)
+    {
+        ft_putstr_fd("minishell: syntax error near\n", 1);
+        ft_putstr_fd("unexpected token\n", 1);
+    }
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	char	*str;
@@ -83,6 +92,8 @@ int	main(int ac, char **av, char **envp)
 		add_history(str);
 		if (ft_parsing(&pars, str, data.env) != 2 && g_global == 0)
 			trimm_exec(&pars, &data);
+        else if (g_global != 0)
+            printf_err(&pars);
 		free(str);
 		ft_free(&pars);
 		str = readline("> ");

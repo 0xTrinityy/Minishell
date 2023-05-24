@@ -134,7 +134,7 @@ void	replace_dollar(t_pars *pars, char **env, char *tmp)
 	int	i;
 
 	i = 0;
-	if (pars->token == TXT_D)
+	if (pars->token == TXT_D || pars->token == CMD)
 	{
 		del_quote(pars);
 	}

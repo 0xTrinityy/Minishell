@@ -161,6 +161,9 @@ enum e_token	*char_ID(char *str);
 
 void    is_cmd(t_pars **pars, t_pipe *file, char **envp);
 
+void    check_error(t_pars *pars);
+void    check_pipe(t_pars *pars);
+
 /***************************************************/
 
 int 	ft_free_all(t_pars **pars, enum e_token *id, int i);

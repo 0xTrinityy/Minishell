@@ -33,7 +33,7 @@ void	del_quote(t_pars *pars)
 	if (!pars->ID)
 	{
 		free(pars->ID);
-		ft_free_all();
+		exit (0);
 	}
 	put_id(tmp, pars->ID);
     free(pars->str);

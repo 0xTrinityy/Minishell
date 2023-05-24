@@ -118,11 +118,12 @@ t_pars	*check_syntax(t_pars *pars, char **env)
 	}
 	if (!check_arg(pars, env))
 	{
-		g_global = 127;
+		g_global = 2;
 		return (pars);
 	}
 	is_builtin(pars);
     g_global = 0;
+    check_error(pars);
 	return (pars);
 }
 

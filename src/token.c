@@ -32,9 +32,9 @@ static enum e_pars	check_redirect(enum e_pars token, char *str)
 		return (token);
 	if (ft_strlen(str) == 1)
 	{
-		if (str[0] == '>')
+		if (str[0] == '>' && str[1] != '>')
 			token = R_OUTPUT;
-		else if (str[0] == '<')
+		else if (str[0] == '<' && str[1] != '<')
 			token = R_INPUT;
 		return (token);
 	}

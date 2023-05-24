@@ -53,7 +53,7 @@ static int	check_ifs(char *str, enum e_token *ID)
 	int	i;
 
 	i = 0;
-	while (ID[i] == IFS && str[i])
+	while ((ID[i] == IFS && str[i]) || str[i] == '!' || str[i] == ':')
 		i++;
 	if (ID[i] != FINISH)
 		return (0);
@@ -107,5 +107,6 @@ int	ft_parsing(t_pars **pars, char *str, char **env)
 	if (!check_token(*pars))
         return (1);
 	(*pars) = check_syntax(*pars, env);
+    check_pipe(*pars);
  	return (1);
 }

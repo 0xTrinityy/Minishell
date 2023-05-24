@@ -14,14 +14,16 @@
 
 extern int  g_global;
 
-static int	len_redirect(enum e_token *ID)
+static int	len_redirect(enum e_token *ID, char *str)
 {
 	int	i;
+    char    c;
 
 	i = 0;
+    c = str[i];
 	if (ID[i] == PIPE_C)
 		return (1);
-	while (ID[i] == REDIRECT)
+	while (ID[i] == REDIRECT && str[i] == c)
 		i++;
 	return (i);
 }
@@ -44,7 +46,7 @@ int	ft_iter(char *str, enum e_token *ID)
 			i++;
 	}
 	else if (ID[i] == REDIRECT || ID[i] == PIPE_C)
-		i = len_redirect(ID);
+		i = len_redirect(ID, str);
 	else
 	{
 		while (ID[i] != IFS && str[i] && ID[i] != REDIRECT && ID[i] != PIPE_C)
