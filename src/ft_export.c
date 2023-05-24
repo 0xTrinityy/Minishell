@@ -6,13 +6,11 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 08:34:02 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/23 13:50:01 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/23 23:48:30 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../includes/minishell.h"
-
 
 static void	free_envp(char **new_env, int i)
 {
@@ -26,7 +24,7 @@ static void	free_envp(char **new_env, int i)
 
 char	*var_trimmed(char *str)
 {
-	int	len;
+	int		len;
 	int		i;
 	char	*tab;
 
@@ -65,7 +63,6 @@ int	new_or_replace(t_data *data, char *str)
 	i = 0;
 	var_len = to_equal(str);
 	var = var_trimmed(str);
-	printf("ici la var vaut = %s\n", var);
 	while (data->env[i] != 0)
 	{
 		if (ft_strnstr(data->env[i], var, var_len) != NULL)
@@ -79,70 +76,65 @@ int	new_or_replace(t_data *data, char *str)
 	return (0);
 }
 
-char    *realloc_value(char *old, char *str, int size)
+char	*realloc_value(char *old, char *str, int size)
 {
-    int     i;
-    char    *new;
-    
-    i = 0;
-    new = malloc(sizeof(char) * (size + 1));
-    if (!new)
-        return (NULL);
-    while (str[i] != '\0')
-    {
-        new[i] = str[i];
-        i++;
-    }
-    str[i] = 0;
-    free(old);
-    return (new);
+	int		i;
+	char	*new;
+
+	i = 0;
+	new = malloc(sizeof(char) * (size + 1));
+	if (!new)
+		return (NULL);
+	while (str[i] != '\0')
+	{
+		new[i] = str[i];
+		i++;
+	}
+	str[i] = 0;
+	free(old);
+	return (new);
 }
 
-
-void new_value(t_data *data, char *str)
+void	new_value(t_data *data, char *str)
 {
-    int     i;
-    int     j;
-    char    *var;
-    size_t  var_len;
-    
-    i = 0;
-    j = 0;
-    var_len = to_equal(str);
+	int		i;
+	int		j;
+	char	*var;
+	size_t	var_len;
+
+	i = 0;
+	j = 0;
+	var_len = to_equal(str);
 	var = var_trimmed(str);
 	while (data->env[i])
 	{
-	    if (ft_strnstr(data->env[i], var, var_len) != NULL)
-	    {
-	        free(data->env[i]);
-	        data->env[i] = ft_strdup(str);
-	        free (var);
-	        break ;
+		if (ft_strnstr(data->env[i], var, var_len) != NULL)
+		{
+			free(data->env[i]);
+			data->env[i] = ft_strdup(str);
+			free(var);
+			break ;
 		}
-	    i++;
+		i++;
 	}
 }
 
 static void	ft_export_arg(char *str, t_data *data)
 {
 	int		i;
-	int     flag;
+	int		flag;
 	char	**new_env;
-	//char    **tmp;
-	
+
 	i = 0;
 	flag = 0;
 	if (new_or_replace(data, str) == 1)
 	{
 		flag = 1;
-		printf("ici on replace la value");
 		new_value(data, str);
 		return ;
 	}
-    while (data->env[i] != 0)
-    {
-        i++;
-	}
+	while (data->env[i] != 0)
+		i++;
 	new_env = malloc(sizeof(char *) * (i + 2));
 	if (!new_env)
 		return ;
@@ -153,27 +145,21 @@ static void	ft_export_arg(char *str, t_data *data)
 		if (!new_env[i])
 		{
 			free_envp(new_env, i);
-			exit (1);
+			exit(1);
 		}
 		i++;
 	}
-	printf("ICI, AVANT AJOUT, ENVP VAUT %d\n", i);
 	new_env[i] = ft_strdup(str);
 	i++;
 	new_env[i] = 0;
-	i = -1;
-	//printf("l'adresse est %p\n", data->env);
 	free(data->env);
-	/*while (data->env[++i])
-		free(data->env[i]);
-	free(data->env);*/
 	data->env = new_env;
 }
 
 void	*ft_realloc(void **old, size_t old_c, size_t new_c)
 {
-	void **new;
-	size_t i;
+	void	**new;
+	size_t	i;
 
 	i = 0;
 	new = ft_calloc(sizeof(void *), new_c);
@@ -188,15 +174,16 @@ void	*ft_realloc(void **old, size_t old_c, size_t new_c)
 	return (new);
 }
 
-void    ft_export(t_pars **pars, t_data *data)
+void	ft_export(t_pars **pars, t_data *data)
 {
-	t_pars  *tmp;
-	
+	t_pars	*tmp;
+
 	tmp = *pars;
 	while ((*pars)->token != BUILTIN)
 		(*pars) = (*pars)->next;
 	(*pars) = (*pars)->next;
-	while ((*pars) != NULL && ((*pars)->token != R_OUTPUT && (*pars)->token != R_DOUTPUT && (*pars)->token != PIPE))
+	while ((*pars) != NULL && ((*pars)->token != R_OUTPUT
+			&& (*pars)->token != R_DOUTPUT && (*pars)->token != PIPE))
 	{
 		ft_export_arg((*pars)->str, data);
 		(*pars) = (*pars)->next;

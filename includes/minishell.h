@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/23 20:59:07 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/23 22:35:18 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,6 @@ int ft_iter(char *str, enum e_token *ID);
 int	ft_parsing(t_pars **pars, char *str, char **env);
 enum e_token	*char_ID(char *str);
 
-void    is_cmd(t_pars **pars, t_pipe *file, char **envp);
 
 /***************************************************/
 
@@ -171,11 +170,9 @@ void	parent_free(t_pipe *file);
 void	pid_err(t_pipe *file);
 void	infile_error(char *err, t_pipe *file);
 void	error_free(t_pipe *file);
-void	close_all1(t_pipe *file);
-void	parent_free1(t_pipe *file);
-void	child_free1(t_pipe *file);
 
 /*************************TRIM-CMD*************************/
+void	dup_cmdd(t_pars **pars, t_pipe *file);
 void    only_file_handler(t_pars **pars);
 int    only_file(t_pars **pars);
 void    one_cmd(t_pipe *file, t_pars **pars, t_data *data);
@@ -185,6 +182,8 @@ void    close_here_doc_pipe(t_node *node, int read, int write);
 void    create_node_and_list(t_pipe *file, char *limiter);
 t_pars* find_first_cmd(t_pars *pars);
 t_pars  *find_previous_cmd(t_pars *pars);
+void	set_doc(t_pipe *file, t_pars **pars);
+void	init_pars(t_pars *pars);
 /************************EXECUTION*************************/
 
 int    trimm_exec(t_pars **pars, t_data *data);
