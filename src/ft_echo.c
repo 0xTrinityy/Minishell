@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 06:29:45 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/24 10:32:11 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/25 13:56:44 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,11 @@ static void	writting_echo(t_pars **pars, t_pipe *file)
 				(*pars) = (*pars)->next;
 		}
 		if ((*pars)->str)
-		{
-			ft_putstr_fd((*pars)->str, file->outfile);
-			ft_putstr_fd(" ", file->outfile);
-		}
+			printf("%s ", (*pars)->str);
 		(*pars) = (*pars)->next;
 	}
 	if (flag == 0)
-		ft_putstr_fd("\n", file->outfile);
+		printf("\n");
 	return ;
 }
 

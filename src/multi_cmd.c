@@ -6,13 +6,10 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/24 17:14:28 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/25 14:05:38 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-
-extern int g_global;
 #include "../includes/minishell.h"
 
 extern int g_global;
@@ -129,6 +126,80 @@ static t_pars* find_cmd_pars(t_pars *pars)
 	return (NULL);
 }
 
+static void   redirect_infirst(t_pars **pars, t_pipe *file, int *last, t_pars *cmd)
+{
+	int nb_rd;
+	
+	nb_rd = 0;
+	while ((*pars) != NULL && (*pars)->token != PIPE)
+	{
+		if ((*pars)->token == R_INPUT)
+		{
+			if (file->infile > 0)
+				close(file->infile);
+			*last = INFILE;
+			file->infile = open((*pars)->next->str, O_RDONLY);
+			if (file->infile < 0)
+				msg_error(ERR_INFILE, file);
+			nb_rd++;
+		}
+		else if ((*pars)->token == R_DINPUT)
+			*last = HEREDOC;
+		(*pars) = (*pars)->next;
+	}	
+	if (nb_rd == 0)
+		file->infile = 0;
+	if (*last == HEREDOC)
+		file->infile = find_doc_fd(file->node, cmd->limiter);
+}
+
+static int   pass_pipe(t_pars **pars, t_pipe *file)
+{
+	int count;
+	
+	count = 0;
+    while (count != file->pidx && (*pars) != NULL)
+	{
+		if ((*pars)->token == PIPE)
+			count++;
+		(*pars) = (*pars)->next;
+	}
+	return (count);
+}
+
+static void     redirect_in2(t_pars **pars, t_pipe *file, int *last, t_pars *cmd)
+{
+	int nb_rd;
+	
+	nb_rd = 0;
+	while ((*pars) != NULL && (*pars)->token != PIPE)
+	{
+		if ((*pars)->token == R_INPUT)
+		{
+			if (file->infile > 0)
+				close(file->infile);
+			*last = INFILE;
+			file->infile = open((*pars)->next->str, O_RDONLY);
+			if (file->infile < 0)
+				msg_error(ERR_INFILE, file);
+			nb_rd++;
+		}
+		else if ((*pars)->token == R_DINPUT)
+		{
+			if (file->infile > 0)
+				close(file->infile);
+			*last = HEREDOC;
+			nb_rd++;
+		}
+		(*pars) = (*pars)->next;
+	}
+	if (nb_rd == 0)
+		file->infile = file->prev_pipes;
+	if (*last == HEREDOC)
+		file->infile = find_doc_fd(file->node, cmd->limiter);
+}
+
+
 static int    redirect_in(t_pipe *file, t_pars **pars)
 {
 	int     count;
@@ -144,62 +215,16 @@ static int    redirect_in(t_pipe *file, t_pars **pars)
 	if (file->pidx == 0)
 	{
 		cmd = find_cmd_pars(*pars);
-		while ((*pars) != NULL && (*pars)->token != PIPE)
-		{
-			if ((*pars)->token == R_INPUT)
-			{
-				if (file->infile > 0)
-					close(file->infile);
-				last = INFILE;
-				file->infile = open((*pars)->next->str, O_RDONLY);
-				if (file->infile < 0)
-					msg_error(ERR_INFILE, file);
-				nb_rd++;
-			}
-			else if ((*pars)->token == R_DINPUT)
-				last = HEREDOC;
-			(*pars) = (*pars)->next;
-		}
-		*pars = tmp;	
-		if (nb_rd == 0)
-			file->infile = 0;
-		if (last == HEREDOC)
-			file->infile = find_doc_fd(file->node, cmd->limiter);
+		redirect_infirst(pars, file, &last, cmd);
+		*pars = tmp;
 		return (file->infile);
 	}
 	else
 	{
-		while (count != file->pidx && (*pars) != NULL)
-		{
-			if ((*pars)->token == PIPE)
-				count++;
-			(*pars) = (*pars)->next;
-		}
+		count = pass_pipe(pars, file);
 		cmd = find_cmd_pars(*pars);
-		while ((*pars) != NULL && (*pars)->token != PIPE)
-		{
-			if ((*pars)->token == R_INPUT)
-			{
-				if (file->infile > 0)
-					close(file->infile);
-				last = INFILE;
-				file->infile = open((*pars)->next->str, O_RDONLY);
-				if (file->infile < 0)
-					msg_error(ERR_INFILE, file);
-				nb_rd++;
-			}
-			else if ((*pars)->token == R_DINPUT)
-			{
-				last = HEREDOC;
-				nb_rd++;
-			}
-			(*pars) = (*pars)->next;
-		}
+		redirect_in2(pars, file, &last, cmd);
 		*pars = tmp;
-		if (nb_rd == 0)
-			file->infile = file->prev_pipes;
-		if (last == HEREDOC)
-			file->infile = find_doc_fd(file->node, cmd->limiter);
 		return (file->infile);
 	}
 }
@@ -333,7 +358,6 @@ static void    free_pars(t_pars **pars)
 static void    free_in(t_pars **pars, t_pipe *file, t_data *data)
 {
 	int i;
-	t_pars *tmp;
 	
 	i = -1;
 	while (data->env[++i])
@@ -435,12 +459,15 @@ static void	    multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 		close_pipes(file);
 		if (is_built_ins(pars, file))
 		{
+			//close_pipes(file);
 			builtin_exe_mult(pars, file, data);
+			//close_pipes(file);
 			close(file->fd[0]);
 			close(file->fd[1]);
 			free_builtin(pars, file, data);
 			exit (1);
 		}
+		//close_pipes(file);
 		file->cmd_args = tema_larg2(file, pars);
 		file->cmd = get_cmd(file->cmd_paths, file->cmd_args[0]);
 		if (!file->cmd)
