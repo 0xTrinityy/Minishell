@@ -3,18 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 13:48:02 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/23 22:32:23 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/24 18:39:35 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	msg(char *err)
+extern int	g_global;
+
+int	msg(char *err, int i)
 {
 	write(2, err, ft_strlen(err));
+	g_global = i;
 	return (1);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 08:58:14 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/15 15:33:33 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/26 11:29:29 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,10 @@ static void	replace_arg(t_pars *pars)
 	t_pars	*tmp;
 
 	tmp = pars;
-    while (pars != NULL && pars->token != CMD)
-        pars = pars->next;
-    if (pars != NULL)
-	    pars = pars->next;
+	while (pars != NULL && pars->token != CMD)
+		pars = pars->next;
+	if (pars != NULL)
+		pars = pars->next;
 	while (pars != NULL && (pars->token == ARG || pars->token == CMD))
 	{
 		pars->token = ARG;
@@ -118,22 +118,11 @@ t_pars	*check_syntax(t_pars *pars, char **env)
 	}
 	if (!check_arg(pars, env))
 	{
-		g_global = 127;
+		g_global = 2;
 		return (pars);
 	}
 	is_builtin(pars);
-    g_global = 0;
+	g_global = 0;
+	check_error(pars);
 	return (pars);
 }
-
-// tmp2 = pars;
-// printf("str:");
-// while(pars != NULL)
-// {
-//     printf(" %s", pars->str);
-//     printf(" (%u)", pars->token);
-//     pars = pars->next;
-// }
-// pars = tmp2;
-// printf("\n");
-// exit (0);

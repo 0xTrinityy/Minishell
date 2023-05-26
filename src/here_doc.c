@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 17:28:18 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/25 20:45:39 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/26 11:06:30 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	free_heredoc(t_pars **pars, t_pipe *file)
 	while ((*pars) != NULL)
 	{
 		tmp = (*pars)->next;
-		free((*pars)->ID);
+		free((*pars)->id);
 		free((*pars)->str);
 		free(*pars);
 		*pars = tmp;

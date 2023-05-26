@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:18:24 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/25 17:37:56 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/26 11:12:11 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*find_path_spe(t_data *data)
 	no_path = 0;
 	if (!data->env[0])
 	{
-		msg(NO_PATH);
+		msg(NO_PATH, 1);
 	}
 	while (data->env[i])
 	{
@@ -63,7 +63,7 @@ char	*find_path_spe(t_data *data)
 	}
 	if (no_path == 0)
 	{
-		msg(NO_PATH);
+		msg(NO_PATH, 1);
 	}
 	new = path_cpy(data);
 	return (new);

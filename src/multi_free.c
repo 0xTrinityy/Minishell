@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 15:32:21 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/25 16:23:42 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/26 11:16:11 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	free_pars(t_pars **pars)
 	while ((*pars) != NULL)
 	{
 		tmp = (*pars)->next;
-		free((*pars)->ID);
+		free((*pars)->id);
 		free((*pars)->str);
 		free(*pars);
 		*pars = tmp;

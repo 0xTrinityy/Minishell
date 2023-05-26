@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/25 19:32:41 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/26 11:11:33 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	end_multi(t_pipe *file, t_data *data, t_pars **pars)
 	if (!file->cmd)
 	{
 		free_no_cmd(pars, file, data);
-		msg(ERR_CMD);
+		msg(ERR_CMD, 127);
 		exit(127);
 	}
 	execve(file->cmd, file->cmd_args, data->env);
@@ -73,7 +73,7 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 			close(file->fd[0]);
 			close(file->fd[1]);
 			free_in(pars, file, data);
-			msg(ERR_INFILE);
+			msg(ERR_INFILE, 126);
 			exit(126);
 		}
 		out = redirect_out(file, pars);

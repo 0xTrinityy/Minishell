@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_replace_dollar.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 09:45:27 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/15 17:19:43 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/26 11:29:21 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 extern int	g_global;
 
-static void ft_exist(char *tmp, t_pars *pars, char *env, char *exp)
+void	ft_exist(char *tmp, t_pars *pars, char *env, char *exp)
 {
 	int	size;
 	int	i;
 
 	i = 0;
-	size = (ft_strlen(pars->str) - ft_strlen(exp)) + (ft_strlen(env) - ft_strlen(exp)
-			- 1);
+	size = (ft_strlen(pars->str) - ft_strlen(exp)) + (ft_strlen(env)
+			- ft_strlen(exp) - 1);
 	tmp = malloc(sizeof(char) * size);
 	if (!tmp)
 		exit(0);
@@ -31,55 +31,46 @@ static void ft_exist(char *tmp, t_pars *pars, char *env, char *exp)
 		i++;
 	}
 	tmp[i] = 0;
-	ft_strlcat(tmp, ft_strchr(env, '=') + 1, ft_strlen(env) + ft_strlen(pars->str));
+	ft_strlcat(tmp, ft_strchr(env, '=') + 1, ft_strlen(env)
+		+ ft_strlen(pars->str));
 	i += ((int)ft_strlen(exp) + 1);
 	ft_strlcat(tmp, pars->str + i, ft_strlen(pars->str) + ft_strlen(env));
-    free(pars->str);
+	free(pars->str);
 	pars->str = tmp;
 }
 
-static void replace_value(t_pars **pars, char **env, char *exp)
+static void	replace_value(t_pars **pars, char **env, char *exp)
 {
 	int		j;
 	char	*tmp;
 
-	j = 0;
 	tmp = 0;
-	while (env[j])
-	{
-		if (ft_strnstr(env[j], exp, ft_strlen(exp)) != NULL
-			&& env[j][ft_strlen(exp)] == '=')
-        {
-		    ft_exist(tmp, (*pars), env[j], exp);
-            printf("str: %s\n", (*pars)->str);
-            return ; 
-        }
-		else
-			j++;
-	}
+	if (find_env(pars, tmp, env, exp))
+		return ;
 	j = 0;
 	if ((ft_strlen((*pars)->str) - ft_strlen(exp) - 1) == 0)
-    {
-        free((*pars)->str);
-	    (*pars)->str = malloc(sizeof(char) * 1);
-        if (!(*pars)->str)
-            return ;
+	{
+		free((*pars)->str);
+		(*pars)->str = malloc(sizeof(char) * 1);
+		if (!(*pars)->str)
+			return ;
 		(*pars)->str[0] = 0;
-        return ;
-    }
-	tmp = malloc(sizeof(char) * (ft_strlen((*pars)->str) - ft_strlen(exp) - 1) + 1);
+		return ;
+	}
+	tmp = malloc(sizeof(char) * (ft_strlen((*pars)->str) - ft_strlen(exp) - 1)
+			+ 1);
 	ft_strcpy_dollar(tmp, (*pars)->str);
 	j += (int)ft_strlen(exp) + 1;
 	if ((*pars)->str[j])
 		ft_strlcat((*pars)->str + j, tmp, ft_strlen((*pars)->str + j));
-    free((*pars)->str);
+	free((*pars)->str);
 	(*pars)->str = tmp;
 }
 
 int	check_dote(t_pars *pars, int i)
 {
 	char	*tmp;
-    char    *nb;
+	char	*nb;
 	int		j;
 
 	j = 0;
@@ -91,12 +82,12 @@ int	check_dote(t_pars *pars, int i)
 	}
 	i += 2;
 	tmp[j] = 0;
-    nb = ft_itoa(g_global);
+	nb = ft_itoa(g_global);
 	ft_strlcat(tmp, nb, ft_strlen(pars->str) + 3);
-    free (nb);
+	free(nb);
 	if (pars->str[i])
 		ft_strlcat(tmp, pars->str + i, ft_strlen(pars->str));
-    free(pars->str);
+	free(pars->str);
 	pars->str = tmp;
 	pars = new_id(pars);
 	return (-1);
@@ -111,14 +102,14 @@ t_pars	*find_dollar(t_pars *pars, char **env, char *tmp)
 	while (pars->str[i])
 	{
 		u = 0;
-		if (pars->ID[i] == DOLLAR && pars->str[i + 1] == '?')
+		if (pars->id[i] == DOLLAR && pars->str[i + 1] == '?')
 			i = check_dote(pars, i);
-		else if (pars->ID[i] == DOLLAR)
+		else if (pars->id[i] == DOLLAR)
 		{
 			i++;
 			tmp = is_expand(pars, tmp, i);
 			replace_value(&pars, env, tmp);
-            free(tmp);
+			free(tmp);
 			if (!pars->str[0])
 				break ;
 			pars = new_id(pars);
@@ -134,7 +125,8 @@ void	replace_dollar(t_pars *pars, char **env, char *tmp)
 	int	i;
 
 	i = 0;
-	if (pars->token == TXT_D)
+	if (pars->token == TXT_D || (pars->token == CMD && (pars->id[0] == D_QUOTE
+				|| pars->id[0] == S_QUOTE)))
 	{
 		del_quote(pars);
 	}

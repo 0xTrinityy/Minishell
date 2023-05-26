@@ -6,13 +6,13 @@
 /*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 13:18:01 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/15 15:49:59 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/24 15:30:23 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static enum e_pars	check_pipe(enum e_pars token, char *str, enum e_token *ID)
+static enum e_pars	check_pipes(enum e_pars token, char *str, enum e_token *ID)
 {
 	if (token == N_SORTED)
 	{
@@ -32,9 +32,9 @@ static enum e_pars	check_redirect(enum e_pars token, char *str)
 		return (token);
 	if (ft_strlen(str) == 1)
 	{
-		if (str[0] == '>')
+		if (str[0] == '>' && str[1] != '>')
 			token = R_OUTPUT;
-		else if (str[0] == '<')
+		else if (str[0] == '<' && str[1] != '<')
 			token = R_INPUT;
 		return (token);
 	}
@@ -61,7 +61,7 @@ void	put_token(t_pars **pars, char **env)
 	tmp = (*pars);
 	while ((*pars) != NULL)
 	{
-		(*pars)->token = check_pipe((*pars)->token, (*pars)->str, (*pars)->ID);
+		(*pars)->token = check_pipes((*pars)->token, (*pars)->str, (*pars)->id);
 		(*pars)->token = check_redirect((*pars)->token, (*pars)->str);
 		(*pars) = (*pars)->next;
 	}

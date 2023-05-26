@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 17:39:26 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/20 15:20:57 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/24 15:23:20 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,10 @@ int	check_syntax_redirect(t_pars *pars, char **env)
 
 t_pars	*new_id(t_pars *pars)
 {
-	free(pars->ID);
-	pars->ID = (enum e_token *)malloc(sizeof(enum e_token)
+	free(pars->id);
+	pars->id = (enum e_token *)malloc(sizeof(enum e_token)
 			* (ft_strlen(pars->str) + 1));
-	put_id(pars->str, pars->ID);
+	put_id(pars->str, pars->id);
 	return (pars);
 }
 

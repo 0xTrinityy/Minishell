@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/25 20:36:47 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/26 12:26:29 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
 	if (in < 0)
 	{
 		free_one_cmd_infile(pars, file, data);
-		msg(ERR_INFILE);
+		msg(ERR_INFILE, 126);
 		exit(126);
 	}
 	out = one_cmd_out(file, pars);
@@ -207,7 +207,7 @@ static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
 	if (!file->cmd)
 	{
 		free_one_cmd_nofound(pars, file, data);
-		msg(ERR_CMD);
+		msg(ERR_CMD, 127);
 		exit(127);
 	}
 	execve(file->cmd, file->cmd_args, data->env);
@@ -247,6 +247,8 @@ void	one_cmd(t_pipe *file, t_pars **pars, t_data *data)
 	if (file->pidx == 0)
 		first_child(file, pars, data);
 	waitpid(file->pidx, &status, 0);
+	if (status == 131)
+		ft_putstr_fd("Quit (core dumped)\n", 1);
 	if (WIFEXITED(status))
 		g_global = WEXITSTATUS(status);
 	parent_free_one(file);

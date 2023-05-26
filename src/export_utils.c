@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 20:09:51 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/25 20:17:18 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/26 12:11:37 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ char	*var_trimmed(char *str)
 		len++;
 	len++;
 	tab = malloc(sizeof(char) * (len + 1));
+	if (!tab)
+		return (NULL);
 	i = 0;
 	while (i < len)
 	{

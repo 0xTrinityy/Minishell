@@ -6,11 +6,33 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 11:40:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/25 19:44:05 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/26 12:05:50 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	valid_arg(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str[0] >= '0' && str[0] <= '9')
+	{
+		printf("export: %s : not a valid identifier\n", str);
+		return (0);
+	}
+	while (str[i])
+	{
+		if (!ft_isalnum(str[i]) && str[i] != 61)
+		{
+			printf("export: %s : not a valid identifier\n", str);
+			return (0);
+		}
+		i++;
+	}
+	return (1);
+}
 
 static void	changing_arg(t_data *data, char **new, char *str, size_t var_len)
 {

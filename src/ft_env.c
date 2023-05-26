@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 08:02:21 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/25 13:57:55 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/26 11:22:13 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 void	ft_env(t_data *data, t_pipe *file)
 {
-	int i;
+	int	i;
+
 	i = 0;
 	if (!data->env[i])
-		msg(NO_PATH);
+		msg(NO_PATH, 1);
 	while (data->env[i] != 0)
 	{
 		printf("%s", data->env[i]);
