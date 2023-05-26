@@ -6,7 +6,7 @@
 #    By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/14 10:06:19 by tbelleng          #+#    #+#              #
-#    Updated: 2023/05/23 22:30:41 by tbelleng         ###   ########.fr        #
+#    Updated: 2023/05/25 20:46:19 by tbelleng         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,8 +31,14 @@ SRC = $(SRC_DIR)/main.c			\
 		$(SRC_DIR)/parsing_utils.c	\
 		$(SRC_DIR)/signal.c			\
 		$(SRC_DIR)/free.c			\
+		$(SRC_DIR)/free_one_cmdd.c	\
 		$(SRC_DIR)/gnl.c			\
 		$(SRC_DIR)/is_cmd.c			\
+		$(SRC_DIR)/multi_free.c		\
+		$(SRC_DIR)/multi_in.c		\
+		$(SRC_DIR)/multi_out.c		\
+		$(SRC_DIR)/multi_builtin.c	\
+		$(SRC_DIR)/multi_utils.c	\
 		$(SRC_DIR)/multi_cmd.c		\
 		$(SRC_DIR)/error_utils.c	\
 		$(SRC_DIR)/error.c			\
@@ -41,11 +47,13 @@ SRC = $(SRC_DIR)/main.c			\
 		$(SRC_DIR)/one_cmd.c		\
 		$(SRC_DIR)/trimm.c			\
 		$(SRC_DIR)/here_doc_utils.c	\
+		$(SRC_DIR)/here_doc_utils2.c\
 		$(SRC_DIR)/here_doc.c		\
 		$(SRC_DIR)/built_in_exe.c	\
 		$(SRC_DIR)/ft_echo.c		\
 		$(SRC_DIR)/ft_env.c		    \
 		$(SRC_DIR)/ft_pwd.c		    \
+		$(SRC_DIR)/export_utils.c	\
 		$(SRC_DIR)/ft_export.c		\
 		$(SRC_DIR)/ft_unset.c		\
 		$(SRC_DIR)/only_file.c		\

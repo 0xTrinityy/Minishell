@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/23 22:35:18 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/25 20:47:36 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,11 +173,16 @@ void	error_free(t_pipe *file);
 
 /*************************TRIM-CMD*************************/
 void	dup_cmdd(t_pars **pars, t_pipe *file);
+void	parent_free_one(t_pipe *file);
+void	free_one_cmd_infile(t_pars **pars, t_pipe *file, t_data *data);
+void	free_one_cmd_nofound(t_pars **pars, t_pipe *file, t_data *data);
+
 void    only_file_handler(t_pars **pars);
 int    only_file(t_pars **pars);
 void    one_cmd(t_pipe *file, t_pars **pars, t_data *data);
 int	    here_doc(t_pipe *file, t_pars **pars, t_data *data);
 int     find_doc_fd(t_node *node, char *limiter);
+void	init_pipes(t_pipe *file);
 void    close_here_doc_pipe(t_node *node, int read, int write);
 void    create_node_and_list(t_pipe *file, char *limiter);
 t_pars* find_first_cmd(t_pars *pars);
@@ -186,12 +191,35 @@ void	set_doc(t_pipe *file, t_pars **pars);
 void	init_pars(t_pars *pars);
 /************************EXECUTION*************************/
 
+//t_pars	*find_cmd_pars(t_pars *pars);
 int    trimm_exec(t_pars **pars, t_data *data);
 int	execution(t_pars **pars, char **envp);
 //void	is_heredoc(t_pipe *file, t_pars **pars);
 //void    infile_read(t_pipe *file, t_pars **pars);
 void	out_read(t_pipe *file, t_pars **pars);
 void	out_read_v2(t_pipe *file, t_pars **pars);
+
+void	redirect_infirst(t_pars **pars, t_pipe *file, int *last, t_pars *cmd);
+int	pass_pipe(t_pars **pars, t_pipe *file);
+void	redirect_in2(t_pars **pars, t_pipe *file, int *last, t_pars *cmd);
+int	redirect_in(t_pipe *file, t_pars **pars);
+
+int	out_count(t_pars **pars, t_pipe *file, t_pars *tmp);
+void	out_open(t_pars **pars, t_pipe *file);
+int	redirect_out(t_pipe *file, t_pars **pars);
+
+int	built_in_first(t_pars **pars, t_pars *tmp);
+int	built_in_next(t_pars **pars, t_pipe *file, t_pars *tmp);
+int	is_built_ins(t_pars **pars, t_pipe *file);
+
+void	free_pars(t_pars **pars);
+void	free_in(t_pars **pars, t_pipe *file, t_data *data);
+void	free_builtin(t_pars **pars, t_pipe *file, t_data *data);
+void	free_no_cmd(t_pars **pars, t_pipe *file, t_data *data);
+
+void	neww(int infile, int outfile);
+char	**return_arg(t_pars **pars, t_pipe *file, char **arg, int count);
+char	**tema_larg2(t_pipe *file, t_pars **pars);
 
 void    mult_cmd(t_pipe *file, t_pars **pars, t_data *data);
 char	*find_path_spe(t_data *data);
@@ -224,6 +252,13 @@ void	ft_exit(t_pars *pars);
 void    ft_env(t_data *data, t_pipe *file);
 void    ft_pwd(void);
 void    ft_cd(t_pars *pars, char **env);
+
+char	*var_trimmed(char *str);
+size_t	to_equal(char *str);
+int	new_or_replace(t_data *data, char *str);
+char	*realloc_value(char *old, char *str, int size);
+void	new_value(t_data *data, char *str);
+
 void    ft_export(t_pars **pars, t_data *data);
 void    ft_unset(t_pars **pars, t_data *data);
 

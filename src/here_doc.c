@@ -6,52 +6,11 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 17:28:18 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/23 23:31:49 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/25 20:45:39 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	find_doc_fd(t_node *head, char *limiter)
-{
-	t_node	*node;
-
-	node = head;
-	while (node)
-	{
-		if (node->limiter == limiter)
-			break ;
-		node = node->next;
-	}
-	return (node->fd[0]);
-}
-
-void	init_pipes(t_pipe *file)
-{
-	t_node	*node;
-
-	node = file->node;
-	while (node)
-	{
-		pipe(node->fd);
-		node = node->next;
-	}
-}
-
-void	close_here_doc_pipe(t_node *head, int read, int write)
-{
-	t_node	*node;
-
-	node = head;
-	while (node)
-	{
-		if (read)
-			close(node->fd[0]);
-		if (write)
-			close(node->fd[1]);
-		node = node->next;
-	}
-}
 
 static void	free_heredoc(t_pars **pars, t_pipe *file)
 {
@@ -82,11 +41,20 @@ static void	free_heredoc(t_pars **pars, t_pipe *file)
 	return ;
 }
 
+static void	free_env_hdoc(t_data *data)
+{
+	int	i;
+
+	i = -1;
+	while (data->env[++i])
+		free(data->env[i]);
+	free(data->env);
+}
+
 void	handle_write(t_pipe *file, t_pars **pars, t_data *data)
 {
 	char	*line;
 	t_node	*node;
-	int		i;
 
 	node = file->node;
 	while (node)
@@ -104,10 +72,7 @@ void	handle_write(t_pipe *file, t_pars **pars, t_data *data)
 		free(line);
 		node = node->next;
 	}
-	i = -1;
-	while (data->env[++i])
-		free(data->env[i]);
-	free(data->env);
+	free_env_hdoc(data);
 	free_heredoc(pars, file);
 	exit(0);
 }
