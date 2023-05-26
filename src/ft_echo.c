@@ -6,13 +6,13 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 06:29:45 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/25 13:56:44 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/26 13:51:34 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	writting_echo(t_pars **pars, t_pipe *file)
+static void	writting_echo(t_pars **pars)
 {
 	int	flag;
 
@@ -35,7 +35,7 @@ static void	writting_echo(t_pars **pars, t_pipe *file)
 	return ;
 }
 
-void	ft_echo(t_pars **pars, t_pipe *file)
+void	ft_echo(t_pars **pars)
 {
 	int	flag;
 	int	i;
@@ -46,6 +46,6 @@ void	ft_echo(t_pars **pars, t_pipe *file)
 		return ;
 	if ((*pars)->next != NULL || (*pars)->token == BUILTIN)
 		(*pars) = (*pars)->next;
-	writting_echo(pars, file);
+	writting_echo(pars);
 	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/26 11:47:07 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/26 13:53:41 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,13 +179,13 @@ int						ft_strlen_classic(char *str);
 int						cmd_comp(char *cmd);
 char					*get_cmd(char **paths, char *cmd);
 char					*find_path(char **envp);
-void					builtin_exec(t_pars **pars, t_pipe *file, t_data *data);
+void					builtin_exec(t_pars **pars, t_data *data);
 void					builtin_exe_mult(t_pars **pars, t_pipe *file,
 							t_data *data);
 size_t					to_equal(char *str);
-void					ft_echo(t_pars **pars, t_pipe *file);
+void					ft_echo(t_pars **pars);
 void					ft_exit(t_pars *pars);
-void					ft_env(t_data *data, t_pipe *file);
+void					ft_env(t_data *data);
 void					ft_pwd(void);
 void					ft_cd(t_pars *pars, char **env);
 int						valid_arg(char *str);

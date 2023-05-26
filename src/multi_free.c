@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 15:32:21 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/26 11:16:11 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/26 13:46:34 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ static void	free_node(t_pipe *file)
 void	free_no_cmd(t_pars **pars, t_pipe *file, t_data *data)
 {
 	int		i;
-	t_node	*tmp1;
 
 	i = -1;
 	while (data->env[++i])

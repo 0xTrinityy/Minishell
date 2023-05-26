@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:49:01 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/24 18:40:11 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/26 13:48:34 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	cpy_env(char **envp, t_data *data)
 
 static void	printf_err(t_pars **pars)
 {
+	(void)pars;
 	if (g_global == 2)
 	{
 		ft_putstr_fd("minishell: syntax error near\n", 1);
