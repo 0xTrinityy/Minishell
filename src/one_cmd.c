@@ -209,7 +209,7 @@ static void	free_one_cmd_infile(t_pars **pars, t_pipe *file, t_data *data)
 	while ((*pars) != NULL)
 	{
 		tmp = (*pars)->next;
-		free((*pars)->ID);
+		free((*pars)->id);
 		free((*pars)->str);
 		free(*pars);
 		*pars = tmp;
@@ -240,7 +240,7 @@ static void	free_one_cmd_nofound(t_pars **pars, t_pipe *file, t_data *data)
 	while ((*pars) != NULL)
 	{
 		tmp = (*pars)->next;
-		free((*pars)->ID);
+		free((*pars)->id);
 		free((*pars)->str);
 		free(*pars);
 		*pars = tmp;
@@ -287,7 +287,7 @@ static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
 	if (in < 0)
 	{
 		free_one_cmd_infile(pars, file, data);
-		msg(ERR_INFILE);
+		msg(ERR_INFILE, 126);
 		exit(126);
 	}
 	out = one_cmd_out(file, pars);
@@ -303,7 +303,7 @@ static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
 	if (!file->cmd)
 	{
 		free_one_cmd_nofound(pars, file, data);
-		msg(ERR_CMD);
+		msg(ERR_CMD, 127);
 		exit(127);
 	}
 	execve(file->cmd, file->cmd_args, data->env);

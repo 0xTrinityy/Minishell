@@ -45,7 +45,8 @@ static void	replace_value(t_pars **pars, char **env, char *exp)
 	char	*tmp;
 
 	tmp = 0;
-	find_env(pars, tmp, env, exp);
+	if(find_env(pars, tmp, env, exp))
+        return ;
 	j = 0;
 	if ((ft_strlen((*pars)->str) - ft_strlen(exp) - 1) == 0)
 	{
@@ -61,7 +62,7 @@ static void	replace_value(t_pars **pars, char **env, char *exp)
 	ft_strcpy_dollar(tmp, (*pars)->str);
 	j += (int)ft_strlen(exp) + 1;
 	if ((*pars)->str[j])
-		ft_strlcat((*pars)->str + j, tmp, ft_strlen((*pars)->str + j));
+		ft_strlcat(tmp, (*pars)->str + j, ft_strlen((*pars)->str + j) + 1);
 	free((*pars)->str);
 	(*pars)->str = tmp;
 }
@@ -130,7 +131,6 @@ void	replace_dollar(t_pars *pars, char **env, char *tmp)
 		del_quote(pars);
 	}
 	pars = find_dollar(pars, env, tmp);
-	printf("str: %s\n", pars->str);
 	if (pars->token == CMD)
 		check_cmd_valid(pars);
 	if (pars->token == TXT || pars->token == TXT_D || pars->token == EXPAND)

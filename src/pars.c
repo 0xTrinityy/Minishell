@@ -35,10 +35,10 @@ t_pars	*get_word(t_pars **pars, char *str, enum e_token *ID, t_pars *new)
 
 	i = 0;
 	j = ft_iter(str, ID) + 1;
-	new = (t_pars *)malloc(sizeof(t_pars));
+    new = (t_pars *) ft_calloc(sizeof(t_pars),1);
 	if (!new)
 		exit(malloc_sec(*pars, new));
-	new->str = malloc(sizeof(char) * j + 1);
+    new->str = ft_calloc(sizeof(char), j + 1);
 	if (!new->str)
 		exit(malloc_sec(*pars, new));
 	ft_strlcpy(new->str, str, j);

@@ -93,7 +93,7 @@ int	ft_parsing(t_pars **pars, char *str, char **env)
 
 	(void)env;
 	*pars = 0;
-	id = (enum e_token *)malloc(sizeof(enum e_token) * (ft_strlen(str) + 1));
+    id = ft_calloc(sizeof(enum e_token), ft_strlen(str) + 1);
 	if (!id)
 		return (ft_free_all(pars, id, 0));
 	if (!str)

@@ -203,7 +203,7 @@ t_pars					*new_id(t_pars *pars);
 char					*is_expand(t_pars *pars, char *tmp, int i);
 t_pars					*ft_lstlast_(t_pars *lst);
 void					ft_exist(char *tmp, t_pars *pars, char *env, char *exp);
-void					find_env(t_pars **pars, char *tmp, char **env,
+int			    		find_env(t_pars **pars, char *tmp, char **env,
 							char *exp);
 int						check_next(t_pars *pars);
 int						check_binary(t_pars *pars);

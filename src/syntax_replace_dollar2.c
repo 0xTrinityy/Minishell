@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-void	find_env(t_pars **pars, char *tmp, char **env, char *exp)
+int	find_env(t_pars **pars, char *tmp, char **env, char *exp)
 {
 	int	j;
 
@@ -23,11 +23,12 @@ void	find_env(t_pars **pars, char *tmp, char **env, char *exp)
 			&& env[j][ft_strlen(exp)] == '=')
 		{
 			ft_exist(tmp, (*pars), env[j], exp);
-			return ;
+			return (1);
 		}
 		else
 			j++;
 	}
+    return (0);
 }
 
 void	_lst_add_between(t_pars *new, t_pars *pars)

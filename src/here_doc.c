@@ -75,7 +75,7 @@ static void	free_heredoc(t_pars **pars, t_pipe *file)
 	while ((*pars) != NULL)
 	{
 		tmp = (*pars)->next;
-		free((*pars)->ID);
+		free((*pars)->id);
 		free((*pars)->str);
 		free(*pars);
 		*pars = tmp;
@@ -130,8 +130,6 @@ int	write_to_pipes(t_pipe *file, t_pars **pars, t_data *data)
 		close_here_doc_pipe(file->node, 0, 1);
 		waitpid(pid, &status, 0);
 	}
-	if (WIFSIGNALED(status) == SIGINT)
-		return (-1);
 	return (0);
 }
 

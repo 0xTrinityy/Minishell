@@ -17,7 +17,7 @@ void	ft_env(t_data *data, t_pipe *file)
 	int i;
 	i = 0;
 	if (!data->env[i])
-		msg(NO_PATH);
+		msg(NO_PATH, 1);
 	while (data->env[i] != 0)
 	{
 		ft_putstr_fd(data->env[i], file->outfile);

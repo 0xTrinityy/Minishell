@@ -51,9 +51,12 @@ void	cpy_env(char **envp, t_data *data)
 	i = 0;
 	while (envp[i])
 		i++;
-	data->env = malloc(sizeof(char *) * (i + 1));
+    data->env = ft_calloc(sizeof(char *), i + 1);
 	if (!data->env)
-		return ;
+    {
+        free (data->env);
+		exit (0);
+    }
 	i = 0;
 	while (envp[i])
 	{

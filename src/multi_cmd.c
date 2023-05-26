@@ -320,7 +320,7 @@ static void    free_pars(t_pars **pars)
 	while ((*pars) != NULL)
 	{
 		tmp = (*pars)->next;
-		free((*pars)->ID);
+		free((*pars)->id);
 		free((*pars)->str);
 		free(*pars);
 		*pars = tmp;
@@ -330,7 +330,6 @@ static void    free_pars(t_pars **pars)
 static void    free_in(t_pars **pars, t_pipe *file, t_data *data)
 {
 	int i;
-	t_pars *tmp;
 	
 	i = -1;
 	while (data->env[++i])
@@ -424,7 +423,7 @@ static void	    multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 			close(file->fd[0]);
 			close(file->fd[1]);
 			free_in(pars, file, data);
-			msg(ERR_INFILE);
+			msg(ERR_INFILE, 126);
 			exit (126);
 		}
 		out = redirect_out(file, pars);
@@ -443,7 +442,7 @@ static void	    multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 		if (!file->cmd)
 		{
 			free_no_cmd(pars, file, data);
-			msg(ERR_CMD);
+			msg(ERR_CMD, 127);
 			exit (127);
 		}
 		execve(file->cmd, file->cmd_args, data->env);

@@ -85,10 +85,15 @@ char	*is_expand(t_pars *pars, char *tmp, int i)
 
 	u = 0;
 	j = i;
-	while ((pars->str[j] >= '0' && pars->str[j] <= '9') || (pars->str[j] >= 'a'
-			&& pars->str[j] <= 'z') || (pars->str[j] >= 'A'
-			&& pars->str[j] <= 'Z') || pars->str[j] == '_')
-		j++;
+    if (pars->str[j] >= '0' && pars->str[j] <= '9')
+        j++;
+    else
+    {
+    	while ((pars->str[j] >= '0' && pars->str[j] <= '9') || (pars->str[j] >= 'a'
+			    && pars->str[j] <= 'z') || (pars->str[j] >= 'A'
+		    	&& pars->str[j] <= 'Z') || pars->str[j] == '_')
+	    	j++;
+    }
 	tmp = malloc(sizeof(char) * (j - i) + 1);
 	if (!tmp)
 		exit(malloc_sec2(pars, tmp));

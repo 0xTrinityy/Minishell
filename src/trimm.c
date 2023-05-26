@@ -53,7 +53,7 @@ char	*find_path_spe(t_data *data)
 	no_path = 0;
 	if (!data->env[0])
 	{
-		msg(NO_PATH);
+		msg(NO_PATH, 1);
 	}
 	while (data->env[i])
 	{
@@ -63,7 +63,7 @@ char	*find_path_spe(t_data *data)
 	}
 	if (no_path == 0)
 	{
-		msg(NO_PATH);
+		msg(NO_PATH, 1);
 	}
 	new = path_cpy(data);
 	return (new);
