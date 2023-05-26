@@ -68,6 +68,7 @@ void	cpy_env(char **envp, t_data *data)
 
 static void	printf_err(t_pars **pars)
 {
+    (void) pars;
 	if (g_global == 2)
 	{
 		ft_putstr_fd("minishell: syntax error near\n", 1);

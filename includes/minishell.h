@@ -215,5 +215,8 @@ int						malloc_sec(t_pars *pars, t_pars *new);
 int						malloc_sec2(t_pars *pars, char *tmp);
 void					ft_free_tab(char **tab);
 int						malloc_sec3(t_pars *pars, char *str, char **env);
+void                    dup_cmdd(t_pars **pars, t_pipe *file);
+void                    init_pars(t_pars *pars);
+void                    set_doc(t_pipe *file, t_pars **pars);
 
 #endif

@@ -36,6 +36,7 @@ SRC = $(SRC_DIR)/main.c						\
 		$(SRC_DIR)/is_cmd.c					\
 		$(SRC_DIR)/multi_cmd.c				\
 		$(SRC_DIR)/error.c					\
+		$(SRC_DIR)/error_utils.c			\
 		$(SRC_DIR)/for_free.c				\
 		$(SRC_DIR)/gnl_utils.c				\
 		$(SRC_DIR)/one_cmd.c				\
