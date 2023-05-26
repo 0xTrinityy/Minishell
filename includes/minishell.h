@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/24 18:36:25 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/26 11:47:07 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,7 @@ void					ft_exit(t_pars *pars);
 void					ft_env(t_data *data, t_pipe *file);
 void					ft_pwd(void);
 void					ft_cd(t_pars *pars, char **env);
+int						valid_arg(char *str);
 void					ft_export(t_pars **pars, t_data *data);
 void					ft_unset(t_pars **pars, t_data *data);
 void					create_pars(t_pars **pars, char *str, enum e_token *ID);
@@ -203,7 +204,7 @@ t_pars					*new_id(t_pars *pars);
 char					*is_expand(t_pars *pars, char *tmp, int i);
 t_pars					*ft_lstlast_(t_pars *lst);
 void					ft_exist(char *tmp, t_pars *pars, char *env, char *exp);
-int			    		find_env(t_pars **pars, char *tmp, char **env,
+int						find_env(t_pars **pars, char *tmp, char **env,
 							char *exp);
 int						check_next(t_pars *pars);
 int						check_binary(t_pars *pars);
@@ -218,5 +219,45 @@ int						malloc_sec3(t_pars *pars, char *str, char **env);
 void                    dup_cmdd(t_pars **pars, t_pipe *file);
 void                    init_pars(t_pars *pars);
 void                    set_doc(t_pipe *file, t_pars **pars);
+
+void					dup_cmdd(t_pars **pars, t_pipe *file);
+void					parent_free_one(t_pipe *file);
+void					free_one_cmd_infile(t_pars **pars, t_pipe *file,
+							t_data *data);
+void					free_one_cmd_nofound(t_pars **pars, t_pipe *file,
+							t_data *data);
+void					init_pipes(t_pipe *file);
+void					set_doc(t_pipe *file, t_pars **pars);
+void					init_pars(t_pars *pars);
+
+void					redirect_infirst(t_pars **pars, t_pipe *file, int *last,
+							t_pars *cmd);
+int						pass_pipe(t_pars **pars, t_pipe *file);
+void					redirect_in2(t_pars **pars, t_pipe *file, int *last,
+							t_pars *cmd);
+int						redirect_in(t_pipe *file, t_pars **pars);
+
+int						out_count(t_pars **pars, t_pipe *file, t_pars *tmp);
+void					out_open(t_pars **pars, t_pipe *file);
+int						redirect_out(t_pipe *file, t_pars **pars);
+
+int						built_in_first(t_pars **pars, t_pars *tmp);
+int						built_in_next(t_pars **pars, t_pipe *file, t_pars *tmp);
+int						is_built_ins(t_pars **pars, t_pipe *file);
+
+void					free_pars(t_pars **pars);
+void					free_in(t_pars **pars, t_pipe *file, t_data *data);
+void					free_builtin(t_pars **pars, t_pipe *file, t_data *data);
+void					free_no_cmd(t_pars **pars, t_pipe *file, t_data *data);
+
+void					neww(int infile, int outfile);
+char					**return_arg(t_pars **pars, t_pipe *file, char **arg,
+							int count);
+char					**tema_larg2(t_pipe *file, t_pars **pars);
+
+char					*var_trimmed(char *str);
+int						new_or_replace(t_data *data, char *str);
+char					*realloc_value(char *old, char *str, int size);
+void					new_value(t_data *data, char *str);
 
 #endif

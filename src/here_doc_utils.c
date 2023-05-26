@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 22:07:08 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/23 22:23:39 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/26 12:23:34 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	dup_cmdd(t_pars **pars, t_pipe *file)
 	i = 0;
 	file->cmd_to_exec = malloc(sizeof(char *) * (file->cmd_nb + file->builtin
 				+ 1));
+	if (!file->cmd_to_exec)
+		return ;
 	while ((*pars) != NULL)
 	{
 		if ((*pars)->token == CMD || (*pars)->token == BUILTIN)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_replace_dollar.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 09:45:27 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/24 15:23:23 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/26 11:29:21 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ static void	replace_value(t_pars **pars, char **env, char *exp)
 	char	*tmp;
 
 	tmp = 0;
-	if(find_env(pars, tmp, env, exp))
-        return ;
+	if (find_env(pars, tmp, env, exp))
+		return ;
 	j = 0;
 	if ((ft_strlen((*pars)->str) - ft_strlen(exp) - 1) == 0)
 	{
