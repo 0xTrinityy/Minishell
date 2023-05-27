@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/26 11:11:33 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/27 15:52:33 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,12 @@ static void	end_multi(t_pipe *file, t_data *data, t_pars **pars)
 	}
 	file->cmd_args = tema_larg2(file, pars);
 	file->cmd = get_cmd(file->cmd_paths, file->cmd_args[0]);
+	if (is_regular_file(file->cmd_to_exec[file->pidx]))
+	{
+		free_isfile(pars, file, data);
+		msg(ERR_CMD, 127);
+		exit (127);
+	}
 	if (!file->cmd)
 	{
 		free_no_cmd(pars, file, data);
@@ -53,7 +59,7 @@ static void	end_multi(t_pipe *file, t_data *data, t_pars **pars)
 	}
 	execve(file->cmd, file->cmd_args, data->env);
 	error_free(file);
-	free(file->cmd);
+	free_no_cmd(pars, file, data);
 	exit(1);
 }
 
@@ -74,7 +80,7 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 			close(file->fd[1]);
 			free_in(pars, file, data);
 			msg(ERR_INFILE, 126);
-			exit(126);
+			exit (126);
 		}
 		out = redirect_out(file, pars);
 		neww(in, out);

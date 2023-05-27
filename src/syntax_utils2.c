@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 17:39:26 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/24 15:23:20 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/26 14:09:39 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,16 @@ char	*is_expand(t_pars *pars, char *tmp, int i)
 
 	u = 0;
 	j = i;
-	while ((pars->str[j] >= '0' && pars->str[j] <= '9') || (pars->str[j] >= 'a'
-			&& pars->str[j] <= 'z') || (pars->str[j] >= 'A'
-			&& pars->str[j] <= 'Z') || pars->str[j] == '_')
+	if (pars->str[j] >= '0' && pars->str[j] <= '9')
 		j++;
+	else
+	{
+		while ((pars->str[j] >= '0' && pars->str[j] <= '9')
+			|| (pars->str[j] >= 'a' && pars->str[j] <= 'z')
+			|| (pars->str[j] >= 'A' && pars->str[j] <= 'Z')
+			|| pars->str[j] == '_')
+			j++;
+	}
 	tmp = malloc(sizeof(char) * (j - i) + 1);
 	if (!tmp)
 		exit(malloc_sec2(pars, tmp));

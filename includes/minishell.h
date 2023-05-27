@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/26 13:53:41 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/27 15:52:54 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <sys/stat.h>
+# include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
 
@@ -179,11 +181,19 @@ int						ft_strlen_classic(char *str);
 int						cmd_comp(char *cmd);
 char					*get_cmd(char **paths, char *cmd);
 char					*find_path(char **envp);
-void					builtin_exec(t_pars **pars, t_data *data);
+void					builtin_exec(t_pars **pars, t_data *data, t_pipe *file);
 void					builtin_exe_mult(t_pars **pars, t_pipe *file,
 							t_data *data);
 size_t					to_equal(char *str);
 void					ft_echo(t_pars **pars);
+
+void					ft_exit_built(t_pars **pars, t_pipe *file,
+							t_data *data);
+void					error_message_exit(char *str);
+long long				ft_atoull(const char *str);
+int						ft_isdigit_special(int arg);
+void					ft_exit_built_mult(t_pars **pars, t_pipe *file,
+							t_data *data);
 void					ft_exit(t_pars *pars);
 void					ft_env(t_data *data);
 void					ft_pwd(void);
@@ -216,10 +226,17 @@ int						malloc_sec(t_pars *pars, t_pars *new);
 int						malloc_sec2(t_pars *pars, char *tmp);
 void					ft_free_tab(char **tab);
 int						malloc_sec3(t_pars *pars, char *str, char **env);
+void					dup_cmdd(t_pars **pars, t_pipe *file);
+void					init_pars(t_pars *pars);
+void					set_doc(t_pipe *file, t_pars **pars);
 
+int						is_regular_file(const char *path);
+void					free_isfile(t_pars **pars, t_pipe *file, t_data *data);
 void					dup_cmdd(t_pars **pars, t_pipe *file);
 void					parent_free_one(t_pipe *file);
 void					free_one_cmd_infile(t_pars **pars, t_pipe *file,
+							t_data *data);
+void					free_one_cmd_isfile(t_pars **pars, t_pipe *file,
 							t_data *data);
 void					free_one_cmd_nofound(t_pars **pars, t_pipe *file,
 							t_data *data);

@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 17:28:18 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/26 11:06:30 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/27 16:03:53 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,14 @@
 static void	free_heredoc(t_pars **pars, t_pipe *file)
 {
 	int		i;
-	t_pars	*tmp;
+	t_node	*node;
 
-	free(file->node->prev);
-	free(file->node);
+	while (file->node)
+	{
+		node = file->node->next;
+		free(file->node);
+		file->node = node;
+	}
 	free(file->cmd_args);
 	i = -1;
 	while (file->cmd_paths[++i])
@@ -30,14 +34,7 @@ static void	free_heredoc(t_pars **pars, t_pipe *file)
 	free(file->cmd_to_exec);
 	free(file->cmd);
 	free(file->paths);
-	while ((*pars) != NULL)
-	{
-		tmp = (*pars)->next;
-		free((*pars)->id);
-		free((*pars)->str);
-		free(*pars);
-		*pars = tmp;
-	}
+	free_pars(pars);
 	return ;
 }
 
@@ -93,8 +90,6 @@ int	write_to_pipes(t_pipe *file, t_pars **pars, t_data *data)
 		close_here_doc_pipe(file->node, 0, 1);
 		waitpid(pid, &status, 0);
 	}
-	if (WIFSIGNALED(status) == SIGINT)
-		return (-1);
 	return (0);
 }
 

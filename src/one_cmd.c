@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/26 13:53:48 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/27 16:05:15 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,17 @@ static t_pars	*find_cmd_pars(t_pars *pars)
 	while ((pars) != NULL)
 	{
 		if ((pars)->token == CMD || (pars)->token == BUILTIN)
-			return pars;
+			return (pars);
 		pars = pars->next;
 	}
 	return (NULL);
 }
 
-static int    one_cmd_in(t_pipe *file, t_pars **pars)
+static int	one_cmd_in(t_pipe *file, t_pars **pars)
 {
-	int     last;
-	t_pars  *tmp;
-	t_pars  *cmd;
+	int		last;
+	t_pars	*tmp;
+	t_pars	*cmd;
 
 	tmp = *pars;
 	last = 0;
@@ -86,7 +86,8 @@ static int	reading_out(t_pars **pars, t_pipe *file, int last)
 			last++;
 			if (file->outfile != 1)
 				close(file->outfile);
-			file->outfile = open((*pars)->next->str, O_APPEND | O_CREAT | O_RDWR, 0000644);
+			file->outfile = open((*pars)->next->str,
+					O_APPEND | O_CREAT | O_RDWR, 0000644);
 			if (file->outfile < 0)
 				msg_error(ERR_OUTFILE, file);
 		}
@@ -184,6 +185,18 @@ static void	getting_args(t_pars **pars, t_pipe *file)
 	*pars = tmp;
 }
 
+int	is_regular_file(const char *path)
+{
+	struct stat	path_stat;
+
+	if (stat(path, &path_stat) == 0)
+	{
+		if (S_ISDIR(path_stat.st_mode))
+			return (1);
+	}
+	return (0);
+}
+
 static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
 {
 	int	in;
@@ -204,6 +217,12 @@ static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
 	if (out != 1)
 		close(out);
 	getting_args(pars, file);
+	if (is_regular_file(file->cmd_to_exec[0]))
+	{
+		free_one_cmd_isfile(pars, file, data);
+		msg(ERR_CMD, 127);
+		exit(127);
+	}
 	if (!file->cmd)
 	{
 		free_one_cmd_nofound(pars, file, data);
@@ -211,6 +230,7 @@ static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
 		exit(127);
 	}
 	execve(file->cmd, file->cmd_args, data->env);
+	exit(1);
 }
 
 static void	one_built_in(t_pipe *file, t_pars **pars, t_data *data)
@@ -222,7 +242,7 @@ static void	one_built_in(t_pipe *file, t_pars **pars, t_data *data)
 	out = one_cmd_out(file, pars);
 	if (in != 0)
 		close(in);
-	builtin_exec(pars, data);
+	builtin_exec(pars, data, file);
 	if (out != 1)
 		close(out);
 	return ;
@@ -251,6 +271,7 @@ void	one_cmd(t_pipe *file, t_pars **pars, t_data *data)
 		ft_putstr_fd("Quit (core dumped)\n", 1);
 	if (WIFEXITED(status))
 		g_global = WEXITSTATUS(status);
+	close_here_doc_pipe(file->node, 1, 0);
 	parent_free_one(file);
 	return ;
 }

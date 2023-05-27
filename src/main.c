@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:49:01 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/26 13:48:34 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/26 17:54:21 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,12 @@ void	cpy_env(char **envp, t_data *data)
 	i = 0;
 	while (envp[i])
 		i++;
-	data->env = malloc(sizeof(char *) * (i + 1));
+	data->env = ft_calloc(sizeof(char *), i + 1);
 	if (!data->env)
-		return ;
+	{
+		free(data->env);
+		exit(0);
+	}
 	i = 0;
 	while (envp[i])
 	{

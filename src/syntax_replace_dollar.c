@@ -62,7 +62,7 @@ static void	replace_value(t_pars **pars, char **env, char *exp)
 	ft_strcpy_dollar(tmp, (*pars)->str);
 	j += (int)ft_strlen(exp) + 1;
 	if ((*pars)->str[j])
-		ft_strlcat((*pars)->str + j, tmp, ft_strlen((*pars)->str + j));
+		ft_strlcat(tmp, (*pars)->str + j, ft_strlen((*pars)->str + j) + 1);
 	free((*pars)->str);
 	(*pars)->str = tmp;
 }

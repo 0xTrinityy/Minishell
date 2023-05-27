@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 15:32:21 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/26 13:46:34 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/27 15:58:54 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,29 @@ static void	free_node(t_pipe *file)
 		free(file->node);
 		file->node = tmp1;
 	}
+}
+
+void	free_isfile(t_pars **pars, t_pipe *file, t_data *data)
+{
+	int		i;
+
+	i = -1;
+	while (data->env[++i])
+		free(data->env[i]);
+	free(data->env);
+	free(file->cmd_args);
+	i = -1;
+	while (file->cmd_paths[++i])
+		free(file->cmd_paths[i]);
+	free(file->cmd_paths);
+	i = -1;
+	while (file->cmd_to_exec[++i])
+		free(file->cmd_to_exec[i]);
+	free(file->cmd_to_exec);
+	free(file->paths);
+	free(file->pid);
+	free_node(file);
+	free_pars(pars);
 }
 
 void	free_no_cmd(t_pars **pars, t_pipe *file, t_data *data)
