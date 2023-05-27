@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 17:30:27 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/26 14:09:29 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/27 16:10:21 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,4 +97,13 @@ void	check_cmd_valid(t_pars *pars)
 		i++;
 	}
 	return ;
+}
+
+void	only_expand(t_pars **pars, char **env, char *exp)
+{
+	free((*pars)->str);
+	(*pars)->str = ft_calloc(sizeof(char), 1);
+	if (!(*pars)->str)
+		malloc_sec3(*pars, exp, env);
+	(*pars)->str[0] = 0;
 }

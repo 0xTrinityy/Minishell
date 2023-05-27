@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:57:38 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/26 14:09:18 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/27 16:10:34 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int	ft_parsing(t_pars **pars, char *str, char **env)
 	put_id(str, id);
 	if (check_ifs(str, id))
 		return (ft_free_all(pars, id, 1));
-	create_pars(pars, str, id);
+	create_pars(pars, str, id, env);
 	free(id);
 	put_token(pars, env);
 	if (!check_token(*pars))

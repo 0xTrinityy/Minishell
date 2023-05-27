@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:49:01 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/26 17:54:21 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/27 16:10:44 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,11 @@ static void	printf_err(t_pars **pars)
 {
 	(void)pars;
 	if (g_global == 2)
-	{
-		ft_putstr_fd("minishell: syntax error near\n", 1);
-		ft_putstr_fd("unexpected token\n", 1);
-	}
+		ft_putstr_fd("minishell: syntax error near\nunexpected token\n", 1);
+	else if (g_global == 126)
+		ft_putstr_fd("minishell: is a directory\n", 1);
+	else if (g_global == 127)
+		ft_putstr_fd("minishell: command not found\n", 1);
 }
 
 int	main(int ac, char **av, char **envp)

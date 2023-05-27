@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/27 15:52:54 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/27 16:11:34 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,8 @@ void					ft_cd(t_pars *pars, char **env);
 int						valid_arg(char *str);
 void					ft_export(t_pars **pars, t_data *data);
 void					ft_unset(t_pars **pars, t_data *data);
-void					create_pars(t_pars **pars, char *str, enum e_token *ID);
+void					create_pars(t_pars **pars, char *str, enum e_token *ID,
+							char **env);
 int						len_redirect(enum e_token *ID, char *str);
 void					put_id(char *str, enum e_token *ID);
 t_pars					*check_syntax(t_pars *pars, char **env);
@@ -209,8 +210,8 @@ void					del_quote(t_pars *pars);
 void					replace_dollar(t_pars *pars, char **env, char *tmp);
 int						check_syntax_redirect(t_pars *pars, char **env);
 int						is_redirect(enum e_pars pars);
-void					ft_strcpy_dollar(char *tmp, char *str);
-t_pars					*new_id(t_pars *pars);
+int 					ft_strcpy_dollar(char *tmp, char *str);
+t_pars					*new_id(t_pars *pars, char **env);
 char					*is_expand(t_pars *pars, char *tmp, int i);
 t_pars					*ft_lstlast_(t_pars *lst);
 void					ft_exist(char *tmp, t_pars *pars, char *env, char *exp);
@@ -226,6 +227,8 @@ int						malloc_sec(t_pars *pars, t_pars *new);
 int						malloc_sec2(t_pars *pars, char *tmp);
 void					ft_free_tab(char **tab);
 int						malloc_sec3(t_pars *pars, char *str, char **env);
+int						malloc_sec4(t_pars *pars, char *str, char **env,
+							char *str2);
 void					dup_cmdd(t_pars **pars, t_pipe *file);
 void					init_pars(t_pars *pars);
 void					set_doc(t_pipe *file, t_pars **pars);
@@ -273,5 +276,6 @@ char					*var_trimmed(char *str);
 int						new_or_replace(t_data *data, char *str);
 char					*realloc_value(char *old, char *str, int size);
 void					new_value(t_data *data, char *str);
+void					only_expand(t_pars **pars, char **env, char *exp);
 
 #endif
