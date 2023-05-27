@@ -6,7 +6,7 @@
 /*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/17 14:02:39 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/24 15:28:18 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/26 16:09:22 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,15 @@ t_pars	*get_word(t_pars **pars, char *str, enum e_token *ID, t_pars *new)
 
 	i = 0;
 	j = ft_iter(str, ID) + 1;
-    new = (t_pars *) ft_calloc(sizeof(t_pars),1);
+	new = (t_pars *)ft_calloc(sizeof(t_pars), 1);
 	if (!new)
 		exit(malloc_sec(*pars, new));
-    new->str = ft_calloc(sizeof(char), j + 1);
+	new->str = ft_calloc(sizeof(char), j + 1);
 	if (!new->str)
 		exit(malloc_sec(*pars, new));
 	ft_strlcpy(new->str, str, j);
-	new->id = (enum e_token *)malloc(sizeof(enum e_token) * (ft_strlen(new->str)
-				+ 1));
+	new->id = (enum e_token *)ft_calloc(sizeof(enum e_token),
+			ft_strlen(new->str) + 1);
 	if (!new->id)
 		exit(malloc_sec(*pars, new));
 	put_id(new->str, new->id);
@@ -70,24 +70,24 @@ static void	_lstadd_back(t_pars *tmp, t_pars **pars)
 	}
 }
 
-int	simple_quote(char *str, t_pars **pars)
+static int	simple_quote(char *str, t_pars **pars, char **env)
 {
 	if (str[0] == '"' || str[0] == '\'')
 	{
 		if (!str[1])
 		{
 			g_global = 2;
-			(*pars) = (t_pars *)malloc(sizeof(t_pars));
+			(*pars) = (t_pars *)ft_calloc(sizeof(t_pars), 1);
 			if (!(*pars))
-				exit(0);
-			(*pars)->str = malloc(sizeof(char) * 2);
+				malloc_sec3(*pars, str, env);
+			(*pars)->str = ft_calloc(sizeof(char), 2);
 			if (!(*pars)->str)
-				exit(0);
+				malloc_sec3(*pars, str, env);
 			(*pars)->str[0] = str[0];
 			(*pars)->str[1] = 0;
-			(*pars)->id = (enum e_token *)malloc(sizeof(enum e_token) * 2);
+			(*pars)->id = (enum e_token *)ft_calloc(sizeof(enum e_token), 2);
 			if (!(*pars)->id)
-				exit(0);
+				malloc_sec3(*pars, str, env);
 			(*pars)->id[0] = S_QUOTE;
 			(*pars)->id[1] = FINISH;
 			(*pars)->token = CMD;
@@ -99,13 +99,13 @@ int	simple_quote(char *str, t_pars **pars)
 	return (1);
 }
 
-void	create_pars(t_pars **pars, char *str, enum e_token *ID)
+void	create_pars(t_pars **pars, char *str, enum e_token *ID, char **env)
 {
 	int		i;
 	t_pars	*tmp;
 
 	i = 0;
-	if (!simple_quote(str, pars))
+	if (!simple_quote(str, pars, env))
 	{
 		return ;
 	}

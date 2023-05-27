@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_replace_dollar.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 09:45:27 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/26 11:29:21 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/27 11:51:18 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,40 +41,37 @@ void	ft_exist(char *tmp, t_pars *pars, char *env, char *exp)
 
 static void	replace_value(t_pars **pars, char **env, char *exp)
 {
-	int		j;
 	char	*tmp;
 
 	tmp = 0;
 	if (find_env(pars, tmp, env, exp))
 		return ;
-	j = 0;
 	if ((ft_strlen((*pars)->str) - ft_strlen(exp) - 1) == 0)
-	{
-		free((*pars)->str);
-		(*pars)->str = malloc(sizeof(char) * 1);
-		if (!(*pars)->str)
-			return ;
-		(*pars)->str[0] = 0;
-		return ;
-	}
-	tmp = malloc(sizeof(char) * (ft_strlen((*pars)->str) - ft_strlen(exp) - 1)
-			+ 1);
+		return (only_expand(pars, env, exp));
+	tmp = ft_calloc(sizeof(char), (ft_strlen((*pars)->str) - ft_strlen(exp) - 1)
+			+ 2);
+	if (!tmp)
+		malloc_sec4(*pars, tmp, env, exp);
 	ft_strcpy_dollar(tmp, (*pars)->str);
-	j += (int)ft_strlen(exp) + 1;
-	if ((*pars)->str[j])
-		ft_strlcat(tmp, (*pars)->str + j, ft_strlen((*pars)->str + j) + 1);
+	if ((*pars)->str[ft_strcpy_dollar(tmp, (*pars)->str) + (ft_strlen(exp)
+				+ 1)])
+		ft_strlcat(tmp, (*pars)->str + (ft_strcpy_dollar(tmp, (*pars)->str)
+				+ ft_strlen(exp) + 1), ft_strlen((*pars)->str
+				+ (ft_strlen(exp) + 1)) + 2);
 	free((*pars)->str);
 	(*pars)->str = tmp;
 }
 
-int	check_dote(t_pars *pars, int i)
+int	check_dote(t_pars *pars, int i, char **env)
 {
 	char	*tmp;
 	char	*nb;
 	int		j;
 
 	j = 0;
-	tmp = malloc(sizeof(char) * (ft_strlen(pars->str) + 3));
+	tmp = ft_calloc(sizeof(char), ft_strlen(pars->str) + 3);
+	if (!tmp)
+		malloc_sec3(pars, tmp, env);
 	while (j < i)
 	{
 		tmp[j] = pars->str[j];
@@ -89,7 +86,7 @@ int	check_dote(t_pars *pars, int i)
 		ft_strlcat(tmp, pars->str + i, ft_strlen(pars->str));
 	free(pars->str);
 	pars->str = tmp;
-	pars = new_id(pars);
+	pars = new_id(pars, env);
 	return (-1);
 }
 
@@ -103,16 +100,18 @@ t_pars	*find_dollar(t_pars *pars, char **env, char *tmp)
 	{
 		u = 0;
 		if (pars->id[i] == DOLLAR && pars->str[i + 1] == '?')
-			i = check_dote(pars, i);
+			i = check_dote(pars, i, env);
 		else if (pars->id[i] == DOLLAR)
 		{
 			i++;
 			tmp = is_expand(pars, tmp, i);
+			if (tmp == 0)
+				break ;
 			replace_value(&pars, env, tmp);
 			free(tmp);
 			if (!pars->str[0])
 				break ;
-			pars = new_id(pars);
+			pars = new_id(pars, env);
 			i = -1;
 		}
 		i++;

@@ -6,7 +6,7 @@
 /*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 09:34:13 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/24 13:39:52 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/27 11:33:47 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@ int	ft_iter(char *str, enum e_token *ID)
 		i = len_redirect(ID, str);
 	else
 	{
-		while (ID[i] != IFS && str[i] && ID[i] != REDIRECT && ID[i] != PIPE_C)
+		while (ID[i] != IFS && str[i] && ID[i] != REDIRECT && ID[i] != PIPE_C
+			&& ID[i] != D_QUOTE && ID[i] != S_QUOTE)
 			i++;
 	}
 	return (i);

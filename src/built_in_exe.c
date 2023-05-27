@@ -31,7 +31,7 @@ static void	which_built(t_pars **pars, t_pipe *file, t_data *data)
 			else if (strcmp((*pars)->str, "echo") == 0)
 				ft_echo(pars, file);
 			else if (strcmp((*pars)->str, "env") == 0)
-				ft_env(data, file);
+				ft_env(data);
 			break ;
 		}
 	}

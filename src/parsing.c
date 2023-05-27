@@ -6,7 +6,7 @@
 /*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:57:38 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/24 13:37:18 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/26 17:20:36 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int	ft_parsing(t_pars **pars, char *str, char **env)
 
 	(void)env;
 	*pars = 0;
-    id = ft_calloc(sizeof(enum e_token), ft_strlen(str) + 1);
+	id = ft_calloc(sizeof(enum e_token), ft_strlen(str) + 1);
 	if (!id)
 		return (ft_free_all(pars, id, 0));
 	if (!str)
@@ -101,7 +101,7 @@ int	ft_parsing(t_pars **pars, char *str, char **env)
 	put_id(str, id);
 	if (check_ifs(str, id))
 		return (ft_free_all(pars, id, 1));
-	create_pars(pars, str, id);
+	create_pars(pars, str, id, env);
 	free(id);
 	put_token(pars, env);
 	if (!check_token(*pars))

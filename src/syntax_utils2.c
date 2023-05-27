@@ -6,13 +6,13 @@
 /*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 17:39:26 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/24 15:23:20 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/27 11:33:28 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	ft_strcpy_dollar(char *tmp, char *str)
+int	ft_strcpy_dollar(char *tmp, char *str)
 {
 	int	i;
 
@@ -23,6 +23,7 @@ void	ft_strcpy_dollar(char *tmp, char *str)
 		i++;
 	}
 	tmp[i] = 0;
+	return (i);
 }
 
 int	cmd_first(t_pars *pars, char **env)
@@ -69,11 +70,13 @@ int	check_syntax_redirect(t_pars *pars, char **env)
 	return (1);
 }
 
-t_pars	*new_id(t_pars *pars)
+t_pars	*new_id(t_pars *pars, char **env)
 {
 	free(pars->id);
-	pars->id = (enum e_token *)malloc(sizeof(enum e_token)
-			* (ft_strlen(pars->str) + 1));
+	pars->id = (enum e_token *)ft_calloc(sizeof(enum e_token),
+			(ft_strlen(pars->str) + 1));
+	if (!pars->id)
+		malloc_sec3(pars, 0, env);
 	put_id(pars->str, pars->id);
 	return (pars);
 }
@@ -85,16 +88,19 @@ char	*is_expand(t_pars *pars, char *tmp, int i)
 
 	u = 0;
 	j = i;
-    if (pars->str[j] >= '0' && pars->str[j] <= '9')
-        j++;
-    else
-    {
-    	while ((pars->str[j] >= '0' && pars->str[j] <= '9') || (pars->str[j] >= 'a'
-			    && pars->str[j] <= 'z') || (pars->str[j] >= 'A'
-		    	&& pars->str[j] <= 'Z') || pars->str[j] == '_')
-	    	j++;
-    }
-	tmp = malloc(sizeof(char) * (j - i) + 1);
+	if (pars->str[j] >= '0' && pars->str[j] <= '9')
+		j++;
+	else
+	{
+		while ((pars->str[j] >= '0' && pars->str[j] <= '9')
+			|| (pars->str[j] >= 'a' && pars->str[j] <= 'z')
+			|| (pars->str[j] >= 'A' && pars->str[j] <= 'Z')
+			|| pars->str[j] == '_')
+			j++;
+	}
+	if (j == i && !pars->str[j + 1])
+		return (NULL);
+	tmp = ft_calloc(sizeof(char), (j - i) + 1);
 	if (!tmp)
 		exit(malloc_sec2(pars, tmp));
 	while (i < j)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_replace_dollar2.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 17:30:27 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/26 11:26:01 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/27 11:50:29 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	find_env(t_pars **pars, char *tmp, char **env, char *exp)
 		else
 			j++;
 	}
-    return (0);
+	return (0);
 }
 
 void	_lst_add_between(t_pars *new, t_pars *pars)
@@ -97,4 +97,13 @@ void	check_cmd_valid(t_pars *pars)
 		i++;
 	}
 	return ;
+}
+
+void	only_expand(t_pars **pars, char **env, char *exp)
+{
+	free((*pars)->str);
+	(*pars)->str = ft_calloc(sizeof(char), 1);
+	if (!(*pars)->str)
+		malloc_sec3(*pars, exp, env);
+	(*pars)->str[0] = 0;
 }
