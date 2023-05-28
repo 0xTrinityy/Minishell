@@ -6,25 +6,11 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 15:32:21 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/27 15:58:54 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/27 16:23:21 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	free_pars(t_pars **pars)
-{
-	t_pars	*tmp;
-
-	while ((*pars) != NULL)
-	{
-		tmp = (*pars)->next;
-		free((*pars)->id);
-		free((*pars)->str);
-		free(*pars);
-		*pars = tmp;
-	}
-}
 
 void	free_in(t_pars **pars, t_pipe *file, t_data *data)
 {

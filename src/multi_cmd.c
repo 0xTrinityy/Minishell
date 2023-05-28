@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/27 15:52:33 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/28 12:08:36 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,7 @@ static void	end_multi(t_pipe *file, t_data *data, t_pars **pars)
 {
 	if (is_built_ins(pars, file))
 	{
-		builtin_exe_mult(pars, file, data);
-		close(file->fd[0]);
-		close(file->fd[1]);
-		free_builtin(pars, file, data);
+		mult_builtexx(pars, file, data);
 		exit(1);
 	}
 	file->cmd_args = tema_larg2(file, pars);
@@ -49,7 +46,7 @@ static void	end_multi(t_pipe *file, t_data *data, t_pars **pars)
 	{
 		free_isfile(pars, file, data);
 		msg(ERR_CMD, 127);
-		exit (127);
+		exit(127);
 	}
 	if (!file->cmd)
 	{
@@ -73,6 +70,7 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 	file->pid[file->pidx] = fork();
 	if (!file->pid[file->pidx])
 	{
+		signal(SIGQUIT, siginthandler_fork);
 		in = redirect_in(file, pars);
 		if (in < 0)
 		{
@@ -80,7 +78,7 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 			close(file->fd[1]);
 			free_in(pars, file, data);
 			msg(ERR_INFILE, 126);
-			exit (126);
+			exit(126);
 		}
 		out = redirect_out(file, pars);
 		neww(in, out);

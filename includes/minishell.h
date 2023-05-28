@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/27 16:11:34 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/27 16:42:55 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,7 @@ void					del_quote(t_pars *pars);
 void					replace_dollar(t_pars *pars, char **env, char *tmp);
 int						check_syntax_redirect(t_pars *pars, char **env);
 int						is_redirect(enum e_pars pars);
-int 					ft_strcpy_dollar(char *tmp, char *str);
+int						ft_strcpy_dollar(char *tmp, char *str);
 t_pars					*new_id(t_pars *pars, char **env);
 char					*is_expand(t_pars *pars, char *tmp, int i);
 t_pars					*ft_lstlast_(t_pars *lst);
@@ -247,6 +247,7 @@ void					init_pipes(t_pipe *file);
 void					set_doc(t_pipe *file, t_pars **pars);
 void					init_pars(t_pars *pars);
 
+void					creating_append(t_pars **pars, t_pipe *file, int *last);
 void					redirect_infirst(t_pars **pars, t_pipe *file, int *last,
 							t_pars *cmd);
 int						pass_pipe(t_pars **pars, t_pipe *file);
@@ -256,10 +257,14 @@ int						redirect_in(t_pipe *file, t_pars **pars);
 
 int						out_count(t_pars **pars, t_pipe *file, t_pars *tmp);
 void					out_open(t_pars **pars, t_pipe *file);
+void					redirect_output(t_pipe *file, int *last, int nb_rd,
+							t_pars *cmd);
 int						redirect_out(t_pipe *file, t_pars **pars);
 
 int						built_in_first(t_pars **pars, t_pars *tmp);
 int						built_in_next(t_pars **pars, t_pipe *file, t_pars *tmp);
+void					mult_builtexx(t_pars **pars, t_pipe *file,
+							t_data *data);
 int						is_built_ins(t_pars **pars, t_pipe *file);
 
 void					free_pars(t_pars **pars);

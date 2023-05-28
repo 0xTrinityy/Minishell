@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 15:33:59 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/25 18:03:46 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/27 16:33:34 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ static t_pars	*find_cmd_pars(t_pars *pars)
 	return (NULL);
 }
 
-void	redirect_infirst(t_pars **pars, t_pipe *file, int *last,
-		t_pars *cmd)
+void	redirect_infirst(t_pars **pars, t_pipe *file, int *last, t_pars *cmd)
 {
 	int	nb_rd;
 
@@ -91,10 +90,7 @@ void	redirect_in2(t_pars **pars, t_pipe *file, int *last, t_pars *cmd)
 		}
 		(*pars) = (*pars)->next;
 	}
-	if (nb_rd == 0)
-		file->infile = file->prev_pipes;
-	if (*last == HEREDOC)
-		file->infile = find_doc_fd(file->node, cmd->limiter);
+	redirect_output(file, last, nb_rd, cmd);
 }
 
 int	redirect_in(t_pipe *file, t_pars **pars)

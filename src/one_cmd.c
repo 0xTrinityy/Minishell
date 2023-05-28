@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/27 16:05:15 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/28 11:52:56 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ static int	one_cmd_in(t_pipe *file, t_pars **pars)
 	{
 		if ((*pars)->token == R_INPUT)
 		{
-			last++;
-			last++;
+			last ++;
+			last ++;
 			if (file->infile != 0 && file->infile > 0)
 				close(file->infile);
 			file->infile = open((*pars)->next->str, O_RDONLY);
@@ -82,15 +82,7 @@ static int	reading_out(t_pars **pars, t_pipe *file, int last)
 				msg_error(ERR_OUTFILE, file);
 		}
 		if ((*pars)->token == R_DOUTPUT)
-		{
-			last++;
-			if (file->outfile != 1)
-				close(file->outfile);
-			file->outfile = open((*pars)->next->str,
-					O_APPEND | O_CREAT | O_RDWR, 0000644);
-			if (file->outfile < 0)
-				msg_error(ERR_OUTFILE, file);
-		}
+			creating_append(pars, file, &last);
 		(*pars) = (*pars)->next;
 	}
 	(*pars) = tmp;
@@ -163,8 +155,7 @@ static void	getting_args(t_pars **pars, t_pipe *file)
 
 	tmp = *pars;
 	count = 0;
-	while (*pars != NULL && ((*pars)->token != R_OUTPUT
-			|| (*pars)->token != R_DOUTPUT))
+	while (*pars != NULL)
 	{
 		if ((*pars)->token == CMD)
 		{
@@ -202,6 +193,7 @@ static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
 	int	in;
 	int	out;
 
+	signal(SIGQUIT,siginthandler_fork);
 	in = one_cmd_in(file, pars);
 	if (in < 0)
 	{

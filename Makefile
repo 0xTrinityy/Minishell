@@ -6,7 +6,7 @@
 #    By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/14 10:06:19 by tbelleng          #+#    #+#              #
-#    Updated: 2023/05/26 17:27:54 by tbelleng         ###   ########.fr        #
+#    Updated: 2023/05/27 16:23:50 by tbelleng         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ SRC = $(SRC_DIR)/main.c						\
 		$(SRC_DIR)/free_one_cmdd.c	\
 		$(SRC_DIR)/gnl.c			\
 		$(SRC_DIR)/is_cmd.c			\
+		$(SRC_DIR)/others.c			\
 		$(SRC_DIR)/multi_free.c		\
 		$(SRC_DIR)/multi_in.c		\
 		$(SRC_DIR)/multi_out.c		\
