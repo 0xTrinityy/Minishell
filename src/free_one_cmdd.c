@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 19:53:18 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/27 15:59:19 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/28 15:50:38 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	parent_free_one(t_pipe *file)
 	free(file->cmd);
 	while (file->node)
 	{
-		printf("Entered--\n");
 		tmp = file->node->next;
 		free(file->node);
 		file->node = tmp;

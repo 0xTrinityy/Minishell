@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 22:07:08 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/26 17:54:36 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/28 15:50:52 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ void	set_doc(t_pipe *file, t_pars **pars)
 				cmd->limiter = tmp->next->str;
 			}
 			create_node_and_list(file, tmp->next->str);
-			printf("node\n");
 		}
 		else if (tmp->token == R_INPUT && (cmd))
 			cmd->doc = INFILE;

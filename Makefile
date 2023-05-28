@@ -6,7 +6,7 @@
 #    By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/14 10:06:19 by tbelleng          #+#    #+#              #
-#    Updated: 2023/05/27 16:23:50 by tbelleng         ###   ########.fr        #
+#    Updated: 2023/05/28 16:38:14 by tbelleng         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,6 +45,9 @@ SRC = $(SRC_DIR)/main.c						\
 		$(SRC_DIR)/error_utils.c	\
 		$(SRC_DIR)/error.c			\
 		$(SRC_DIR)/gnl_utils.c		\
+		$(SRC_DIR)/once_cmd_arg.c	\
+		$(SRC_DIR)/one_cmd_inc.c	\
+		$(SRC_DIR)/one_cmd_out.c	\
 		$(SRC_DIR)/one_cmd.c		\
 		$(SRC_DIR)/trimm.c			\
 		$(SRC_DIR)/here_doc_utils.c	\

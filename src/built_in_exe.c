@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 07:22:10 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/28 12:27:33 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/28 16:21:02 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ static void	which_built(t_pars **pars, t_data *data, t_pipe *file)
 {
 	while ((*pars) != NULL)
 	{
-		if ((*pars)->token == BUILTIN)
+		if ((*pars)->token != BUILTIN)
+			(*pars) = (*pars)->next;
+		else if ((*pars)->token == BUILTIN)
 		{
 			if (strcmp((*pars)->str, "unset") == 0)
 				ft_unset(pars, data);
@@ -42,7 +44,9 @@ static void	which_built_mult(t_pars **pars, t_data *data, t_pipe *file)
 {
 	while ((*pars) != NULL)
 	{
-		if ((*pars)->token == BUILTIN)
+		if ((*pars)->token != BUILTIN)
+			(*pars) = (*pars)->next;
+		else if ((*pars)->token == BUILTIN)
 		{
 			if (strcmp((*pars)->str, "unset") == 0)
 				ft_unset(pars, data);

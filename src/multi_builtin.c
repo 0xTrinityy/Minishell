@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 15:33:08 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/27 16:21:57 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/28 16:22:35 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 int	built_in_first(t_pars **pars, t_pars *tmp)
 {
-	while ((*pars) != NULL && (*pars)->token != PIPE
-		&& (*pars)->token != R_OUTPUT && (*pars)->token != R_DOUTPUT)
+	while ((*pars) != NULL && (*pars)->token != PIPE)
 	{
 		if ((*pars)->token == BUILTIN)
 		{
@@ -38,8 +37,7 @@ int	built_in_next(t_pars **pars, t_pipe *file, t_pars *tmp)
 			count++;
 		(*pars) = (*pars)->next;
 	}
-	while ((*pars) != NULL && (*pars)->token != PIPE
-		&& (*pars)->token != R_OUTPUT && (*pars)->token != R_DOUTPUT)
+	while ((*pars) != NULL && (*pars)->token != PIPE)
 	{
 		if ((*pars)->token == BUILTIN)
 		{

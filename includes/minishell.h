@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/28 12:27:09 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/28 16:37:55 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,6 +234,15 @@ void					init_pars(t_pars *pars);
 void					set_doc(t_pipe *file, t_pars **pars);
 void					ft_env_mult(t_data *data, t_pipe *file);
 void					ft_pwd_mult(t_pipe *file);
+
+int						reading_in_one(t_pars **pars, t_pipe *file, int *last,
+							t_pars *cmd);
+int						one_cmd_in(t_pipe *file, t_pars **pars);
+int						reading_out(t_pars **pars, t_pipe *file, int last);
+int						one_cmd_out(t_pipe *file, t_pars **pars);
+int						arg_count(t_pars **pars);
+char					**tema_larg(t_pars **pars, t_pipe *file);
+void					getting_args(t_pars **pars, t_pipe *file);
 
 int						is_regular_file(const char *path);
 void					free_isfile(t_pars **pars, t_pipe *file, t_data *data);
