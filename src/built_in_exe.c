@@ -21,7 +21,7 @@ static void	which_built(t_pars **pars, t_data *data, t_pipe *file)
 			if (strcmp((*pars)->str, "unset") == 0)
 				ft_unset(pars, data);
 			else if (strcmp((*pars)->str, "pwd") == 0)
-				ft_pwd();
+				ft_pwd(file);
 			else if (strcmp((*pars)->str, "cd") == 0)
 				ft_cd(*pars, data->env);
 			else if (strcmp((*pars)->str, "exit") == 0)
@@ -29,9 +29,9 @@ static void	which_built(t_pars **pars, t_data *data, t_pipe *file)
 			else if (strcmp((*pars)->str, "export") == 0)
 				ft_export(pars, data);
 			else if (strcmp((*pars)->str, "echo") == 0)
-				ft_echo(pars);
+				ft_echo(pars, file);
 			else if (strcmp((*pars)->str, "env") == 0)
-				ft_env(data);
+				ft_env(data, file);
 			break ;
 		}
 	}
@@ -47,7 +47,7 @@ static void	which_built_mult(t_pars **pars, t_data *data, t_pipe *file)
 			if (strcmp((*pars)->str, "unset") == 0)
 				ft_unset(pars, data);
 			else if (strcmp((*pars)->str, "pwd") == 0)
-				ft_pwd();
+				ft_pwd(file);
 			else if (strcmp((*pars)->str, "cd") == 0)
 				ft_cd(*pars, data->env);
 			else if (strcmp((*pars)->str, "exit") == 0)
@@ -55,9 +55,9 @@ static void	which_built_mult(t_pars **pars, t_data *data, t_pipe *file)
 			else if (strcmp((*pars)->str, "export") == 0)
 				ft_export(pars, data);
 			else if (strcmp((*pars)->str, "echo") == 0)
-				ft_echo(pars);
+				ft_echo(pars, file);
 			else if (strcmp((*pars)->str, "env") == 0)
-				ft_env(data);
+				ft_env(data, file);
 			break ;
 		}
 	}

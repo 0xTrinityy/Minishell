@@ -17,9 +17,9 @@ extern int	g_global;
 void	check_error(t_pars *pars)
 {
 	if (pars->str[0] == '&' || pars->str[0] == ';' || pars->str[0] == '('
-		|| pars->str[0] == ')' || pars->str[0] == '.')
+		|| pars->str[0] == ')' || (pars->str[0] == '.' && !pars->str[1]))
 		g_global = 2;
-	else if (pars->str[0] == '/' || (pars->str[0] == '.' && pars->str[1] == '/')
+	else if ((pars->str[0] == '/' && !pars->str[1]) || (pars->str[0] == '.' && pars->str[1] == '/' && !pars->str[2])
 		|| pars->str[0] == '~')
 		g_global = 126;
 	else if (!pars->str[0])

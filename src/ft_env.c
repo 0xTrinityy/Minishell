@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-void	ft_env(t_data *data)
+void	ft_env(t_data *data, t_pipe *file)
 {
 	int	i;
 
@@ -21,8 +21,8 @@ void	ft_env(t_data *data)
 		msg(NO_PATH, 1);
 	while (data->env[i] != 0)
 	{
-		printf("%s", data->env[i]);
-		printf("\n");
+		ft_putstr_fd(data->env[i], file->outfile);
+		ft_putstr_fd("\n", file->outfile);
 		i++;
 	}
 	return ;

@@ -185,7 +185,7 @@ void					builtin_exec(t_pars **pars, t_data *data, t_pipe *file);
 void					builtin_exe_mult(t_pars **pars, t_pipe *file,
 							t_data *data);
 size_t					to_equal(char *str);
-void					ft_echo(t_pars **pars);
+void					ft_echo(t_pars **pars, t_pipe *file);
 
 void					ft_exit_built(t_pars **pars, t_pipe *file,
 							t_data *data);
@@ -195,8 +195,8 @@ int						ft_isdigit_special(int arg);
 void					ft_exit_built_mult(t_pars **pars, t_pipe *file,
 							t_data *data);
 void					ft_exit(t_pars *pars);
-void					ft_env(t_data *data);
-void					ft_pwd(void);
+void					ft_env(t_data *data, t_pipe *file);
+void					ft_pwd(t_pipe *file);
 void					ft_cd(t_pars *pars, char **env);
 int						valid_arg(char *str);
 void					ft_export(t_pars **pars, t_data *data);
