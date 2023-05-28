@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 06:29:45 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/27 16:11:14 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/28 12:34:32 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,31 @@ static int	check_option(t_pars **pars)
 
 static void	writting_echo(t_pars *pars, int flag, t_pipe *file)
 {
-	while (pars != NULL && (!is_redirect(pars->token)
-			&& pars->token != PIPE))
+	while (pars != NULL && (!is_redirect(pars->token) && pars->token != PIPE))
 	{
 		if (pars->str)
 			ft_putstr_fd(pars->str, file->outfile);
 		if (pars->str[0] && pars->next != NULL)
-            ft_putstr_fd(" ", file->outfile);
+			ft_putstr_fd(" ", file->outfile);
 		pars = pars->next;
 	}
 	if (flag == 0)
 		ft_putstr_fd("\n", file->outfile);
+	return ;
+}
+
+static void	writting_echo_mult(t_pars *pars, int flag)
+{
+	while (pars != NULL && (!is_redirect(pars->token) && pars->token != PIPE))
+	{
+		if (pars->str)
+			printf("%s", pars->str);
+		if (pars->str[0] && pars->next != NULL)
+			printf(" ");
+		pars = pars->next;
+	}
+	if (flag == 0)
+		printf("\n");
 	return ;
 }
 
@@ -57,12 +71,20 @@ void	ft_echo(t_pars **pars, t_pipe *file)
 
 	tmp = *pars;
 	if ((*pars)->token == BUILTIN && (*pars)->next == NULL)
-		ft_putstr_fd("\n", file->outfile);
+	{
+		if (file->cmd_nb == 1)
+			ft_putstr_fd("\n", file->outfile);
+		else
+			printf("\n");
+	}
 	else if ((*pars)->token == BUILTIN)
 	{
 		(*pars) = (*pars)->next;
 		i = check_option(pars);
-		writting_echo(*pars, i, file);
+		if (file->cmd_nb == 1)
+			writting_echo(*pars, i, file);
+		else
+			writting_echo_mult(*pars, i);
 	}
 	*pars = tmp;
 	return ;

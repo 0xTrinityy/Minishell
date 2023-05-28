@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/27 16:42:55 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/28 12:27:09 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,6 +232,8 @@ int						malloc_sec4(t_pars *pars, char *str, char **env,
 void					dup_cmdd(t_pars **pars, t_pipe *file);
 void					init_pars(t_pars *pars);
 void					set_doc(t_pipe *file, t_pars **pars);
+void					ft_env_mult(t_data *data, t_pipe *file);
+void					ft_pwd_mult(t_pipe *file);
 
 int						is_regular_file(const char *path);
 void					free_isfile(t_pars **pars, t_pipe *file, t_data *data);

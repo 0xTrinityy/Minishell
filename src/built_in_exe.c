@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 07:22:10 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/27 16:00:36 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/28 12:27:33 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	which_built_mult(t_pars **pars, t_data *data, t_pipe *file)
 			if (strcmp((*pars)->str, "unset") == 0)
 				ft_unset(pars, data);
 			else if (strcmp((*pars)->str, "pwd") == 0)
-				ft_pwd(file);
+				ft_pwd_mult(file);
 			else if (strcmp((*pars)->str, "cd") == 0)
 				ft_cd(*pars, data->env);
 			else if (strcmp((*pars)->str, "exit") == 0)
@@ -57,7 +57,7 @@ static void	which_built_mult(t_pars **pars, t_data *data, t_pipe *file)
 			else if (strcmp((*pars)->str, "echo") == 0)
 				ft_echo(pars, file);
 			else if (strcmp((*pars)->str, "env") == 0)
-				ft_env(data, file);
+				ft_env_mult(data, file);
 			break ;
 		}
 	}
