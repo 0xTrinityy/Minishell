@@ -14,15 +14,16 @@
 
 extern int	g_global;
 
-void	ft_pwd(void)
+void	ft_pwd(t_pipe *file)
 {
 	char	*path;
 
 	g_global = 1;
 	path = getcwd(NULL, 0);
 	if (path == NULL)
-		printf("error pwd\n");
-	printf("%s\n", path);
+		ft_putstr_fd("error pwd\n", file->outfile);
+	ft_putstr_fd(path, file->outfile);
+	ft_putstr_fd("\n", file->outfile);
 	free(path);
 	g_global = 0;
 }

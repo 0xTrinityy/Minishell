@@ -243,7 +243,7 @@ static void	one_built_in(t_pipe *file, t_pars **pars, t_data *data)
 	if (in != 0)
 		close(in);
 	builtin_exec(pars, data, file);
-	if (out != 1)
+    if (out != 1)
 		close(out);
 	return ;
 }
