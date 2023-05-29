@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/29 11:12:23 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/29 15:46:30 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,13 @@ static void	one_built_in(t_pipe *file, t_pars **pars, t_data *data)
 
 	in = one_cmd_in(file, pars);
 	out = one_cmd_out(file, pars);
-	if (in != 0)
+	if (in > 0)
 		close(in);
+	if (in < 0)
+	{
+		msg(ERR_INFILE, 126);
+		return ;
+	}
 	builtin_exec(pars, data, file);
 	if (out > 1)
 		close(out);

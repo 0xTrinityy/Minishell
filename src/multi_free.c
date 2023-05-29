@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 15:32:21 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/27 16:23:21 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/29 15:28:57 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	free_in(t_pars **pars, t_pipe *file, t_data *data)
 	free(file->cmd);
 	free(file->paths);
 	free(file->pid);
+	free_nodess(file);
 	free_pars(pars);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 19:53:18 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/28 15:50:38 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/29 15:33:10 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	parent_free_one(t_pipe *file)
 void	free_one_cmd_infile(t_pars **pars, t_pipe *file, t_data *data)
 {
 	int	i;
+	t_node	*node;
 
 	i = -1;
 	while (data->env[++i])
@@ -57,6 +58,12 @@ void	free_one_cmd_infile(t_pars **pars, t_pipe *file, t_data *data)
 	free(file->cmd_to_exec);
 	free(file->cmd);
 	free(file->paths);
+	while (file->node)
+	{
+		node = file->node->next;
+		free(file->node);
+		file->node = node;
+	}
 	free_pars(pars);
 }
 
@@ -77,6 +84,7 @@ void	free_one_cmd_isfile(t_pars **pars, t_pipe *file, t_data *data)
 	free(file->cmd_to_exec[0]);
 	free(file->cmd_to_exec);
 	free(file->paths);
+	free_nodess(file);
 	free_pars(pars);
 }
 
@@ -100,5 +108,6 @@ void	free_one_cmd_nofound(t_pars **pars, t_pipe *file, t_data *data)
 	free(file->cmd_to_exec);
 	free(file->cmd);
 	free(file->paths);
+	free_nodess(file);
 	free_pars(pars);
 }

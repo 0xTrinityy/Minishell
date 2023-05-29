@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/29 13:48:13 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/29 15:49:04 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@
 #  define BUFFER_SIZE 42
 # endif
 
-# define ERR_INFILE "Infile error\n"
+# define ERR_INFILE "Infile error\nNo such file or directory\n"
 # define ERR_OUTFILE "Outfile error\n"
 # define ERR_INPUT "Invalid number of arguments\n"
-# define ERR_PIPE "Pipe error \n"
-# define ERR_CMD "Command not found\n"
+# define ERR_PIPE "Pipe error\n"
+# define ERR_CMD "Minishell : Command not found\n"
 # define ERR_HEREDOC "Here_doc error\n"
 # define ERR_UNLINK "Unlink error\n"
 # define NO_PATH "Path not found\n No such file or directory\n"
@@ -234,7 +234,7 @@ void					init_pars(t_pars *pars);
 void					set_doc(t_pipe *file, t_pars **pars);
 void					ft_env_mult(t_data *data, t_pipe *file);
 void					ft_pwd_mult(t_pipe *file);
-
+void					free_nodess(t_pipe *file);
 int						reading_in_one(t_pars **pars, t_pipe *file, int *last,
 							t_pars **cmd);
 int						one_cmd_in(t_pipe *file, t_pars **pars);
