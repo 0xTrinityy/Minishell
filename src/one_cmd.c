@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/28 16:31:59 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/29 11:12:23 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	is_regular_file(const char *path)
 	{
 		if (S_ISDIR(path_stat.st_mode))
 			return (1);
-		if (S_ISREG(path_stat.st_mode))
+		if (S_ISREG(path_stat.st_mode) && (path_stat.st_mode & S_IXUSR) == 0)
 			return (1);
 	}
 	return (0);

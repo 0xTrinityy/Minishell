@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/28 16:37:55 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/29 10:46:11 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 # define ERR_CMD "Command not found\n"
 # define ERR_HEREDOC "Here_doc error\n"
 # define ERR_UNLINK "Unlink error\n"
-# define NO_PATH "Path not found\n"
+# define NO_PATH "Path not found\n No such file or directory\n"
 # define INVALID_ID "not a valid identifier\n"
 # define INFILE 0
 # define HEREDOC 1

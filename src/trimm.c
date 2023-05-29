@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:18:24 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/26 11:12:11 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/29 10:47:43 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ char	*find_path_spe(t_data *data)
 	if (no_path == 0)
 	{
 		msg(NO_PATH, 1);
+		return (NULL);
 	}
 	new = path_cpy(data);
 	return (new);
@@ -75,6 +76,8 @@ static void	is_a_cmd(t_pars **pars, t_pipe *file, t_data *data)
 
 	tmp = *pars;
 	file->paths = find_path_spe(data);
+	if (!file->paths)
+		return ;
 	file->cmd_paths = ft_split(file->paths, ':');
 	while ((*pars) != NULL)
 	{
@@ -82,15 +85,10 @@ static void	is_a_cmd(t_pars **pars, t_pipe *file, t_data *data)
 		{
 			file->cmd_nb += 1;
 			file->builtin += 1;
-			(*pars) = (*pars)->next;
 		}
 		else if ((*pars)->token == CMD)
-		{
 			file->cmd_nb += 1;
-			(*pars) = (*pars)->next;
-		}
-		else
-			*pars = (*pars)->next;
+		*pars = (*pars)->next;
 	}
 	*pars = tmp;
 	if (file->cmd_nb > 0)
@@ -139,6 +137,8 @@ int	trimm_exec(t_pars **pars, t_data *data)
 	}
 	init_pars(*pars);
 	is_a_cmd(pars, &file, data);
+	if (!file.paths)
+		return (0);
 	set_doc(&file, pars);
 	if (file.doc > 0)
 		here_doc(&file, pars, data);
