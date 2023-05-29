@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 19:53:18 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/29 16:40:30 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/29 17:15:12 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	parent_free_one(t_pipe *file)
 
 void	free_one_cmd_infile(t_pars **pars, t_pipe *file, t_data *data)
 {
-	int	i;
+	int		i;
 	t_node	*node;
 
 	i = -1;

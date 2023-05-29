@@ -6,16 +6,16 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 20:45:13 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/29 17:04:51 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/29 17:15:27 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void    free_nodess(t_pipe *file)
+void	free_nodess(t_pipe *file)
 {
-	t_node *node;
-	
+	t_node	*node;
+
 	while (file->node)
 	{
 		node = file->node->next;

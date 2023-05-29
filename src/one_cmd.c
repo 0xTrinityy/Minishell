@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/29 16:40:10 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/29 17:15:57 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,11 @@ static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
 {
 	int	in;
 	int	out;
-	
+
 	signal(SIGQUIT, siginthandler_fork);
 	in = one_cmd_in(file, pars);
 	if (in < 0)
 	{
-		/*if (file->node->fd[0])
-			close(file->node->fd[0]);*/
 		free_one_cmd_infile(pars, file, data);
 		msg(ERR_INFILE, 126);
 		exit(126);
