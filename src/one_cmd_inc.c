@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 16:27:06 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/28 16:37:45 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/29 14:23:41 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 static t_pars	*find_cmd_pars(t_pars *pars)
 {
+	while ((pars)->prev != NULL)
+		pars = pars->prev;
 	while ((pars) != NULL)
 	{
 		if ((pars)->token == CMD || (pars)->token == BUILTIN)
@@ -23,7 +25,7 @@ static t_pars	*find_cmd_pars(t_pars *pars)
 	return (NULL);
 }
 
-int	reading_in_one(t_pars **pars, t_pipe *file, int *last, t_pars *cmd)
+int	reading_in_one(t_pars **pars, t_pipe *file, int *last, t_pars **cmd)
 {
 	while ((*pars) != NULL)
 	{
@@ -41,7 +43,7 @@ int	reading_in_one(t_pars **pars, t_pipe *file, int *last, t_pars *cmd)
 		{
 			if (file->infile > 0)
 				close(file->infile);
-			cmd = find_cmd_pars(*pars);
+			*cmd = find_cmd_pars(*pars);
 			*last = HEREDOC;
 		}
 		(*pars) = (*pars)->next;
@@ -56,11 +58,11 @@ int	one_cmd_in(t_pipe *file, t_pars **pars)
 	t_pars	*cmd;
 
 	tmp = *pars;
-	cmd = NULL;
+	cmd = 0;
 	last = 0;
 	if (last == 0)
 		file->infile = STDIN_FILENO;
-	if (reading_in_one(pars, file, &last, cmd) == -1)
+	if (reading_in_one(pars, file, &last, &cmd) == -1)
 	{
 		*pars = tmp;
 		return (-1);

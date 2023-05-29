@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 11:45:59 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/29 10:46:11 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/29 13:48:13 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,7 +236,7 @@ void					ft_env_mult(t_data *data, t_pipe *file);
 void					ft_pwd_mult(t_pipe *file);
 
 int						reading_in_one(t_pars **pars, t_pipe *file, int *last,
-							t_pars *cmd);
+							t_pars **cmd);
 int						one_cmd_in(t_pipe *file, t_pars **pars);
 int						reading_out(t_pars **pars, t_pipe *file, int last);
 int						one_cmd_out(t_pipe *file, t_pars **pars);

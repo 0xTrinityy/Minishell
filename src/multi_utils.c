@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 19:20:03 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/25 19:36:37 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/29 14:35:08 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ char	**return_arg(t_pars **pars, t_pipe *file, char **arg, int count)
 	while ((*pars)->token != CMD)
 		(*pars) = (*pars)->next;
 	while ((*pars) != NULL && ((*pars)->token != PIPE
+			&& (*pars)->token != R_INPUT && (*pars)->token != R_DINPUT
 			&& (*pars)->token != R_OUTPUT && (*pars)->token != R_DOUTPUT))
 	{
 		if ((*pars)->token != CMD && (*pars)->token != PIPE)
