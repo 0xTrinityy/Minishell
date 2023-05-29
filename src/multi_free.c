@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 15:32:21 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/29 15:28:57 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/29 17:07:34 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	free_builtin(t_pars **pars, t_pipe *file, t_data *data)
 	while (file->node)
 	{
 		tmp1 = file->node->next;
+		close(file->node->fd[0]);
 		free(file->node);
 		file->node = tmp1;
 	}
@@ -70,6 +71,7 @@ static void	free_node(t_pipe *file)
 	while (file->node)
 	{
 		tmp1 = file->node->next;
+		close(file->node->fd[0]);
 		free(file->node);
 		file->node = tmp1;
 	}

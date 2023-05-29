@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 20:45:13 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/29 16:19:12 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/29 17:04:51 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void    free_nodess(t_pipe *file)
 	while (file->node)
 	{
 		node = file->node->next;
+		close(file->node->fd[0]);
 		free(file->node);
 		file->node = node;
 	}

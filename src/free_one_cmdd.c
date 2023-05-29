@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 19:53:18 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/29 16:00:13 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/29 16:40:30 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	free_one_cmd_infile(t_pars **pars, t_pipe *file, t_data *data)
 	while (file->node)
 	{
 		node = file->node->next;
+		close(file->node->fd[0]);
 		free(file->node);
 		file->node = node;
 	}
