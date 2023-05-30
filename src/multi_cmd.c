@@ -6,198 +6,124 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/08 13:38:59 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/28 12:48:02 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-//L'OFFICIEL
 
-/*char	*get_cmd(char **paths, char *cmd)
+extern int	g_global;
+
+void	create_node_and_list(t_pipe *file, char *limiter)
 {
-	char	*tmp;
-	char	*command;
+	t_node	*node;
 
-	while (*paths != NULL)
+	node = ft_calloc(sizeof(t_node), 1);
+	node->limiter = limiter;
+	if (file->node == NULL)
 	{
-		tmp = ft_strjoin(*paths, "/");
-		command = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (access(command, 0) == 0)
-			return (command);
-		free(command);
-		paths++;
+		file->node = node;
+		file->last = node;
 	}
-	return (NULL);
-}*/
-
-static int    pipe_count(t_pars **pars)
-{
-	int     count;
-	t_pars  *tmp;
-	
-	count = 0;
-	tmp = *pars;
-	while(*pars != NULL)
+	else
 	{
-		if ((*pars)->token == PIPE)
-			count++;
-		*pars = (*pars)->next;
+		file->last->next = node;
+		node->prev = file->last;
+		file->last = node;
 	}
-	*pars = tmp;
-	count = count * 2;
-	return (count);
 }
 
+static void	end_multi(t_pipe *file, t_data *data, t_pars **pars)
+{
+	if (is_built_ins(pars, file))
+	{
+		mult_builtexx(pars, file, data);
+		exit(1);
+	}
+	file->cmd_args = tema_larg2(file, pars);
+	file->cmd = get_cmd(file->cmd_paths, file->cmd_args[0]);
+	if (is_regular_file(file->cmd_to_exec[file->pidx]))
+	{
+		free_isfile(pars, file, data);
+		msg(ERR_CMD, 127);
+		exit(127);
+	}
+	if (!file->cmd)
+	{
+		free_no_cmd(pars, file, data);
+		msg(ERR_CMD, 127);
+		exit(127);
+	}
+	execve(file->cmd, file->cmd_args, data->env);
+	error_free(file);
+	free_no_cmd(pars, file, data);
+	exit(1);
+}
 
-static void	new_pipe(t_pipe *file)
+static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 {
 	int	i;
+	int	in;
+	int	out;
 
-	i = 0;
-	while (i < file->cmd_nb)
-	{
-		if (pipe(file->pipe + (2 * i)) < 0)
-			parent_free(file);
-		i++;
-	}
-}
-
-static void	neww(int infile, int outfile)
-{
-	dup2(infile, 0);
-	dup2(outfile, 1);
-}
-
-
-
-/*static int many_pipe(t_pars **pars)
-{
-	t_pars  *tmp;
-	int     count;
-	
-	tmp = *pars;
-	count = 0;
-	while ((*pars) != NULL)
-	{
-		if ((*pars)->token == PIPE)
-			count++;
-	}
-	*pars = tmp;
-	return (count);
-}*/
-
-static char **tema_larg2(t_pipe *file, t_pars **pars)
-{
-	t_pars  *tmp;
-	int     count;
-	char    **arg;
-	
-	count = 0;
-	tmp = *pars;
-	arg = malloc(sizeof(char *) * 20000);
-	while (count != file->pidx && (*pars) != NULL)
-	{
-		if ((*pars)->token == PIPE)
-			count++;
-		(*pars) = (*pars)->next;
-	}
-	count = 0;
-	arg[count] = file->cmd_to_exec[file->pidx];
-	count++;
-	while ((*pars) != NULL && ((*pars)->token != PIPE && (*pars)->token != R_OUTPUT && (*pars)->token != R_DOUTPUT))
-	{
-		if ((*pars)->token != CMD && (*pars)->token != PIPE)
-		{
-			if((*pars)->token != CMD && (*pars)->token != R_INPUT && (*pars)->token != PIPE)
-			{
-				arg[count] = (*pars)->str;
-				printf("L'arg vaut = %s\n", arg[count]);
-				count++;
-			}
-			(*pars) = (*pars)->next;
-		}
-		else
-			(*pars) = (*pars)->next;
-	}
-	arg[count] = 0;
-	*pars = tmp;
-	return (arg);
-}
-
-static void	multiple_cmd(t_pipe *file, char **envp, t_pars **pars)
-{
-	int     i;
-	
 	i = 0;
 	file->pid[file->pidx] = fork();
 	if (!file->pid[file->pidx])
 	{
-		if (file->pidx == 0)
-			neww(file->infile, file->pipe[1]);
-		else if (file->pidx == file->cmd_nb - 1)
-			neww(file->pipe[2 * file->pidx - 2], file->outfile);
-		else
-			neww(file->pipe[2 * file->pidx - 2], file->pipe[2 * file->pidx + 1]);
-		close_pipes(file);
-		//file->cmd_args = ft_split(file->cmd_to_exec[file->pidx], ' ');
-		file->cmd_args = tema_larg2(file, pars);
-		file->cmd = get_cmd(file->cmd_paths, file->cmd_args[0]);
-		printf("ARG to b executed is %s\n", file->cmd_args[1]);
-		if (!file->cmd)
+		signal(SIGQUIT, siginthandler_fork);
+		in = redirect_in(file, pars);
+		if (in < 0)
 		{
-			child_free1(file);
-			close_all1(file);
-			parent_free1(file);
-			msg(ERR_CMD);
-			exit(1);
+			close(file->fd[0]);
+			close(file->fd[1]);
+			free_in(pars, file, data);
+			msg(ERR_INFILE, 126);
+			exit(126);
 		}
-		execve(file->cmd, file->cmd_args, envp);
-		printf("EXEC FAIL\n");
-		error_free(file);
-		free(file->cmd);
+		out = redirect_out(file, pars);
+		neww(in, out);
+		close_pipes(file);
+		end_multi(file, data, pars);
 	}
 }
 
-void    mult_cmd(t_pipe *file, t_pars **pars, char **envp)
+static void	init_structt(t_pipe *file, t_pars **pars, t_data *data)
 {
-	int    i;
-	(void)envp;
-	
-	i = 0;
-	redirect_hdoc(pars, file);
-	is_heredoc(file, pars);
+	file->infile = 0;
 	file->outfile = 1;
-	out_read_v2(file, pars);
-
-	file->pipe_nb = pipe_count(pars);
-	file->pipe = malloc(sizeof(int *) * file->pipe_nb);
-	if (pipe(file->pipe) < 0)
-		msg_error(ERR_PIPE, file);
-	new_pipe(file);
-	printf("INFILE = %d\n", file->infile);
+	file->prev_pipes = -1;
 	file->pid = malloc(sizeof(pid_t) * (file->cmd_nb));
 	if (!file->pid)
-		pid_err(file);
-	//printf("PIDX = %d et CMD_MB = %d\n", file.pidx, file.cmd_nb);
+	{
+		free_in(pars, file, data);
+		exit(1);
+	}
+}
+
+void	mult_cmd(t_pipe *file, t_pars **pars, t_data *data)
+{
+	int	i;
+	int	status;
+
+	status = 0;
+	init_structt(file, pars, data);
 	while (file->pidx < file->cmd_nb)
 	{
-		multiple_cmd(file, envp, pars);
+		if (file->pidx != file->cmd_nb - 1 && pipe(file->fd) < 0)
+			msg_error(ERR_PIPE, file);
+		multiple_cmd(file, data, pars);
+		close(file->fd[1]);
+		if (file->prev_pipes != -1)
+			close(file->prev_pipes);
+		file->prev_pipes = file->fd[0];
 		file->pidx++;
 	}
-	close_pipes(file);
-	while (i < file->cmd_nb)
-	{
-		waitpid(file->pid[i], NULL, 0);
-		i++;
-	}
+	close_here_doc_pipe(file->node, 1, 0);
+	i = -1;
+	while (++i < file->cmd_nb)
+		waitpid(file->pid[i], &status, 0);
+	if (WIFEXITED(status))
+		g_global = WEXITSTATUS(status);
 	parent_free(file);
-	while (file->out_nb > 0)
-	{
-		close(file->out_fd[file->out_nb - 1]);
-		file->out_nb--;
-	}
-	free(file->out_fd);
-	free(file->pid);
 	return ;
 }

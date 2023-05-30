@@ -1,18 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   token.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/17 13:18:01 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/06 10:29:06 by luciefer         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../includes/minishell.h"
 
-static enum e_pars	check_pipe(enum e_pars token, char *str, enum e_token *ID)
+static enum e_pars	check_pipes(enum e_pars token, char *str, enum e_token *ID)
 {
 	if (token == N_SORTED)
 	{
@@ -32,18 +20,18 @@ static enum e_pars	check_redirect(enum e_pars token, char *str)
 		return (token);
 	if (ft_strlen(str) == 1)
 	{
-		if (str[0] == '>')
+		if (str[0] == '>' && str[1] != '>')
 			token = R_OUTPUT;
-		else if (str[0] == '<')
+		else if (str[0] == '<' && str[1] != '<')
 			token = R_INPUT;
 		return (token);
 	}
-	while (str[i] == '>' && str[i])
+	while (str[i] == '>' && str[i + 1] == '>' && str[i] && str[i + 1])
 	{
 		i++;
 		token = R_DOUTPUT;
 	}
-	while (str[i] == '<' && str[i])
+	while (str[i] == '<' && str[i + 1] == '<' && str[i] && str[i + 1])
 	{
 		i++;
 		token = R_DINPUT;
@@ -51,46 +39,32 @@ static enum e_pars	check_redirect(enum e_pars token, char *str)
 	return (token);
 }
 
-static int    is_a_cmd(char *str, char **envp)
+static void	give_cmd(t_pars *pars, int i)
 {
-	char	**tab;
-	char	*path;
-	char	*cmd;
-
-	tab = 0;
-	path = 0;
-	cmd = 0;
-	path = find_path(envp);
-	tab = ft_split(path, ':');
-	cmd = get_cmd(tab, str);
-	ft_free_tab(tab);
-	printf("cmd = %s\n", cmd);
-	if (cmd != NULL)
+	while (pars != NULL)
 	{
-		free(cmd);
-		return (1);
-	}
-	free(cmd);
-	return (0);
-}
-
-static enum e_pars	check_cmd(enum e_pars token, char *str, enum e_token *ID, char **env)
-{
-	if (token == N_SORTED)
-	{
-		if (is_a_cmd(str, env))
-			token = CMD;
-		else
+		if (is_redirect(pars->token))
 		{
-			token = check_quoted(str, ID);
-			if (token == N_SORTED)
-				token = TXT;
+			pars = pars->next;
+			if (pars == NULL)
+				return ;
+			if (pars->token == 0)
+				pars->token = ARG;
 		}
+		if (pars->token == PIPE)
+			give_cmd(pars->next, 0);
+		if (i == 0 && pars->token == N_SORTED)
+		{
+			pars->token = CMD;
+			i = 1;
+		}
+		if (pars->token == 0)
+			pars->token = ARG;
+		pars = pars->next;
 	}
-	return (token);
 }
 
-void	put_token(t_pars **pars, char **env)
+void	put_token(t_pars **pars)
 {
 	int		i;
 	t_pars	*tmp;
@@ -99,18 +73,11 @@ void	put_token(t_pars **pars, char **env)
 	tmp = (*pars);
 	while ((*pars) != NULL)
 	{
-		(*pars)->token = check_pipe((*pars)->token, (*pars)->str, (*pars)->ID);
+		(*pars)->token = check_pipes((*pars)->token, (*pars)->str, (*pars)->id);
 		(*pars)->token = check_redirect((*pars)->token, (*pars)->str);
-		(*pars)->token = check_cmd((*pars)->token, (*pars)->str, (*pars)->ID, env);
 		(*pars) = (*pars)->next;
 	}
 	(*pars) = tmp;
-	while ((*pars) != NULL)
-	{
-		if ((*pars)->next != 0 && is_redirect((*pars)->token)
-			&& (*pars)->next->token == CMD)
-			(*pars)->next->token = ARG;
-		*pars = (*pars)->next;
-	}
+	give_cmd(*pars, 0);
 	(*pars) = tmp;
 }

@@ -1,21 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/15 11:57:38 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/05 17:18:59 by luciefer         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../includes/minishell.h"
 
-void	ft_free_all(void)
-{
-	exit (0);
-}
+extern int  g_global;
 
 static int	check_token(t_pars *pars)
 {
@@ -27,7 +12,12 @@ static int	check_token(t_pars *pars)
 		if (is_redirect(pars->token))
 		{
 			if (ft_strlen(pars->str) > 2)
+			{
+				g_global = 2;
+                pars->str[2] = 0;
+                print_error(pars->str);
 				return (0);
+			}
 		}
 		pars = pars->next;
 	}
@@ -35,31 +25,46 @@ static int	check_token(t_pars *pars)
 	return (1);
 }
 
-int	ft_parcing(t_pars **pars, char *str, char **env)
+static int	check_ifs(char *str, enum e_token *ID)
 {
-	enum e_token	*id;
-	int				i;
+	int	i;
 
-	(void) env;
-	*pars = 0;
-	id = (enum e_token *) malloc(sizeof(enum e_token) * (ft_strlen(str) + 1));
-	if (!id)
-	{
-		free(id);
-		ft_free_all();
-	}
-	if (!str)
+	i = 0;
+	while ((ID[i] == IFS_TMP && str[i]) || str[i] == '!' || str[i] == ':')
+		i++;
+	if (ID[i] != FINISH)
 		return (0);
-	put_id(str, id);
-	i = create_pars(pars, str, id);
-	if (i == 0)
-		return (0);
-	else if (i == 2)
+	return (1);
+}
+
+int ft_free_start(t_start *start)
+{
+    free(start->str);
+    free(start->id);
+    return (2);
+}
+
+int    ft_parsing(t_pars **pars, char **str, char **env)
+{
+    t_start start;
+    int i;
+
+    i = 0;
+    start.id = 0;
+    start.env = env;
+    start.str = ft_strdup(*str);
+    free(*str);
+    start.id = put_id(start.str);
+    if (!ft_expand(&start))
+        return (ft_free_start(&start));
+    put_token(pars);
+    if (check_ifs(start.str, start.id))
+        return(ft_free_start(&start));
+    create_pars(&start, pars);
+    put_token(pars); 
+    if (!check_token(*pars))
 		return (1);
-	free(id);
-	printf("str: %s\n", (*pars)->str);
-	put_token(pars, env);
-	if (!check_token(*pars))
-		return (0);
-	return (check_syntax(pars, env));
+    check_syntax(pars, start.env);
+    ft_free_start(&start);
+    return (0);
 }

@@ -1,37 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   is_cmd.c                                           :+:      :+:    :+:   */
+/*   error_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/21 17:34:49 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/26 11:20:51 by tbelleng         ###   ########.fr       */
+/*   Created: 2023/05/23 22:29:41 by tbelleng          #+#    #+#             */
+/*   Updated: 2023/05/23 22:32:41 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*get_cmd(char **paths, char *cmd)
+void	pid_err(t_pipe *file)
 {
-	char	*tmp;
-	char	*command;
+	parent_free(file);
+}
 
-	while (*paths != NULL)
+void	infile_error(char *err, t_pipe *file)
+{
+	perror(err);
+	file->infile = -1;
+}
+
+void	error_free(t_pipe *file)
+{
+	int	i;
+
+	i = 0;
+	while (file->cmd_args[i] != NULL)
 	{
-		if (access(cmd, F_OK) == 0)
-		{
-			return (cmd);
-		}
-		tmp = ft_strjoin(*paths, "/");
-		command = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (access(command, F_OK) == 0)
-		{
-			return (command);
-		}
-		free(command);
-		paths++;
+		free(file->cmd_args[i]);
+		i++;
 	}
-	return (NULL);
+	free(file->cmd_args);
 }

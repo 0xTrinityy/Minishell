@@ -1,37 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   is_cmd.c                                           :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/21 17:34:49 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/26 11:20:51 by tbelleng         ###   ########.fr       */
+/*   Created: 2023/05/13 08:02:21 by tbelleng          #+#    #+#             */
+/*   Updated: 2023/05/28 12:34:52 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*get_cmd(char **paths, char *cmd)
+void	ft_env(t_data *data, t_pipe *file)
 {
-	char	*tmp;
-	char	*command;
+	int	i;
 
-	while (*paths != NULL)
+	i = 0;
+	if (!data->env[i])
+		msg(NO_PATH, 1);
+	while (data->env[i] != 0)
 	{
-		if (access(cmd, F_OK) == 0)
-		{
-			return (cmd);
-		}
-		tmp = ft_strjoin(*paths, "/");
-		command = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (access(command, F_OK) == 0)
-		{
-			return (command);
-		}
-		free(command);
-		paths++;
+		ft_putstr_fd(data->env[i], file->outfile);
+		ft_putstr_fd("\n", file->outfile);
+		i++;
 	}
-	return (NULL);
+	return ;
+}
+
+void	ft_env_mult(t_data *data, t_pipe *file)
+{
+	int	i;
+
+	(void)file;
+	i = 0;
+	if (!data->env[i])
+		msg(NO_PATH, 1);
+	while (data->env[i] != 0)
+	{
+		printf("%s\n", data->env[i]);
+		i++;
+	}
+	return ;
 }

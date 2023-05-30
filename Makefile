@@ -1,47 +1,58 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: luciefer <marvin@42.fr>                    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/03/14 10:06:19 by tbelleng          #+#    #+#              #
-#    Updated: 2023/05/05 16:36:33 by luciefer         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
-
 NAME = minishell
 
 SRC_DIR = ./src
 
 BIN_DIR = ./bin/
 
-SRC = $(SRC_DIR)/main.c			\
-		$(SRC_DIR)/parsing.c		\
-		$(SRC_DIR)/pars.c			\
-		$(SRC_DIR)/token.c			\
-		$(SRC_DIR)/token2.c			\
-		$(SRC_DIR)/syntax.c			\
-		$(SRC_DIR)/syntax_utils.c	\
-		$(SRC_DIR)/syntax_utils2.c	\
-		$(SRC_DIR)/syntax_utils3.c	\
-		$(SRC_DIR)/parsing_utils.c	\
-		$(SRC_DIR)/signal.c			\
-		$(SRC_DIR)/free.c			\
-		$(SRC_DIR)/cmd_exec.c		\
+
+SRC =	$(SRC_DIR)/main.c				\
+		$(SRC_DIR)/parsing.c			\
+		$(SRC_DIR)/parsing_utils.c		\
+		$(SRC_DIR)/put_id.c				\
+		$(SRC_DIR)/expand.c				\
+		$(SRC_DIR)/expand_utils.c		\
+		$(SRC_DIR)/dollar.c				\
+		$(SRC_DIR)/create_pars.c		\
+		$(SRC_DIR)/create_pars_utils.c	\
+		$(SRC_DIR)/token.c				\
+		$(SRC_DIR)/syntax.c				\
+		$(SRC_DIR)/syntax_utils.c		\
+		$(SRC_DIR)/free.c				\
+		$(SRC_DIR)/signal.c				\
+		$(SRC_DIR)/free_one_cmdd.c	\
 		$(SRC_DIR)/gnl.c			\
 		$(SRC_DIR)/is_cmd.c			\
+		$(SRC_DIR)/others.c			\
+		$(SRC_DIR)/multi_free.c		\
+		$(SRC_DIR)/multi_in.c		\
+		$(SRC_DIR)/multi_out.c		\
+		$(SRC_DIR)/multi_builtin.c	\
+		$(SRC_DIR)/multi_utils.c	\
 		$(SRC_DIR)/multi_cmd.c		\
+		$(SRC_DIR)/error_utils.c	\
 		$(SRC_DIR)/error.c			\
-		$(SRC_DIR)/for_free.c		\
 		$(SRC_DIR)/gnl_utils.c		\
+		$(SRC_DIR)/once_cmd_arg.c	\
+		$(SRC_DIR)/one_cmd_inc.c	\
+		$(SRC_DIR)/one_cmd_out.c	\
 		$(SRC_DIR)/one_cmd.c		\
-		$(SRC_DIR)/in_file.c		\
-		$(SRC_DIR)/out_file.c		\
 		$(SRC_DIR)/trimm.c			\
-
-
+		$(SRC_DIR)/here_doc_utils.c	\
+		$(SRC_DIR)/here_doc_utils2.c\
+		$(SRC_DIR)/here_doc.c		\
+		$(SRC_DIR)/built_in_exe.c	\
+		$(SRC_DIR)/ft_echo.c		\
+		$(SRC_DIR)/ft_env.c		    \
+		$(SRC_DIR)/ft_pwd.c		    \
+		$(SRC_DIR)/export_utils.c	\
+		$(SRC_DIR)/ft_export.c		\
+		$(SRC_DIR)/ft_unset.c		\
+		$(SRC_DIR)/ft_exit.c		\
+		$(SRC_DIR)/exit_mult.c		\
+		$(SRC_DIR)/cd.c		        \
+		$(SRC_DIR)/only_file.c		\
+		$(SRC_DIR)/exec.c		    \
+		
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(BIN_DIR)%.o)
 
 
@@ -51,7 +62,7 @@ LIB = -Llibft -lft
 
 INCLUDES = ./includes
 
-CFLAGS = -Wall -Werror -Wextra -I$(INCLUDES) -g3
+CFLAGS = -Werror -Wall -Wextra -I$(INCLUDES) -g3
 
 all :	$(BIN_DIR) $(NAME)
 

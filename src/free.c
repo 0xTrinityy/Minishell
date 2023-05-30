@@ -1,29 +1,22 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/04 11:30:22 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/06 10:30:21 by luciefer         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../includes/minishell.h"
 
-int	malloc_sec(t_pars *pars, t_pars *new)
-{
-	ft_free(pars);
-	ft_free(new);
-	return (0);
-}
+extern int  g_global;
 
-int	malloc_sec2(t_pars *pars, char *tmp)
+void	ft_free_lst(t_pars **pars)
 {
-	ft_free(pars);
-	free(tmp);
-	return (0);
+	t_pars	*next;
+	int		i;
+
+	i = 0;
+	while (*pars != NULL)
+	{
+		next = (*pars)->next;
+		free((*pars)->str);
+		free((*pars)->id);
+		free((*pars));
+		*pars = next;
+	}
+	return ;
 }
 
 void	ft_free_tab(char **tab)
@@ -37,4 +30,27 @@ void	ft_free_tab(char **tab)
 		i++;
 	}
 	free(tab);
+}
+
+int ft_free_3(t_pars *pars, t_pars *new, t_start *start)
+{
+    ft_free_lst(&pars);
+    ft_free_lst(&new);
+    free(start->str);
+    free(start->id);
+    return (0);
+}
+
+int ft_free_1(char *tmp, t_start *start)
+{
+    free(tmp);
+    free(start->str);
+    free(start->id);
+    return (0);
+}
+
+int ft_free_2(char *tmp, char *tmp2, t_start *start)
+{
+    free(tmp2);
+    return (ft_free_1(tmp, start));
 }

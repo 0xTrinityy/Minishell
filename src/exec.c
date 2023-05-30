@@ -3,22 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luciefer <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 11:18:26 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/05 17:33:53 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/24 18:37:16 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 extern int	g_global;
-
-void	ft_exec(t_pars *pars, char *str, char **env)
-{
-	if (is_a_cmd(pars->str, env) == 2)
-		ft_exit(pars, str);
-}
 
 int	nb_fd(t_pars *pars)
 {
@@ -38,15 +32,14 @@ int	nb_fd(t_pars *pars)
 	return (i);
 }
 
-void	ft_exit(t_pars *pars, char *str)
+void	ft_exit(t_pars *pars)
 {
 	int	i;
 
 	i = 0;
 	while (i < nb_fd(pars))
 		close(i++);
-	ft_free(pars);
-	free(str);
+	ft_free(&pars);
 	g_global = 2;
-	exit (0);
+	exit(0);
 }

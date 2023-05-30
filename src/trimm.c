@@ -6,157 +6,142 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:18:24 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/06 11:02:12 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/29 10:47:43 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*find_path(char **envp)
+extern int	g_global;
+
+static char	*path_cpy(t_data *data)
 {
-	int	i;
-	int	no_path;
+	int		i;
+	int		j;
+	int		len;
+	char	*path;
+
+	i = 0;
+	j = 0;
+	while (ft_strncmp("PATH", data->env[i], 4))
+		i++;
+	while (data->env[i][j] != '=')
+		j++;
+	j++;
+	len = ft_strlen(data->env[i]);
+	path = malloc(sizeof(char) * (len - 4));
+	if (!path)
+		return (NULL);
+	len = 0;
+	while (data->env[i][j] != '\0')
+	{
+		path[len] = data->env[i][j];
+		len++;
+		j++;
+	}
+	path[len] = '\0';
+	return (path);
+}
+
+char	*find_path_spe(t_data *data)
+{
+	int		i;
+	int		no_path;
+	char	*new;
 
 	i = 0;
 	no_path = 0;
-	if (!envp[0])
+	if (!data->env[0])
 	{
-		msg(NO_PATH);
+		msg(NO_PATH, 1);
 	}
-	i = 0;
-	while (envp[i] != NULL)
+	while (data->env[i])
 	{
-		if (ft_strnstr(envp[i], "PATH", 6) != NULL)
+		if (ft_strnstr(data->env[i], "PATH", 6) != NULL)
 			no_path = 1;
 		i++;
 	}
 	if (no_path == 0)
 	{
-		msg(NO_PATH);
+		msg(NO_PATH, 1);
+		return (NULL);
 	}
-	while (ft_strncmp("PATH", *envp, 4))
-		envp++;
-	return (*envp + 5);
+	new = path_cpy(data);
+	return (new);
 }
 
-/*char	*get_cmd(char **paths, char *cmd)
+static void	is_a_cmd(t_pars **pars, t_pipe *file, t_data *data)
 {
-	char	*tmp;
-	char	*command;
-
-	while (*paths != NULL)
-	{
-		tmp = ft_strjoin(*paths, "/");
-		command = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (access(command, 0) == 0)
-			return (command);
-		free(command);
-		paths++;
-	}
-	return (NULL);
-}*/
-
-static void    dup_cmdd(t_pars **pars, t_pipe *file)
-{
-	t_pars  *tmp;
-	int     i;
-	
-	tmp = *pars;
-	i = 0;
-	file->cmd_to_exec = malloc(sizeof(char *) * (file->cmd_nb + 1));
-	while ((*pars) != NULL)
-	{
-		if ((*pars)->token == CMD)
-		{
-			file->cmd_to_exec[i] = ft_strdup((*pars)->str);
-			i++;
-		}
-		*pars = (*pars)->next;
-	}
-	file->cmd_to_exec[i] = 0;
-	*pars = tmp;
-}
-
-static void    is_a_cmd(t_pars **pars, t_pipe *file, char **envp)
-{
-	t_pars *tmp;
+	t_pars	*tmp;
 
 	tmp = *pars;
-	file->cmd_nb = 0;
-	file->paths = find_path(envp);
+	file->paths = find_path_spe(data);
+	if (!file->paths)
+		return ;
 	file->cmd_paths = ft_split(file->paths, ':');
 	while ((*pars) != NULL)
 	{
-		file->cmd = get_cmd(file->cmd_paths, (*pars)->str);
-		if (file->cmd != NULL)
+		if ((*pars)->token == BUILTIN)
 		{
-			(*pars)->token = CMD;
-			//printf("l input %s est bien une commande\n", (*pars)->str);
 			file->cmd_nb += 1;
+			file->builtin += 1;
 		}
-		//else if (ft_strncmp(file))
+		else if ((*pars)->token == CMD)
+			file->cmd_nb += 1;
 		*pars = (*pars)->next;
 	}
 	*pars = tmp;
 	if (file->cmd_nb > 0)
 		dup_cmdd(pars, file);
-	//printf("CMD a la fin du TRIM = %s et nombre de commande = %d\n", file->cmd_to_exec[0], file->cmd_nb);
 	return ;
 }
 
-int    trimm_exec(t_pars **pars, char **envp)
+static int	trimm_end(t_pars **pars, t_pipe file, t_data *data)
 {
-	t_pipe  file;
-	
-	is_a_cmd(pars, &file, envp);
+	int	i;
+
+	i = 0;
 	if (file.cmd_nb == 1)
 	{
-		one_cmd(&file, pars, envp);
+		one_cmd(&file, pars, data);
 		return (0);
 	}
-	if (file.cmd_nb > 1)
+	else if (file.cmd_nb > 1)
 	{
-		mult_cmd(&file, pars, envp);
+		mult_cmd(&file, pars, data);
 		return (0);
 	}
-	if (file.cmd_nb <= 0)
+	else if (file.cmd_nb <= 0)
 	{
+		i = -1;
+		while (file.cmd_paths[++i])
+			free(file.cmd_paths[i]);
+		free(file.cmd_paths);
+		free(file.paths);
 		msg_error(ERR_CMD, &file);
 	}
 	return (0);
 }
 
-
-
-
-
-
-
-/*
-static void    is_a_cmd(t_pars **pars, t_pipe *file, char **envp)
+int	trimm_exec(t_pars **pars, t_data *data)
 {
-	t_pars *tmp;
-	
-	tmp = *pars;
-	file->cmd_nb = 0;
-	file->paths = find_path(envp);
-	file->cmd_paths = ft_split(file->paths, ':');
-	while ((*pars) != NULL)
+	t_pipe	file;
+
+	if (!(*pars)->str[0])
+		return (0);
+	ft_memset(&file, 0, sizeof(t_pipe));
+	if (only_file(pars))
 	{
-		file->cmd_args = ft_split((*pars)->str, ' ');
-		file->cmd = get_cmd(file->cmd_paths, file->cmd_args[0]);
-		if (file->cmd != NULL)
-		{
-			printf("LA CMD EST = %s\n", file->cmd);
-			(*pars)->token = CMD;
-			file->cmd_nb += 1;
-		}
-		*pars = (*pars)->next;
+		only_file_handler(pars);
+		return (0);
 	}
-	*pars = tmp;
-	if (file->cmd_nb > 0)
-		dup_cmdd(pars, file);
-	printf("CMD a la fin du TRIM = %s\n", file->cmd_to_exec[0]);
-	return ;
-}*/
+	init_pars(*pars);
+	is_a_cmd(pars, &file, data);
+	if (!file.paths)
+		return (0);
+	set_doc(&file, pars);
+	if (file.doc > 0)
+		here_doc(&file, pars, data);
+	trimm_end(pars, file, data);
+	return (0);
+}
