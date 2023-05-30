@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   create_pars.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/30 16:37:27 by luciefer          #+#    #+#             */
+/*   Updated: 2023/05/30 16:37:28 by luciefer         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 static int	len_redirect(enum e_token *ID, char *str)
@@ -16,14 +28,15 @@ static int	len_redirect(enum e_token *ID, char *str)
 
 static int	ft_iter(char *str, enum e_token *ID)
 {
-	int				i;
+	int	i;
 
 	i = 0;
 	if (ID[i] == REDIRECT || ID[i] == PIPE_C)
 		i = len_redirect(ID, str);
 	else
 	{
-		while (ID[i] != IFS_TMP && str[i] && ID[i] != REDIRECT && ID[i] != PIPE_C)
+		while (ID[i] != IFS_TMP && str[i] && ID[i] != REDIRECT
+			&& ID[i] != PIPE_C)
 			i++;
 	}
 	return (i);
@@ -67,23 +80,23 @@ static void	_lstadd_back(t_pars *tmp, t_pars **pars)
 	}
 }
 
-void    create_pars(t_start *start, t_pars **pars)
+void	create_pars(t_start *start, t_pars **pars)
 {
-    int i;
-    t_pars  *tmp;
+	int		i;
+	t_pars	*tmp;
 
-    i = 0;
-    while (start->str[i])
-    {
-        while (start->id[i] == IFS_TMP)
-            i++;
-        if (start->id[i] != FINISH)
-        {
-            tmp = get_word(pars, start, i, tmp);
+	i = 0;
+	while (start->str[i])
+	{
+		while (start->id[i] == IFS_TMP)
+			i++;
+		if (start->id[i] != FINISH)
+		{
+			tmp = get_word(pars, start, i, tmp);
 			if (pars)
 				tmp->prev = *pars;
 			_lstadd_back(tmp, pars);
-        }
-        i = i + ft_iter(start->str + i, start->id + i);
-    }
+		}
+		i = i + ft_iter(start->str + i, start->id + i);
+	}
 }

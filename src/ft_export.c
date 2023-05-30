@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 08:34:02 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/26 12:18:09 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/30 16:47:40 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@ void	ft_export(t_pars **pars, t_data *data)
 	while ((*pars)->token != BUILTIN)
 		(*pars) = (*pars)->next;
 	(*pars) = (*pars)->next;
-	while ((*pars) != NULL && (is_redirect((*pars)->token) && (*pars)->token != PIPE))
+	while ((*pars) != NULL && (!is_redirect((*pars)->token)
+			&& (*pars)->token != PIPE))
 	{
 		if (valid_arg((*pars)->str))
 			ft_export_arg((*pars)->str, data);

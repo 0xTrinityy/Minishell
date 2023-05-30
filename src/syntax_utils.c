@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   syntax_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/30 16:39:43 by luciefer          #+#    #+#             */
+/*   Updated: 2023/05/30 16:48:57 by luciefer         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-extern int  g_global;
+extern int	g_global;
 
 int	check_next(t_pars *pars)
 {
@@ -48,16 +60,16 @@ void	check_error(t_pars *pars)
 {
 	if (pars->str[0] == '&' || pars->str[0] == ';' || pars->str[0] == '('
 		|| pars->str[0] == ')' || (pars->str[0] == '.' && !pars->str[1]))
-    {
-        print_error(&pars->str[0]);
+	{
+		print_error(&pars->str[0]);
 		g_global = 2;
-    }
+	}
 	else if ((pars->str[0] == '/' && !pars->str[1]) || (pars->str[0] == '.'
 			&& pars->str[1] == '/' && !pars->str[2]) || pars->str[0] == '~')
-    {
-        print_error(pars->str);
+	{
+		print_error(pars->str);
 		g_global = 126;
-    }
+	}
 	else if (!pars->str[0])
 		g_global = 127;
 }
