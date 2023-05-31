@@ -6,19 +6,14 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 15:20:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/31 10:03:00 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/31 11:50:58 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	file_open_one(t_pars **pars)
+static void	open_files(t_pars **pars, int opening)
 {
-	t_pars	*tmp;
-	int		opening;
-
-	tmp = *pars;
-	opening = 0;
 	while ((*pars) != NULL)
 	{
 		if ((*pars)->token == R_INPUT)
@@ -44,13 +39,23 @@ static void	file_open_one(t_pars **pars)
 		}
 		(*pars) = (*pars)->next;
 	}
+}
+
+static void	file_open_one(t_pars **pars)
+{
+	t_pars	*tmp;
+	int		opening;
+
+	tmp = *pars;
+	opening = 0;
+	open_files(pars, opening);
 	*pars = tmp;
 	return ;
 }
 
 int	only_hdoc_one(t_pars **pars)
 {
-	t_pars *tmp;
+	t_pars	*tmp;
 
 	tmp = *pars;
 	while ((*pars) != NULL)

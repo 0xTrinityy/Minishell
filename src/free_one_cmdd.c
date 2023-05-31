@@ -6,11 +6,22 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 19:53:18 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/30 16:54:52 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/31 11:45:53 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+static void	free_arg(t_pipe *file)
+{
+	int	i;
+
+	i = -1;
+	while (file->cmd_to_exec[++i])
+		free(file->cmd_to_exec[i]);
+	free(file->cmd_to_exec);
+	free(file->cmd);
+}
 
 void	parent_free_one(t_pipe *file)
 {
@@ -25,14 +36,8 @@ void	parent_free_one(t_pipe *file)
 	while (file->cmd_paths[++i])
 		free(file->cmd_paths[i]);
 	free(file->cmd_paths);
-	i = -1;
 	if (file->cmd_to_exec)
-	{
-		while (file->cmd_to_exec[++i])
-			free(file->cmd_to_exec[i]);
-	}
-	free(file->cmd_to_exec);
-	free(file->cmd);
+		free_arg(file);
 	while (file->node)
 	{
 		tmp = file->node->next;
@@ -55,14 +60,8 @@ void	free_one_cmd_infile(t_pars **pars, t_pipe *file, t_data *data)
 	while (file->cmd_paths[++i])
 		free(file->cmd_paths[i]);
 	free(file->cmd_paths);
-	i = -1;
 	if (file->cmd_to_exec)
-	{
-		while (file->cmd_to_exec[++i])
-		free(file->cmd_to_exec[i]);
-	}
-	free(file->cmd_to_exec);
-	free(file->cmd);
+		free_arg(file);
 	free(file->paths);
 	while (file->node)
 	{

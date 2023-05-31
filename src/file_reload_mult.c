@@ -6,19 +6,14 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 17:02:36 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/31 10:02:49 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/31 11:52:30 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	file_open_mult(t_pars **pars)
+static void	opening_files_mult(t_pars **pars, int opening)
 {
-	t_pars	*tmp;
-	int		opening;
-
-	tmp = *pars;
-	opening = 0;
 	while ((*pars) != NULL && (*pars)->token != PIPE)
 	{
 		if ((*pars)->token == R_INPUT)
@@ -44,6 +39,16 @@ static void	file_open_mult(t_pars **pars)
 		}
 		(*pars) = (*pars)->next;
 	}
+}
+
+static void	file_open_mult(t_pars **pars)
+{
+	t_pars	*tmp;
+	int		opening;
+
+	tmp = *pars;
+	opening = 0;
+	opening_files_mult(pars, opening);
 	*pars = tmp;
 	return ;
 }
@@ -64,8 +69,8 @@ static void	skip_pipe(t_pars **pars, t_pipe *file)
 
 int	only_hdoc_mult(t_pars **pars, t_pipe *file)
 {
-	t_pars *tmp;
-	int flag;
+	t_pars	*tmp;
+	int		flag;
 
 	tmp = *pars;
 	flag = 0;

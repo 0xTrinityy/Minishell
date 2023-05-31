@@ -6,17 +6,17 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 11:48:02 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/30 18:16:12 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/31 10:21:44 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void    redirect_hdoc(t_pars **pars, t_pipe *file)
+void	redirect_hdoc(t_pars **pars, t_pipe *file)
 {
-	t_pars *tmp;
-	int     size;
-	
+	t_pars	*tmp;
+	int		size;
+
 	size = 0;
 	tmp = *pars;
 	file->doc = 0;
@@ -26,19 +26,17 @@ void    redirect_hdoc(t_pars **pars, t_pipe *file)
 		{
 			file->doc += 1;
 			file->limit = ft_strdup((*pars)->next->str);
-			//printf("limit = %s\n", file->limit);
 		}
 		*pars = (*pars)->next;
 	}
 	*pars = tmp;
-	//free(tmp);
 	return ;
 }
 
 void	read_doc(t_pipe *file)
 {
 	int		fd;
-	int     size;
+	int		size;
 	char	*buffer;
 
 	fd = open(".here_doc", O_WRONLY | O_TRUNC | O_CREAT, 0000644);
@@ -72,17 +70,16 @@ void	is_heredoc(t_pipe *file, t_pars **pars)
 	{
 		infile_read(file, pars);
 	}
-	//printf("is there an hdoc = %d\n", file->doc);
 }
 
-int    pipe_count(t_pars **pars)
+int	pipe_count(t_pars **pars)
 {
-	int     count;
-	t_pars  *tmp;
-	
+	int		count;
+	t_pars	*tmp;
+
 	count = 0;
 	tmp = *pars;
-	while(*pars != NULL)
+	while (*pars != NULL)
 	{
 		if ((*pars)->token == PIPE)
 			count++;
@@ -91,88 +88,3 @@ int    pipe_count(t_pars **pars)
 	*pars = tmp;
 	return (count);
 }
-
-
-/*void	new_pipe(t_pipe *file)
-{
-	int	i;
-
-	i = 0;
-	while (i < file->cmd_nb)
-	{
-		if (pipe(file->pipe + (2 * i)) < 0)
-			parent_free(file);
-		i++;
-	}
-}*/
-
-/*
-int	execution(t_pars **pars, char **envp)
-{
-	t_pipe	file;
-	int     i;
-
-	i = 0;
-	//file.pidx = 0;
-	is_cmd(pars, &file, envp);
-	redirect_hdoc(pars, &file);
-	is_heredoc(&file, pars);
-	file.outfile = 1;
-	out_read_v2(&file, pars);
-	//printf("le nombre de pipe est de %d\n\n\n", file.pipe_nb);
-	if (file.cmd_nb > 1)
-	{
-		file.pipe_nb = pipe_count(pars);
-		file.pipe = malloc(sizeof(int *) * file.pipe_nb);
-		if (pipe(file.pipe) < 0)
-			msg_error(ERR_PIPE, &file);
-		new_pipe(&file);	
-	//printf("DEBUGGGGG\n");
-		file.pid = malloc(sizeof(pid_t) * (file.cmd_nb));
-		if (!file.pid)
-			pid_err(&file);
-	//printf("PIDX = %d et CMD_MB = %d\n", file.pidx, file.cmd_nb);
-		while (file.pidx < file.cmd_nb)
-		{
-			multiple_cmd(file, envp);
-			file.pidx++;
-		}
-		close_pipes(&file);
-		while (i < file.cmd_nb)
-		{
-			waitpid(file.pid[i], NULL, 0);
-			i++;
-		}
-	}
-	else
-	{
-		if (pipe(file.pipe) < 0)
-			msg_error(ERR_PIPE, &file);
-		file.pidx = fork();
-		printf("PID vaut %d\n", file.pidx);
-		printf("avant d'exec, outfile = %d\n", file.outfile);
-		if (file.pidx == 0)
-		{
-			first_child(&file, pars, envp);
-			close_pipes(&file);
-		}
-	}
-	printf("NB de commande = %d\n", file.cmd_nb);
-	if (file.cmd_nb == 1)
-	{
-		waitpid(file.pidx, NULL, 0);
-	}
-	//parent_free(&file);
-	if (file.doc == 1)
-	{
-		unlink(".here_doc");
-		return (1);
-	}
-	return (0);
-}
-
-
- //faire une fonction speciale si on a qu une seule commande
- //gerer sans qu on est d'outfile ou d'infile'
- 
- */

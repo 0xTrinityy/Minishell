@@ -6,7 +6,7 @@
 /*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 18:37:04 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/24 18:37:06 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/30 16:42:13 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	change_env_pwd(char **env, char *str)
 	free(env[j]);
 	env[j] = malloc(sizeof(char) * (i + 1));
 	if (!env[j])
-        exit(0);
+		exit(0);
 	env[j][0] = 0;
 	i = ft_strlen(str);
 	ft_strlcat(env[j], str, i + 1);

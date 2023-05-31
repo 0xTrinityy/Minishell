@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   syntax.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/30 16:40:01 by luciefer          #+#    #+#             */
+/*   Updated: 2023/05/30 16:40:08 by luciefer         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-extern int  g_global;
+extern int	g_global;
 
 static int	cmd_first(t_pars *pars, char **env)
 {
@@ -92,12 +104,12 @@ static int	check_arg(t_pars **pars, char **env)
 	return (1);
 }
 
-void    check_syntax(t_pars **pars, char **env)
+void	check_syntax(t_pars **pars, char **env)
 {
-    if (!check_arg(pars, env))
+	if (!check_arg(pars, env))
 	{
 		g_global = 2;
-        print_error((*pars)->str);
+		print_error((*pars)->str);
 		return ;
 	}
 	is_builtin(*pars);

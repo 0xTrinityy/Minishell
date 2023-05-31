@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 13:48:02 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/30 17:24:20 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/31 10:51:45 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,10 @@ void	close_pipes(t_pipe *file)
 		close(file->prev_pipes);
 }
 
-void	parent_free(t_pipe *file)
+static void	free_part(t_pipe *file)
 {
-	int		i;
 	t_node	*tmp;
 
-	i = -1;
-	if (file->infile > 0)
-		close(file->infile);
-	if (file->outfile != 1)
-		close(file->outfile);
-	while (file->cmd_paths[++i])
-		free(file->cmd_paths[i]);
 	free(file->cmd_args);
 	free(file->cmd_paths);
 	while (file->node)
@@ -57,6 +49,20 @@ void	parent_free(t_pipe *file)
 		free(file->node);
 		file->node = tmp;
 	}
+}
+
+void	parent_free(t_pipe *file)
+{
+	int		i;
+
+	i = -1;
+	if (file->infile > 0)
+		close(file->infile);
+	if (file->outfile != 1)
+		close(file->outfile);
+	while (file->cmd_paths[++i])
+		free(file->cmd_paths[i]);
+	free_part(file);
 	i = -1;
 	if (file->cmd_to_exec)
 	{

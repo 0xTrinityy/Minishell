@@ -199,11 +199,13 @@ void					close_here_doc_pipe(t_node *node, int read, int write);
 void					create_node_and_list(t_pipe *file, char *limiter);
 t_pars					*find_first_cmd(t_pars *pars);
 t_pars					*find_previous_cmd(t_pars *pars);
+int						pipe_count(t_pars **pars);
 int						trimm_exec(t_pars **pars, t_data *data);
 int						execution(t_pars **pars, char **envp);
 void					out_read(t_pipe *file, t_pars **pars);
 void					out_read_v2(t_pipe *file, t_pars **pars);
-void					mult_cmd(t_pipe *file, t_pars **pars, t_data *data, int pipe_nb);
+void					mult_cmd(t_pipe *file, t_pars **pars, t_data *data,
+							int pipe_nb);
 char					*find_path_spe(t_data *data);
 void					redirect_hdoc(t_pars **pars, t_pipe *file);
 char					*get_next_line(int fd);
@@ -256,6 +258,8 @@ int						is_regular_file(const char *path);
 void					free_isfile(t_pars **pars, t_pipe *file, t_data *data);
 void					dup_cmdd(t_pars **pars, t_pipe *file);
 void					parent_free_one(t_pipe *file);
+void					close_free_in(t_pars **pars, t_pipe *file,
+							t_data *data);
 void					free_one_cmd_infile(t_pars **pars, t_pipe *file,
 							t_data *data);
 void					free_one_cmd_isfile(t_pars **pars, t_pipe *file,

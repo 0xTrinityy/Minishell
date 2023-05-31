@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/30 16:38:33 by luciefer          #+#    #+#             */
+/*   Updated: 2023/05/30 16:38:41 by luciefer         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-int g_global;
+int			g_global;
 
-void    ft_free(t_pars **pars)
+void	ft_free(t_pars **pars)
 {
-   	t_pars	*next;
+	t_pars	*next;
 	int		i;
 
 	i = 0;
@@ -45,14 +57,14 @@ int	main(int ac, char **av, char **envp)
 {
 	char	*str;
 	t_pars	*pars;
-    t_data  data;
+	t_data	data;
 
 	(void)ac;
 	(void)av;
 	pars = NULL;
-    ft_memset(&data, 0, sizeof(t_data));
-    cpy_env(envp, &data);
-    signal(SIGINT, &siginthandler);
+	ft_memset(&data, 0, sizeof(t_data));
+	cpy_env(envp, &data);
+	signal(SIGINT, &siginthandler);
 	signal(SIGQUIT, SIG_IGN);
 	str = readline("> ");
 	while (str)
@@ -63,6 +75,6 @@ int	main(int ac, char **av, char **envp)
 		ft_free(&pars);
 		str = readline("> ");
 	}
-    ft_free_tab(data.env);
+	ft_free_tab(data.env);
 	free(str);
 }

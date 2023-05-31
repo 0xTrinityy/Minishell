@@ -22,9 +22,9 @@ int	valid_arg(char *str)
 		printf("export: %s : not a valid identifier\n", str);
 		return (0);
 	}
-	while (str[i])
+	while (str[i] && str[i] != '=')
 	{
-		if (!ft_isalnum(str[i]) && str[i] != 61)
+		if (!ft_isalnum(str[i]) && str[i] != '_')
 		{
 			printf("export: %s : not a valid identifier\n", str);
 			return (0);
