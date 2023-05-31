@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/31 12:08:11 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/31 16:54:10 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	create_node_and_list(t_pipe *file, char *limiter)
 
 static void	end_multi(t_pipe *file, t_data *data, t_pars **pars)
 {
-	if (is_built_ins(pars, file))
+	if (is_built_ins(pars, file) || (!file->paths))
 	{
 		mult_builtexx(pars, file, data);
 		exit(1);

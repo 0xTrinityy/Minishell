@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:18:24 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/31 12:12:11 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/31 16:50:35 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,8 @@ static void	is_a_cmd(t_pars **pars, t_pipe *file, t_data *data)
 
 	tmp = *pars;
 	file->paths = find_path_spe(data);
-	if (!file->paths)
-		return ;
-	file->cmd_paths = ft_split(file->paths, ':');
+	if (file->paths)
+		file->cmd_paths = ft_split(file->paths, ':');
 	while ((*pars) != NULL)
 	{
 		if ((*pars)->token == BUILTIN)
@@ -123,8 +122,6 @@ int	trimm_exec(t_pars **pars, t_data *data)
 	ft_memset(&file, 0, sizeof(t_pipe));
 	init_pars(*pars);
 	is_a_cmd(pars, &file, data);
-	if (!file.paths)
-		return (0);
 	set_doc(&file, pars);
 	here_doc(&file, pars, data);
 	trimm_end(pars, file, data);

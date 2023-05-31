@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 15:32:21 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/30 17:14:11 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/31 17:18:07 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,7 @@ void	free_in(t_pars **pars, t_pipe *file, t_data *data)
 	while (data->env[++i])
 		free(data->env[i]);
 	free(data->env);
-	i = -1;
-	while (file->cmd_paths[++i])
-		free(file->cmd_paths[i]);
-	free(file->cmd_paths);
-	i = -1;
-	if (file->cmd_to_exec)
-	{
-		while (file->cmd_to_exec[++i])
-			free(file->cmd_to_exec[i]);
-	}
-	free(file->cmd_to_exec);
-	free(file->cmd);
-	free(file->paths);
+	multi_free_no_path(file);
 	free(file->pid);
 	free_nodess(file);
 	free_pars(pars);
@@ -47,15 +35,7 @@ void	free_builtin(t_pars **pars, t_pipe *file, t_data *data)
 	while (data->env[++i])
 		free(data->env[i]);
 	free(data->env);
-	i = -1;
-	while (file->cmd_to_exec[++i])
-		free(file->cmd_to_exec[i]);
-	free(file->cmd_to_exec);
-	i = -1;
-	while (file->cmd_paths[++i])
-		free(file->cmd_paths[i]);
-	free(file->cmd_paths);
-	free(file->paths);
+	multi_free_no_path(file);
 	free(file->pid);
 	while (file->node)
 	{
@@ -82,7 +62,7 @@ static void	free_node(t_pipe *file)
 
 void	free_isfile(t_pars **pars, t_pipe *file, t_data *data)
 {
-	int		i;
+	int	i;
 
 	i = -1;
 	while (data->env[++i])
@@ -90,9 +70,12 @@ void	free_isfile(t_pars **pars, t_pipe *file, t_data *data)
 	free(data->env);
 	free(file->cmd_args);
 	i = -1;
-	while (file->cmd_paths[++i])
-		free(file->cmd_paths[i]);
-	free(file->cmd_paths);
+	if (file->cmd_paths)
+	{
+		while (file->cmd_paths[++i])
+			free(file->cmd_paths[i]);
+		free(file->cmd_paths);
+	}
 	i = -1;
 	while (file->cmd_to_exec[++i])
 		free(file->cmd_to_exec[i]);
@@ -105,7 +88,7 @@ void	free_isfile(t_pars **pars, t_pipe *file, t_data *data)
 
 void	free_no_cmd(t_pars **pars, t_pipe *file, t_data *data)
 {
-	int		i;
+	int	i;
 
 	i = -1;
 	while (data->env[++i])
@@ -113,9 +96,12 @@ void	free_no_cmd(t_pars **pars, t_pipe *file, t_data *data)
 	free(data->env);
 	free(file->cmd_args);
 	i = -1;
-	while (file->cmd_paths[++i])
-		free(file->cmd_paths[i]);
-	free(file->cmd_paths);
+	if (file->cmd_paths)
+	{
+		while (file->cmd_paths[++i])
+			free(file->cmd_paths[i]);
+		free(file->cmd_paths);
+	}
 	i = -1;
 	while (file->cmd_to_exec[++i])
 		free(file->cmd_to_exec[i]);

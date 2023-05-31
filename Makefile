@@ -23,6 +23,7 @@ SRC =	$(SRC_DIR)/main.c				\
 		$(SRC_DIR)/file_reload.c	\
 		$(SRC_DIR)/file_reload_mult.c	\
 		$(SRC_DIR)/dup_cmd.c	   \
+		$(SRC_DIR)/free2.c	       \
 		$(SRC_DIR)/gnl.c			\
 		$(SRC_DIR)/is_cmd.c			\
 		$(SRC_DIR)/others.c			\

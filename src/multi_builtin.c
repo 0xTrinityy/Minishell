@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 15:33:08 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/28 16:22:35 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/31 17:00:21 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,14 @@ int	is_built_ins(t_pars **pars, t_pipe *file)
 
 void	mult_builtexx(t_pars **pars, t_pipe *file, t_data *data)
 {
+	if (!file->paths)
+	{
+		close(file->fd[0]);
+		close(file->fd[1]);
+		free_builtin(pars, file, data);
+		msg(ERR_CMD, 126);
+		return ;
+	}
 	builtin_exe_mult(pars, file, data);
 	close(file->fd[0]);
 	close(file->fd[1]);

@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/31 10:19:42 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/31 16:19:48 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@ int	is_regular_file(const char *path)
 
 static void	child_end(t_pipe *file, t_pars **pars, t_data *data)
 {
+	if (!file->paths)
+	{
+		free_one_cmd_nofound(pars, file, data);
+		msg(ERR_CMD, 127);
+		exit(127);
+	}
 	getting_args(pars, file);
 	if (is_regular_file(file->cmd_to_exec[0]))
 	{

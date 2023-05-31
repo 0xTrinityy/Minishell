@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/31 15:31:26 by tbelleng          #+#    #+#             */
+/*   Updated: 2023/05/31 17:17:35 by tbelleng         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -269,7 +281,8 @@ void					free_one_cmd_nofound(t_pars **pars, t_pipe *file,
 void					init_pipes(t_pipe *file);
 void					set_doc(t_pipe *file, t_pars **pars);
 void					init_pars(t_pars *pars);
-
+void					here_doc_path(t_pipe *file);
+void					multi_free_no_path(t_pipe *file);
 void					creating_append(t_pars **pars, t_pipe *file, int *last);
 void					redirect_infirst(t_pars **pars, t_pipe *file, int *last,
 							t_pars *cmd);
