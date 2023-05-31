@@ -6,7 +6,7 @@
 /*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 16:38:33 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/30 16:38:41 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/31 16:39:12 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,11 @@ int	main(int ac, char **av, char **envp)
 	str = readline("> ");
 	while (str)
 	{
-		add_history(str);
+		if (ft_strlen(str) > 0)
+			add_history(str);
 		if (ft_parsing(&pars, &str, data.env) != 2 && g_global == 0)
 			trimm_exec(&pars, &data);
+		signal(SIGINT, &siginthandler);
 		ft_free(&pars);
 		str = readline("> ");
 	}

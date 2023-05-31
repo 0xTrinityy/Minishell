@@ -35,7 +35,7 @@ static char	*replace_dote(t_start *start, int i)
 	ft_strlcat(tmp, nb, ft_strlen(start->str) + 3);
 	free(nb);
 	if (start->str[i])
-		ft_strlcat(tmp, start->str + i, ft_strlen(start->str));
+		ft_strlcat(tmp, start->str + i, ft_strlen(start->str) + 4);
 	free(start->str);
 	return (tmp);
 }

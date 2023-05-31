@@ -6,7 +6,7 @@
 /*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 16:39:43 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/30 16:48:57 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/31 16:52:40 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,19 @@ void	check_error(t_pars *pars)
 	}
 	else if (!pars->str[0])
 		g_global = 127;
+}
+
+int	redirect_condition(t_pars *pars, char **env)
+{
+	if (pars != NULL && is_redirect(pars->token))
+	{
+		if (!check_syntax_redirect(pars, env))
+			return (0);
+	}
+	if (pars != NULL && pars->token == PIPE)
+	{
+		if (!check_syntax(&pars->next, env))
+			return (0);
+	}
+	return (1);
 }

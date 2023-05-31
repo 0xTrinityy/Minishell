@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   one_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:53:28 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/31 10:19:42 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/31 16:40:11 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-extern int		g_global;
+extern int	g_global;
 
 int	is_regular_file(const char *path)
 {
@@ -57,7 +57,7 @@ static void	first_child(t_pipe *file, t_pars **pars, t_data *data)
 	if (!only_hdoc_one(pars))
 	{
 		free_one_cmd_infile(pars, file, data);
-		exit (0);
+		exit(0);
 	}
 	in = one_cmd_in(file, pars);
 	if (in < 0)
@@ -114,6 +114,7 @@ void	one_cmd(t_pipe *file, t_pars **pars, t_data *data)
 	file->pidx = fork();
 	if (file->pidx == 0)
 		first_child(file, pars, data);
+	signal(SIGINT, siginthandler_2);
 	waitpid(file->pidx, &status, 0);
 	if (status == 131)
 		ft_putstr_fd("Quit (core dumped)\n", 1);

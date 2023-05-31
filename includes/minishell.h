@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/31 16:52:55 by luciefer          #+#    #+#             */
+/*   Updated: 2023/05/31 16:52:59 by luciefer         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -165,16 +177,19 @@ t_pars					*ft_lstlast_(t_pars *lst);
 void					put_token(t_pars **pars);
 
 //syntax.c
-void					check_syntax(t_pars **pars, char **env);
+int						check_syntax(t_pars **pars, char **env);
+int						check_syntax_redirect(t_pars *pars, char **env);
 
 //syntax_utils.c
 void					check_error(t_pars *pars);
 void					is_builtin(t_pars *pars);
 int						check_next(t_pars *pars);
+int						redirect_condition(t_pars *pars, char **env);
 
 //signal.c
 void					siginthandler(int signal);
 void					siginthandler_fork(int signal);
+void					siginthandler_2(int signal);
 
 //exec
 
