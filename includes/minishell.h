@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/31 15:31:26 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/31 17:17:35 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/31 17:32:05 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,16 +177,19 @@ t_pars					*ft_lstlast_(t_pars *lst);
 void					put_token(t_pars **pars);
 
 //syntax.c
-void					check_syntax(t_pars **pars, char **env);
+int						check_syntax(t_pars **pars, char **env);
+int						check_syntax_redirect(t_pars *pars, char **env);
 
 //syntax_utils.c
 void					check_error(t_pars *pars);
 void					is_builtin(t_pars *pars);
 int						check_next(t_pars *pars);
+int						redirect_condition(t_pars *pars, char **env);
 
 //signal.c
 void					siginthandler(int signal);
 void					siginthandler_fork(int signal);
+void					siginthandler_2(int signal);
 
 //exec
 

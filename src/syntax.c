@@ -6,7 +6,7 @@
 /*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 16:40:01 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/30 16:40:08 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/31 16:51:11 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	cmd_first(t_pars *pars, char **env)
 	return (1);
 }
 
-static int	check_syntax_redirect(t_pars *pars, char **env)
+int	check_syntax_redirect(t_pars *pars, char **env)
 {
 	t_pars	*tmp;
 
@@ -46,13 +46,8 @@ static int	check_syntax_redirect(t_pars *pars, char **env)
 			pars = pars->next;
 		while (pars != NULL && pars->token == ARG)
 			pars = pars->next;
-		if (pars != NULL && is_redirect(pars->token))
-		{
-			if (!check_syntax_redirect(pars, env))
-				return (0);
-		}
-		if (pars != NULL && pars->token == PIPE)
-			check_syntax(&pars->next, env);
+		if (!redirect_condition(pars, env))
+			return (0);
 		pars = tmp;
 	}
 	return (1);
@@ -93,7 +88,9 @@ static int	check_arg(t_pars **pars, char **env)
 	{
 		if ((*pars)->token == PIPE && (*pars)->next != NULL)
 		{
-			check_syntax(&(*pars)->next, env);
+			printf("%d\n", g_global);
+			if (!check_syntax(&(*pars)->next, env))
+				return (0);
 			break ;
 		}
 		if ((*pars)->token != ARG)
@@ -104,16 +101,15 @@ static int	check_arg(t_pars **pars, char **env)
 	return (1);
 }
 
-void	check_syntax(t_pars **pars, char **env)
+int	check_syntax(t_pars **pars, char **env)
 {
 	if (!check_arg(pars, env))
 	{
 		g_global = 2;
-		print_error((*pars)->str);
-		return ;
+		return (0);
 	}
 	is_builtin(*pars);
 	g_global = 0;
 	check_error(*pars);
-	return ;
+	return (1);
 }

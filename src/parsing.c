@@ -6,7 +6,7 @@
 /*   By: luciefer <luciefer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 16:39:15 by luciefer          #+#    #+#             */
-/*   Updated: 2023/05/30 16:40:37 by luciefer         ###   ########.fr       */
+/*   Updated: 2023/05/31 16:39:40 by luciefer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,10 @@ int	ft_parsing(t_pars **pars, char **str, char **env)
 	put_token(pars);
 	if (!check_token(*pars))
 		return (ft_free_start(&start));
-	check_syntax(pars, start.env);
+	if (!check_syntax(pars, start.env))
+	{
+		print_error((*pars)->str);
+	}
 	ft_free_start(&start);
 	return (0);
 }
