@@ -6,35 +6,11 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 22:07:08 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/28 15:50:52 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/31 10:01:58 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	dup_cmdd(t_pars **pars, t_pipe *file)
-{
-	t_pars	*tmp;
-	int		i;
-
-	tmp = *pars;
-	i = 0;
-	file->cmd_to_exec = malloc(sizeof(char *) * (file->cmd_nb + file->builtin
-				+ 1));
-	if (!file->cmd_to_exec)
-		return ;
-	while ((*pars) != NULL)
-	{
-		if ((*pars)->token == CMD || (*pars)->token == BUILTIN)
-		{
-			file->cmd_to_exec[i] = ft_strdup((*pars)->str);
-			i++;
-		}
-		*pars = (*pars)->next;
-	}
-	file->cmd_to_exec[i] = 0;
-	*pars = tmp;
-}
 
 t_pars	*find_first_cmd(t_pars *pars)
 {
@@ -72,10 +48,10 @@ void	set_doc(t_pipe *file, t_pars **pars)
 	{
 		if (tmp->token == R_DINPUT)
 		{
+			file->doc = 1;
 			if (cmd)
 			{
 				cmd->doc = HEREDOC;
-				file->doc = 1;
 				cmd->limiter = tmp->next->str;
 			}
 			create_node_and_list(file, tmp->next->str);

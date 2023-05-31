@@ -1,44 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   only_file.c                                        :+:      :+:    :+:   */
+/*   file_reload.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/23 15:27:15 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/30 15:14:31 by tbelleng         ###   ########.fr       */
+/*   Created: 2023/05/30 15:20:53 by tbelleng          #+#    #+#             */
+/*   Updated: 2023/05/31 10:03:00 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	only_error(char *err)
-{
-	perror(err);
-}
-
-int	only_file(t_pars **pars)
+static void	file_open_one(t_pars **pars)
 {
 	t_pars	*tmp;
+	int		opening;
 
 	tmp = *pars;
-	while ((*pars) != NULL)
-	{
-		if ((*pars)->token != R_INPUT
-			&& (*pars)->token != R_OUTPUT && (*pars)->token != R_DOUTPUT
-			&& (*pars)->token != ARG && (*pars)->token != PIPE)
-		{
-			*pars = tmp;
-			return (0);
-		}
-		(*pars) = (*pars)->next;
-	}
-	*pars = tmp;
-	return (1);
-}
-
-static void	creating_file(t_pars **pars, int opening)
-{
+	opening = 0;
 	while ((*pars) != NULL)
 	{
 		if ((*pars)->token == R_INPUT)
@@ -46,34 +26,45 @@ static void	creating_file(t_pars **pars, int opening)
 			opening = open((*pars)->next->str, O_RDONLY);
 			if (opening < 0)
 			{
-				only_error(ERR_INFILE);
+				msg(ERR_INFILE, 126);
 				break ;
 			}
 			close(opening);
 		}
-		if ((*pars)->token == R_OUTPUT || (*pars)->token == R_DOUTPUT)
+		else if ((*pars)->token == R_OUTPUT || (*pars)->token == R_DOUTPUT)
 		{
 			opening = open((*pars)->next->str, O_TRUNC | O_CREAT | O_RDWR,
 					0000644);
 			if (opening < 0)
 			{
-				only_error(ERR_OUTFILE);
+				msg(ERR_OUTFILE, 126);
 				break ;
 			}
 			close(opening);
 		}
 		(*pars) = (*pars)->next;
 	}
-}
-
-void	only_file_handler(t_pars **pars)
-{
-	int		opening;
-	t_pars	*tmp;
-
-	tmp = *pars;
-	opening = 0;
-	creating_file(pars, opening);
 	*pars = tmp;
 	return ;
+}
+
+int	only_hdoc_one(t_pars **pars)
+{
+	t_pars *tmp;
+
+	tmp = *pars;
+	while ((*pars) != NULL)
+	{
+		if ((*pars)->token != R_INPUT && (*pars)->token != R_DINPUT
+			&& (*pars)->token != R_OUTPUT && (*pars)->token != R_DOUTPUT
+			&& (*pars)->token != ARG)
+		{
+			*pars = tmp;
+			return (1);
+		}
+		(*pars) = (*pars)->next;
+	}
+	*pars = tmp;
+	file_open_one(pars);
+	return (0);
 }

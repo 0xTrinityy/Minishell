@@ -38,7 +38,7 @@ enum					e_token
 {
 	ALPHA_NUM,
 	IFS,
-    IFS_TMP,
+	IFS_TMP,
 	S_QUOTE,
 	D_QUOTE,
 	DOLLAR,
@@ -71,16 +71,16 @@ typedef struct s_node
 	t_node				*prev;
 }						t_node;
 
-typedef struct  s_start
+typedef struct s_start
 {
-    char        *str;
-    char        **env;
-    enum e_token *id;
-}               t_start;
+	char				*str;
+	char				**env;
+	enum e_token		*id;
+}						t_start;
 
 typedef struct s_pars
 {
-    int                 space;
+	int					space;
 	struct s_pars		*prev;
 	int					doc;
 	char				*str;
@@ -127,58 +127,58 @@ typedef struct s_data
 //parsing
 
 //parsing.c
-int             ft_parsing(t_pars **pars, char **str, char **env);
+int						ft_parsing(t_pars **pars, char **str, char **env);
 
 //parsing_utils.c
-int             is_redirect(enum e_pars token);
-void            print_error(char *str);
+int						is_redirect(enum e_pars token);
+void					print_error(char *str);
 
 //put_id.c
-enum e_token    *put_id(char *str);
-enum e_token    is_id(char c);
+enum e_token			*put_id(char *str);
+enum e_token			is_id(char c);
 
 //expand.c
-int            ft_expand(t_start *start);
+int						ft_expand(t_start *start);
 
 //expand_utils.c
-char            *del_quote(t_start *start, enum e_token quote);
-void            check_id(t_start *start);
-int             len_expand(char *str);
+char					*del_quote(t_start *start, enum e_token quote);
+void					check_id(t_start *start);
+int						len_expand(char *str);
 
 //free.c
-int             ft_free_1(char *tmp, t_start *start);
-int             ft_free_2(char *tmp, char *tmp2, t_start *start);
-int             ft_free_3(t_pars *pars, t_pars *new, t_start *start);
-void            ft_free_tab(char **tab);
-void        	ft_free_lst(t_pars **pars);
+int						ft_free_1(char *tmp, t_start *start);
+int						ft_free_2(char *tmp, char *tmp2, t_start *start);
+int						ft_free_3(t_pars *pars, t_pars *new, t_start *start);
+void					ft_free_tab(char **tab);
+void					ft_free_lst(t_pars **pars);
 
 //dollar.c
-char            *get_value(t_start *start, char *str, int pos);
+char					*get_value(t_start *start, char *str, int pos);
 
 //create_pars.c
-void            create_pars(t_start *start, t_pars **pars);
+void					create_pars(t_start *start, t_pars **pars);
 
 //create_pars_utils.c
-t_pars          *ft_lstlast_(t_pars *lst);
+t_pars					*ft_lstlast_(t_pars *lst);
 
 //token.c
-void            put_token(t_pars **pars);
+void					put_token(t_pars **pars);
 
 //syntax.c
-void            check_syntax(t_pars **pars, char **env);
+void					check_syntax(t_pars **pars, char **env);
 
 //syntax_utils.c
-void            check_error(t_pars *pars);
-void            is_builtin(t_pars *pars);
-int             check_next(t_pars *pars);
+void					check_error(t_pars *pars);
+void					is_builtin(t_pars *pars);
+int						check_next(t_pars *pars);
 
 //signal.c
-void            siginthandler(int signal);
-void            siginthandler_fork(int signal);
+void					siginthandler(int signal);
+void					siginthandler_fork(int signal);
 
 //exec
 
-void                    ft_free(t_pars **pars);
+void					ft_free(t_pars **pars);
 int						msg(char *err, int i);
 void					msg_error(char *err, t_pipe *data);
 void					close_pipes(t_pipe *file);
@@ -203,7 +203,7 @@ int						trimm_exec(t_pars **pars, t_data *data);
 int						execution(t_pars **pars, char **envp);
 void					out_read(t_pipe *file, t_pars **pars);
 void					out_read_v2(t_pipe *file, t_pars **pars);
-void					mult_cmd(t_pipe *file, t_pars **pars, t_data *data);
+void					mult_cmd(t_pipe *file, t_pars **pars, t_data *data, int pipe_nb);
 char					*find_path_spe(t_data *data);
 void					redirect_hdoc(t_pars **pars, t_pipe *file);
 char					*get_next_line(int fd);
@@ -250,6 +250,8 @@ int						arg_count(t_pars **pars);
 char					**tema_larg(t_pars **pars, t_pipe *file);
 void					getting_args(t_pars **pars, t_pipe *file);
 
+int						only_hdoc_one(t_pars **pars);
+int						only_hdoc_mult(t_pars **pars, t_pipe *file);
 int						is_regular_file(const char *path);
 void					free_isfile(t_pars **pars, t_pipe *file, t_data *data);
 void					dup_cmdd(t_pars **pars, t_pipe *file);
@@ -299,6 +301,5 @@ int						new_or_replace(t_data *data, char *str);
 char					*realloc_value(char *old, char *str, int size);
 void					new_value(t_data *data, char *str);
 void					only_expand(t_pars **pars, char **env, char *exp);
-
 
 #endif

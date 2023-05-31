@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 19:53:18 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/29 17:15:12 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/30 16:54:52 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,11 @@ void	parent_free_one(t_pipe *file)
 		free(file->cmd_paths[i]);
 	free(file->cmd_paths);
 	i = -1;
-	while (file->cmd_to_exec[++i])
-		free(file->cmd_to_exec[i]);
+	if (file->cmd_to_exec)
+	{
+		while (file->cmd_to_exec[++i])
+			free(file->cmd_to_exec[i]);
+	}
 	free(file->cmd_to_exec);
 	free(file->cmd);
 	while (file->node)
@@ -53,8 +56,11 @@ void	free_one_cmd_infile(t_pars **pars, t_pipe *file, t_data *data)
 		free(file->cmd_paths[i]);
 	free(file->cmd_paths);
 	i = -1;
-	while (file->cmd_to_exec[++i])
+	if (file->cmd_to_exec)
+	{
+		while (file->cmd_to_exec[++i])
 		free(file->cmd_to_exec[i]);
+	}
 	free(file->cmd_to_exec);
 	free(file->cmd);
 	free(file->paths);

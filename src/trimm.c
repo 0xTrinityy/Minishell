@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 14:18:24 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/29 10:47:43 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/30 21:44:26 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,26 @@ static void	is_a_cmd(t_pars **pars, t_pipe *file, t_data *data)
 		*pars = (*pars)->next;
 	}
 	*pars = tmp;
-	if (file->cmd_nb > 0)
-		dup_cmdd(pars, file);
+	//if (file->cmd_nb > 0)
+	dup_cmdd(pars, file);
 	return ;
+}
+
+int    pipe_count(t_pars **pars)
+{
+	int     count;
+	t_pars  *tmp;
+	
+	count = 0;
+	tmp = *pars;
+	while(*pars != NULL)
+	{
+		if ((*pars)->token == PIPE)
+			count++;
+		*pars = (*pars)->next;
+	}
+	*pars = tmp;
+	return (count);
 }
 
 static int	trimm_end(t_pars **pars, t_pipe file, t_data *data)
@@ -101,17 +118,19 @@ static int	trimm_end(t_pars **pars, t_pipe file, t_data *data)
 	int	i;
 
 	i = 0;
-	if (file.cmd_nb == 1)
+	//printf("ICI doc = %d\n", file.doc);
+	i = pipe_count(pars);
+	if (i == 0)
 	{
 		one_cmd(&file, pars, data);
 		return (0);
 	}
-	else if (file.cmd_nb > 1)
+	else if (i >= 1)
 	{
-		mult_cmd(&file, pars, data);
+		mult_cmd(&file, pars, data, i);
 		return (0);
 	}
-	else if (file.cmd_nb <= 0)
+	/*else if (file.cmd_nb <= 0)
 	{
 		i = -1;
 		while (file.cmd_paths[++i])
@@ -119,7 +138,7 @@ static int	trimm_end(t_pars **pars, t_pipe file, t_data *data)
 		free(file.cmd_paths);
 		free(file.paths);
 		msg_error(ERR_CMD, &file);
-	}
+	}*/
 	return (0);
 }
 
@@ -130,18 +149,13 @@ int	trimm_exec(t_pars **pars, t_data *data)
 	if (!(*pars)->str[0])
 		return (0);
 	ft_memset(&file, 0, sizeof(t_pipe));
-	if (only_file(pars))
-	{
-		only_file_handler(pars);
-		return (0);
-	}
 	init_pars(*pars);
 	is_a_cmd(pars, &file, data);
 	if (!file.paths)
 		return (0);
 	set_doc(&file, pars);
-	if (file.doc > 0)
-		here_doc(&file, pars, data);
+	//if (file.doc > 0)
+	here_doc(&file, pars, data);
 	trimm_end(pars, file, data);
 	return (0);
 }

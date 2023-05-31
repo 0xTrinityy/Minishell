@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 15:33:59 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/29 14:31:36 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/30 15:05:01 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ static t_pars	*find_cmd_pars(t_pars *pars)
 {
 	while ((pars)->prev != NULL && (pars)->token != PIPE)
 		pars = pars->prev;
-	pars = pars->next;
+	if (pars->token == PIPE)
+		pars = pars->next;
 	while ((pars) != NULL && pars->token != PIPE)
 	{
 		if ((pars)->token == CMD || (pars)->token == BUILTIN)

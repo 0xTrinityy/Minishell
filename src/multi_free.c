@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 15:32:21 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/29 17:07:34 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/30 17:14:11 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,11 @@ void	free_in(t_pars **pars, t_pipe *file, t_data *data)
 		free(file->cmd_paths[i]);
 	free(file->cmd_paths);
 	i = -1;
-	while (file->cmd_to_exec[++i])
-		free(file->cmd_to_exec[i]);
+	if (file->cmd_to_exec)
+	{
+		while (file->cmd_to_exec[++i])
+			free(file->cmd_to_exec[i]);
+	}
 	free(file->cmd_to_exec);
 	free(file->cmd);
 	free(file->paths);

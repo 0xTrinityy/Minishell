@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 17:28:18 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/27 16:03:53 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/30 16:36:22 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,11 @@ static void	free_heredoc(t_pars **pars, t_pipe *file)
 		free(file->cmd_paths[i]);
 	free(file->cmd_paths);
 	i = -1;
-	while (file->cmd_to_exec[++i])
-		free(file->cmd_to_exec[i]);
+	if (file->cmd_to_exec)
+	{
+		while (file->cmd_to_exec[++i])
+			free(file->cmd_to_exec[i]);
+	}
 	free(file->cmd_to_exec);
 	free(file->cmd);
 	free(file->paths);

@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 16:56:53 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/28 12:48:02 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/31 09:57:35 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,13 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 	if (!file->pid[file->pidx])
 	{
 		signal(SIGQUIT, siginthandler_fork);
+		if (!only_hdoc_mult(pars, file))
+		{
+			close(file->fd[0]);
+			close(file->fd[1]);
+			free_in(pars, file, data);
+			exit (0);
+		}
 		in = redirect_in(file, pars);
 		if (in < 0)
 		{
@@ -87,12 +94,12 @@ static void	multiple_cmd(t_pipe *file, t_data *data, t_pars **pars)
 	}
 }
 
-static void	init_structt(t_pipe *file, t_pars **pars, t_data *data)
+static void	init_structt(t_pipe *file, t_pars **pars, t_data *data, int pipe_nb)
 {
 	file->infile = 0;
 	file->outfile = 1;
 	file->prev_pipes = -1;
-	file->pid = malloc(sizeof(pid_t) * (file->cmd_nb));
+	file->pid = malloc(sizeof(pid_t) * (pipe_nb + 1));
 	if (!file->pid)
 	{
 		free_in(pars, file, data);
@@ -100,16 +107,17 @@ static void	init_structt(t_pipe *file, t_pars **pars, t_data *data)
 	}
 }
 
-void	mult_cmd(t_pipe *file, t_pars **pars, t_data *data)
+void	mult_cmd(t_pipe *file, t_pars **pars, t_data *data, int pipe_nb)
 {
 	int	i;
 	int	status;
 
 	status = 0;
-	init_structt(file, pars, data);
-	while (file->pidx < file->cmd_nb)
+	init_structt(file, pars, data, pipe_nb);
+	while (file->pidx < (pipe_nb + 1))
 	{
-		if (file->pidx != file->cmd_nb - 1 && pipe(file->fd) < 0)
+		fprintf(stderr,"OKKKK CMD\n");
+		if (file->pidx != pipe_nb && pipe(file->fd) < 0)
 			msg_error(ERR_PIPE, file);
 		multiple_cmd(file, data, pars);
 		close(file->fd[1]);
@@ -120,7 +128,7 @@ void	mult_cmd(t_pipe *file, t_pars **pars, t_data *data)
 	}
 	close_here_doc_pipe(file->node, 1, 0);
 	i = -1;
-	while (++i < file->cmd_nb)
+	while (++i < (pipe_nb + 1))
 		waitpid(file->pid[i], &status, 0);
 	if (WIFEXITED(status))
 		g_global = WEXITSTATUS(status);

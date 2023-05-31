@@ -6,7 +6,7 @@
 /*   By: tbelleng <tbelleng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 11:48:02 by tbelleng          #+#    #+#             */
-/*   Updated: 2023/05/03 11:23:02 by tbelleng         ###   ########.fr       */
+/*   Updated: 2023/05/30 18:16:12 by tbelleng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,12 +89,11 @@ int    pipe_count(t_pars **pars)
 		*pars = (*pars)->next;
 	}
 	*pars = tmp;
-	count = count * 2;
 	return (count);
 }
 
 
-void	new_pipe(t_pipe *file)
+/*void	new_pipe(t_pipe *file)
 {
 	int	i;
 
@@ -105,7 +104,7 @@ void	new_pipe(t_pipe *file)
 			parent_free(file);
 		i++;
 	}
-}
+}*/
 
 /*
 int	execution(t_pars **pars, char **envp)
